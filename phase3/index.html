@@ -36,6 +36,28 @@
 .agreement-doc .ag-field{display:flex;justify-content:space-between;border-bottom:1px dotted var(--border-strong);padding:4px 0}
 .sign-box{border:1px dashed var(--border-strong);border-radius:9px;padding:16px;text-align:center;margin-top:8px;font-family:var(--font-body);font-size:12px;color:var(--fg-faint)}
 .sign-box.signed{border-color:var(--brand);color:var(--brand);background:var(--brand-soft);font-weight:700}
+.stamp-pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-body);font-size:11px;font-weight:600;color:var(--brand)}
+
+/* ---- notifications ---- */
+.notif-matrix{display:flex;flex-direction:column}
+.notif-row{display:grid;grid-template-columns:minmax(0,1.6fr) repeat(4,64px);gap:8px;align-items:center;padding:11px 0;border-bottom:1px solid var(--border)}
+.notif-row:first-child{padding-top:0}
+.notif-row:last-child{border-bottom:none}
+.notif-row.head{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-faint)}
+.notif-row .ch{display:flex;justify-content:center}
+@media (max-width:620px){.notif-row{grid-template-columns:minmax(0,1fr) repeat(4,44px);font-size:12px}}
+.notif-feed{display:flex;flex-direction:column;gap:0}
+.notif-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.notif-item:last-child{border-bottom:none}
+.notif-ic{width:32px;height:32px;border-radius:9px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;flex:none}
+.notif-chan{font-size:10px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--fg-faint)}
+
+/* ---- no-show ---- */
+.noshow-card{display:flex;gap:14px;align-items:flex-start}
+.noshow-ic{width:38px;height:38px;border-radius:10px;background:var(--danger-soft);color:var(--danger);display:flex;align-items:center;justify-content:center;flex:none}
+.noshow-count{display:flex;gap:4px;margin-top:6px}
+.noshow-count span{width:22px;height:22px;border-radius:999px;background:var(--surface-3);color:var(--fg-faint);display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700}
+.noshow-count span.hit{background:var(--danger-soft);color:var(--danger)}
 </style>
 </head>
 <body>
@@ -197,6 +219,22 @@
         </div>
       </section>
 
+      <!-- ===== NOTIFICATIONS CENTER ===== -->
+      <section class="view-section" id="view-notifications">
+        <div class="section-title"><h2 data-t="h_notif">Notification matrix · Section 11</h2><span class="count" data-t="h_notif_sub">SMS (primary), email, web push, WhatsApp (optional)</span></div>
+        <div class="card">
+          <div class="notif-matrix" id="notifMatrix"></div>
+        </div>
+        <div class="section-title"><h2 data-t="h_notif_feed">Live feed (demo)</h2></div>
+        <div class="card"><div class="notif-feed" id="notifFeed"></div></div>
+      </section>
+
+      <!-- ===== NO-SHOW & SUSPENSION (admin, FR-B5) ===== -->
+      <section class="view-section" id="view-noshow">
+        <div class="section-title"><h2 data-t="h_noshow">No-show incidents · FR-B5 (admin view)</h2><span class="count" data-t="h_noshow_sub">Two no-shows in a rolling 6 months suspends Pay-at-Property</span></div>
+        <div style="display:flex;flex-direction:column;gap:14px" id="noshowList"></div>
+      </section>
+
       <div class="app-footer">
         <span data-t="footer_note">CBS Stays Bangladesh · Phase 3 prototype · all data on this page is simulated</span>
         <a href="../index.html" data-t="footer_hub">← Back to prototype hub</a>
@@ -213,6 +251,12 @@ window.I18N = {
     nav_group:'ডিফারেনশিয়েটর', nav_pap:'পে অ্যাট প্রপার্টি', nav_reviews:'ভেরিফাইড রিভিউ', nav_loyalty:'CBS ক্লাব লয়্যালটি',
     nav_matcher:'রুমমেট ম্যাচার', nav_agreement:'রেন্টাল এগ্রিমেন্ট', other_phases:'অন্য ফেজ', role_tenant:'CBS ক্লাব · লেভেল ২ প্লাস',
     footer_note:'CBS Stays Bangladesh · ফেজ ৩ প্রোটোটাইপ · এই পেজের সব ডেটা সিমুলেটেড', footer_hub:'← প্রোটোটাইপ হাবে ফিরে যান',
+    nav_notif:'নোটিফিকেশন', nav_noshow:'নো-শো ও সাসপেনশন',
+    h_notif:'নোটিফিকেশন ম্যাট্রিক্স · সেকশন ১১', h_notif_sub:'SMS (প্রাইমারি), ইমেইল, ওয়েব পুশ, হোয়াটসঅ্যাপ (ঐচ্ছিক)',
+    n_event:'ইভেন্ট', n_booking_conf:'বুকিং নিশ্চিত', n_payment:'পেমেন্ট প্রাপ্ত', n_payout:'পেআউট পাঠানো', n_review_req:'রিভিউ রিকোয়েস্ট', n_listing_exp:'লিস্টিং মেয়াদোত্তীর্ণ',
+    h_notif_feed:'লাইভ ফিড (ডেমো)',
+    h_noshow:'নো-শো ইনসিডেন্ট · FR-B5 (অ্যাডমিন ভিউ)', h_noshow_sub:'৬ মাসের মধ্যে দুটি নো-শো হলে পে-অ্যাট-প্রপার্টি সাসপেন্ড হবে',
+    noshow_privilege:'পে-অ্যাট-প্রপার্টি সুবিধা', noshow_active:'সক্রিয়', noshow_suspended:'স্থগিত', noshow_suspend_btn:'সুবিধা স্থগিত করুন', noshow_restore_btn:'সুবিধা পুনর্বহাল করুন',
     pap_title:'টোকেন ডিপোজিট যোগ্যতা · FR-B4', pap_sub:'অ্যাডমিন-কনফিগারযোগ্য নিয়ম ঠিক করে কে সম্পূর্ণ অনলাইন পেমেন্টের বদলে পে অ্যাট প্রপার্টি ব্যবহার করতে পারবে।',
     pap_c1:'NID ও ফোন ভেরিফায়েড', pap_c2:'মালিক পে অ্যাট প্রপার্টি অনুমতি দিয়েছেন', pap_c3:'নো-শো হিস্টরি', pap_c4:'টোকেন পরিমাণ (প্রথম মাসের ১৫%)', pap_clean:'পরিষ্কার',
     pap_secure:'টোকেন দিয়ে বুকিং নিশ্চিত করুন',
@@ -237,6 +281,12 @@ window.I18N = {
     nav_group:'Differentiators', nav_pap:'Pay at Property', nav_reviews:'Verified Reviews', nav_loyalty:'CBS Club Loyalty',
     nav_matcher:'Roommate Matcher', nav_agreement:'Rental Agreement', other_phases:'Other phases', role_tenant:'CBS Club · Level 2 Plus',
     footer_note:'CBS Stays Bangladesh · Phase 3 prototype · all data on this page is simulated', footer_hub:'← Back to prototype hub',
+    nav_notif:'Notifications', nav_noshow:'No-Show & Suspension',
+    h_notif:'Notification matrix · Section 11', h_notif_sub:'SMS (primary), email, web push, WhatsApp (optional)',
+    n_event:'Event', n_booking_conf:'Booking confirmed', n_payment:'Payment received', n_payout:'Payout sent', n_review_req:'Review request', n_listing_exp:'Listing expiry',
+    h_notif_feed:'Live feed (demo)',
+    h_noshow:'No-show incidents · FR-B5 (admin view)', h_noshow_sub:'Two no-shows in a rolling 6 months suspends Pay-at-Property',
+    noshow_privilege:'Pay-at-Property privilege', noshow_active:'Active', noshow_suspended:'Suspended', noshow_suspend_btn:'Suspend privilege', noshow_restore_btn:'Restore privilege',
     pap_title:'Token deposit eligibility · FR-B4', pap_sub:'Admin-configurable rules decide who can use Pay at Property instead of full online payment.',
     pap_c1:'NID & phone verified', pap_c2:'Owner allows Pay at Property', pap_c3:'No-show history', pap_c4:'Token amount (15% of first month)', pap_clean:'Clean',
     pap_secure:'Secure booking with token',
@@ -312,6 +362,67 @@ function renderMatches(){
     </div>`).join('');
 }
 
+/* ---- notification matrix (Section 11) ---- */
+const notifEvents=['n_booking_conf','n_payment','n_payout','n_review_req','n_listing_exp'];
+let notifState = {
+  n_booking_conf:{sms:true,email:true,push:true,wa:false},
+  n_payment:{sms:true,email:true,push:false,wa:false},
+  n_payout:{sms:true,email:false,push:false,wa:false},
+  n_review_req:{sms:false,email:true,push:true,wa:true},
+  n_listing_exp:{sms:true,email:false,push:true,wa:false},
+};
+function renderNotifMatrix(){
+  const t = window.I18N[LANG];
+  let html = `<div class="notif-row head"><span>${t.n_event}</span><span class="ch">SMS</span><span class="ch">Email</span><span class="ch">Push</span><span class="ch">WhatsApp</span></div>`;
+  html += notifEvents.map(ev=>{
+    const s = notifState[ev];
+    return `<div class="notif-row">
+      <span style="font-weight:600">${t[ev]}</span>
+      ${['sms','email','push','wa'].map(ch=>`<span class="ch"><div class="toggle ${s[ch]?'on':''}" data-notif-toggle="${ev}|${ch}"></div></span>`).join('')}
+    </div>`;
+  }).join('');
+  document.getElementById('notifMatrix').innerHTML = html;
+}
+const notifFeedItems=[
+  {ic:'check',chan:'SMS',text:{bn:'বুকিং নিশ্চিতকরণ পাঠানো হয়েছে Farzana Yasmin-কে',en:'Booking confirmation sent to Farzana Yasmin'},time:'10:42'},
+  {ic:'wallet',chan:'Email',text:{bn:'পেআউট রসিদ পাঠানো হয়েছে Md. Kamal Hossain-কে',en:'Payout receipt emailed to Md. Kamal Hossain'},time:'09:15'},
+  {ic:'star',chan:'Push',text:{bn:'রিভিউ রিকোয়েস্ট পুশ নোটিফিকেশন পাঠানো হয়েছে',en:'Review-request push notification sent'},time:'Yesterday'},
+];
+function renderNotifFeed(){
+  document.getElementById('notifFeed').innerHTML = notifFeedItems.map(n=>`
+    <div class="notif-item">
+      <div class="notif-ic">${icon(n.ic,'icon-sm')}</div>
+      <div style="flex:1;min-width:0">
+        <div class="notif-chan">${n.chan}</div>
+        <div style="font-size:12.5px;margin-top:2px">${n.text[LANG]}</div>
+      </div>
+      <span class="muted mono" style="font-size:11px;white-space:nowrap">${n.time}</span>
+    </div>`).join('');
+}
+
+/* ---- no-show incidents (admin, FR-B5) ---- */
+let noshowCases=[
+  {name:'Rafiqul Amin',count:1,suspended:false,note:{bn:'জুনে ১টি নো-শো — ফ্ল্যাগড, এখনো সুবিধা সক্রিয়',en:'1 no-show in June — flagged, privilege still active'}},
+  {name:'Tania Sultana',count:2,suspended:true,note:{bn:'৬ মাসের মধ্যে ২টি নো-শো — সুবিধা স্বয়ংক্রিয়ভাবে স্থগিত হয়েছে',en:'2 no-shows within 6 months — privilege auto-suspended'}},
+];
+function renderNoshow(){
+  document.getElementById('noshowList').innerHTML = noshowCases.map((c,i)=>`
+    <div class="card noshow-card">
+      <div class="noshow-ic">${icon('shield')}</div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b style="font-size:13.5px">${c.name}</b>${statusBadge(c.suspended?'suspended':'active', LANG==='bn'?(c.suspended?'স্থগিত':'সক্রিয়'):(c.suspended?'Suspended':'Active'))}</div>
+        <div class="noshow-count">${[1,2].map(n=>`<span class="${n<=c.count?'hit':''}">${n}</span>`).join('')}</div>
+        <div class="muted" style="font-size:12.5px;margin-top:8px;line-height:1.5">${c.note[LANG]}</div>
+        <button class="btn ${c.suspended?'btn-outline':'btn-danger-outline'} btn-sm" style="margin-top:10px" data-noshow-action="${i}">${c.suspended ? window.I18N[LANG].noshow_restore_btn : window.I18N[LANG].noshow_suspend_btn}</button>
+      </div>
+    </div>`).join('');
+}
+function toggleNoshow(i){
+  noshowCases[i].suspended = !noshowCases[i].suspended;
+  renderNoshow();
+  toastMsg(noshowCases[i].suspended ? (LANG==='bn'?'সুবিধা স্থগিত করা হয়েছে':'Privilege suspended') : (LANG==='bn'?'সুবিধা পুনর্বহাল করা হয়েছে':'Privilege restored'), 'shield');
+}
+
 /* ---- wiring ---- */
 function wirePage(){
   document.getElementById('secureTokenBtn').addEventListener('click', secureToken);
@@ -329,13 +440,17 @@ function wirePage(){
   });
   document.addEventListener('click',e=>{
     if(e.target.closest('[data-action="matcher-msg"]')) toastMsg(LANG==='bn'?'ম্যাসেজিং (প্রোটোটাইপ)':'Messaging (prototype)','users');
+    const nt=e.target.closest('[data-notif-toggle]');
+    if(nt){ const [ev,ch]=nt.dataset.notifToggle.split('|'); notifState[ev][ch]=!notifState[ev][ch]; renderNotifMatrix(); return; }
+    const ns=e.target.closest('[data-noshow-action]');
+    if(ns){ toggleNoshow(parseInt(ns.dataset.noshowAction,10)); return; }
   });
-  window.onLangChange = ()=>{ renderReviews(); renderMatches(); };
+  window.onLangChange = ()=>{ renderReviews(); renderMatches(); renderNotifMatrix(); renderNotifFeed(); renderNoshow(); };
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{
   hydrateIcons(document);
-  renderReviews(); renderMatches();
+  renderReviews(); renderMatches(); renderNotifMatrix(); renderNotifFeed(); renderNoshow();
   wirePage();
   initNav('pap');
   initLang();
