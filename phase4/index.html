@@ -25,6 +25,27 @@
 
 .nrb-row{display:flex;gap:14px;align-items:center}
 .nrb-flag{width:38px;height:28px;border-radius:5px;background:var(--surface-3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--fg-muted);flex:none}
+
+/* ---- code block (sitemap / structured data) ---- */
+.code-block{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 16px;font-family:var(--font-mono);font-size:11.5px;line-height:1.7;overflow-x:auto;color:var(--fg-muted)}
+.code-block .k{color:var(--info)}
+.code-block .s{color:var(--ok)}
+.code-block .c{color:var(--fg-faint)}
+
+/* ---- PWA install mockup ---- */
+.phone-frame{
+  width:260px;margin:0 auto;border-radius:34px;background:var(--fg);padding:10px;box-shadow:var(--shadow-lg);
+}
+.phone-screen{background:var(--bg);border-radius:26px;overflow:hidden;position:relative;min-height:420px;display:flex;flex-direction:column}
+.phone-notch{height:22px;display:flex;align-items:center;justify-content:center}
+.phone-notch::after{content:'';width:60px;height:5px;border-radius:99px;background:var(--border-strong)}
+.phone-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;text-align:center}
+.phone-app-icon{width:56px;height:56px;border-radius:16px;background:linear-gradient(155deg,var(--brand),var(--brand-ink));color:var(--brand-fg);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:20px;box-shadow:var(--shadow-md)}
+.install-sheet{position:absolute;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--border);border-radius:16px 16px 0 0;padding:16px;box-shadow:0 -8px 20px rgba(0,0,0,.12);transform:translateY(0);transition:transform .25s cubic-bezier(.2,.8,.3,1)}
+.install-sheet.hidden-sheet{transform:translateY(110%)}
+.push-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}
+.push-row:last-child{border-bottom:none}
+.push-ic{width:34px;height:34px;border-radius:9px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;flex:none}
 </style>
 </head>
 <body>
@@ -41,6 +62,7 @@
     <button class="sb-link" data-view="nrb"><i data-icon="plane"></i><span data-t="nav_nrb">NRB &amp; Tourist Stays</span></button>
     <button class="sb-link" data-view="partners"><i data-icon="tools"></i><span data-t="nav_partners">Partner Services</span></button>
     <button class="sb-link" data-view="cities"><i data-icon="globe"></i><span data-t="nav_cities">City Expansion</span></button>
+    <button class="sb-link" data-view="pwa"><i data-icon="bell"></i><span data-t="nav_pwa">PWA Install &amp; Push</span></button>
     <button class="sb-link" data-view="kpi"><i data-icon="layout"></i><span data-t="nav_kpi">KPI Scorecard</span></button>
 
     <div class="phase-switch">
@@ -73,6 +95,31 @@
       <section class="view-section active" id="view-seo">
         <div class="section-title"><h2 data-t="h_seo">Area + type landing pages · FR-S12</h2><span class="count" data-t="h_seo_sub">Structured data, sitemaps, canonical URLs</span></div>
         <div style="display:flex;flex-direction:column;gap:16px;max-width:680px" id="seoList"></div>
+
+        <div class="section-title"><h2 data-t="h_sitemap">sitemap.xml output</h2></div>
+        <div class="code-block"><span class="c">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br>
+&lt;urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"&gt;<br>
+&nbsp;&nbsp;&lt;url&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;loc&gt;<span class="s">https://cbsstays.com/dhaka/mirpur/bachelor-flats</span>&lt;/loc&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;lastmod&gt;<span class="k">2026-11-18</span>&lt;/lastmod&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;changefreq&gt;daily&lt;/changefreq&gt;<br>
+&nbsp;&nbsp;&lt;/url&gt;<br>
+&nbsp;&nbsp;&lt;url&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;loc&gt;<span class="s">https://cbsstays.com/dhaka/dhanmondi/family-flats</span>&lt;/loc&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;lastmod&gt;<span class="k">2026-11-17</span>&lt;/lastmod&gt;<br>
+&nbsp;&nbsp;&lt;/url&gt;<br>
+&lt;/urlset&gt;</div>
+
+        <div class="section-title"><h2 data-t="h_jsonld">JSON-LD structured data (per listing)</h2></div>
+        <div class="code-block">{<br>
+&nbsp;&nbsp;<span class="k">"@context"</span>: <span class="s">"https://schema.org"</span>,<br>
+&nbsp;&nbsp;<span class="k">"@type"</span>: <span class="s">"Apartment"</span>,<br>
+&nbsp;&nbsp;<span class="k">"name"</span>: <span class="s">"Sunrise Residency — Room B"</span>,<br>
+&nbsp;&nbsp;<span class="k">"address"</span>: { <span class="k">"addressLocality"</span>: <span class="s">"Dhanmondi, Dhaka"</span> },<br>
+&nbsp;&nbsp;<span class="k">"numberOfRooms"</span>: <span class="c">1</span>,<br>
+&nbsp;&nbsp;<span class="k">"priceRange"</span>: <span class="s">"৳7,500/month"</span>,<br>
+&nbsp;&nbsp;<span class="k">"aggregateRating"</span>: { <span class="k">"ratingValue"</span>: <span class="c">4.8</span>, <span class="k">"reviewCount"</span>: <span class="c">32</span> }<br>
+}</div>
       </section>
 
       <!-- ===== NRB & TOURIST ===== -->
@@ -97,6 +144,50 @@
       <section class="view-section" id="view-cities">
         <div class="section-title"><h2 data-t="h_cities">Beyond Dhaka</h2><span class="count" data-t="h_cities_sub">Field-agent playbook repeated per city</span></div>
         <div style="display:flex;flex-direction:column;gap:12px" id="cityList"></div>
+      </section>
+
+      <!-- ===== PWA INSTALL & PUSH ===== -->
+      <section class="view-section" id="view-pwa">
+        <div class="section-title"><h2 data-t="h_pwa">Installable PWA &amp; web push</h2><span class="count" data-t="h_pwa_sub">Add-to-home-screen, offline shell, opt-in push</span></div>
+        <div class="two-col">
+          <div>
+            <div class="phone-frame">
+              <div class="phone-screen">
+                <div class="phone-notch"></div>
+                <div class="phone-body">
+                  <div class="phone-app-icon">CS</div>
+                  <div style="font-weight:700;font-size:13px">CBS Stays</div>
+                  <div class="muted" style="font-size:11.5px" data-t="pwa_browsing">Browsing in Chrome…</div>
+                </div>
+                <div class="install-sheet" id="installSheet">
+                  <div style="display:flex;gap:11px;align-items:center;margin-bottom:12px">
+                    <div class="phone-app-icon" style="width:40px;height:40px;font-size:14px;border-radius:11px">CS</div>
+                    <div style="flex:1;min-width:0">
+                      <div style="font-weight:700;font-size:13px" data-t="pwa_install_title">Install CBS Stays?</div>
+                      <div class="muted" style="font-size:11px" data-t="pwa_install_sub">Works offline · add to home screen</div>
+                    </div>
+                  </div>
+                  <div style="display:flex;gap:8px">
+                    <button class="btn btn-ghost btn-sm btn-block" id="pwaDismissBtn" data-t="pwa_dismiss">Not now</button>
+                    <button class="btn btn-primary btn-sm btn-block" id="pwaInstallBtn" data-t="pwa_install_cta">Install</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="card" style="margin-bottom:16px">
+              <div style="font-weight:700;font-size:14px;margin-bottom:4px" data-t="pwa_offline_title">Offline shell caching</div>
+              <div class="muted" style="font-size:12.5px;margin-bottom:12px" data-t="pwa_offline_sub">For variable mobile data — the app shell, saved searches and recent bookings stay viewable without a connection.</div>
+              <div class="progress"><span style="width:100%;background:var(--ok)"></span></div>
+              <div class="muted tabular" style="font-size:11px;margin-top:6px" data-t="pwa_cache_status">Shell cached · 2.1 MB</div>
+            </div>
+            <div class="card">
+              <div style="font-weight:700;font-size:14px;margin-bottom:10px" data-t="pwa_push_title">Web push opt-in</div>
+              <div id="pushRows"></div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- ===== KPI ===== -->
@@ -126,6 +217,13 @@ window.I18N = {
     nav_group:'স্কেল', nav_seo:'SEO ল্যান্ডিং পেজ', nav_nrb:'NRB ও ট্যুরিস্ট স্টে', nav_partners:'পার্টনার সার্ভিসেস', nav_cities:'সিটি এক্সপ্যানশন', nav_kpi:'KPI স্কোরকার্ড',
     other_phases:'অন্য ফেজ', role_lead:'গ্রোথ ও স্কেল ভিউ',
     footer_note:'CBS Stays Bangladesh · ফেজ ৪ প্রোটোটাইপ · এই পেজের সব ডেটা সিমুলেটেড', footer_hub:'← প্রোটোটাইপ হাবে ফিরে যান',
+    nav_pwa:'PWA ইনস্টল ও পুশ', h_sitemap:'sitemap.xml আউটপুট', h_jsonld:'JSON-LD স্ট্রাকচার্ড ডেটা (প্রতি লিস্টিং)',
+    h_pwa:'ইনস্টলযোগ্য PWA ও ওয়েব পুশ', h_pwa_sub:'অ্যাড-টু-হোম-স্ক্রিন, অফলাইন শেল, অপ্ট-ইন পুশ',
+    pwa_browsing:'Chrome-এ ব্রাউজ করছেন…', pwa_install_title:'CBS Stays ইনস্টল করবেন?', pwa_install_sub:'অফলাইনে কাজ করে · হোম স্ক্রিনে যোগ করুন',
+    pwa_dismiss:'এখন না', pwa_install_cta:'ইনস্টল করুন',
+    pwa_offline_title:'অফলাইন শেল ক্যাশিং', pwa_offline_sub:'ভ্যারিয়েবল মোবাইল ডেটার জন্য — অ্যাপ শেল, সেভড সার্চ ও সাম্প্রতিক বুকিং ইন্টারনেট ছাড়াও দেখা যাবে।',
+    pwa_cache_status:'শেল ক্যাশড · ২.১ MB', pwa_push_title:'ওয়েব পুশ অপ্ট-ইন',
+    push_booking:'বুকিং আপডেট', push_payment:'পেমেন্ট ও পেআউট', push_promo:'অফার ও প্রোমোশন', push_price:'প্রাইস ড্রপ অ্যালার্ট', pwa_installed:'ইনস্টল করা হয়েছে (ডেমো)',
     h_seo:'এরিয়া + টাইপ ল্যান্ডিং পেজ · FR-S12', h_seo_sub:'স্ট্রাকচার্ড ডেটা, সাইটম্যাপ, ক্যানোনিক্যাল URL',
     h_nrb:'NRB ও ভিজিটর স্টে · FR-C6', nrb_card_title:'ফার্নিশড শর্ট-স্টে ফিল্টার',
     h_tourist:'ট্যুরিস্ট গন্তব্য · FR-C8', h_tourist_sub:'হোটেল ও গেস্ট-হাউস ইনভেন্টরি, সিজনাল প্রাইসিং',
@@ -137,6 +235,13 @@ window.I18N = {
     nav_group:'Scale', nav_seo:'SEO Landing Pages', nav_nrb:'NRB & Tourist Stays', nav_partners:'Partner Services', nav_cities:'City Expansion', nav_kpi:'KPI Scorecard',
     other_phases:'Other phases', role_lead:'Growth & scale view',
     footer_note:'CBS Stays Bangladesh · Phase 4 prototype · all data on this page is simulated', footer_hub:'← Back to prototype hub',
+    nav_pwa:'PWA Install & Push', h_sitemap:'sitemap.xml output', h_jsonld:'JSON-LD structured data (per listing)',
+    h_pwa:'Installable PWA & web push', h_pwa_sub:'Add-to-home-screen, offline shell, opt-in push',
+    pwa_browsing:'Browsing in Chrome…', pwa_install_title:'Install CBS Stays?', pwa_install_sub:'Works offline · add to home screen',
+    pwa_dismiss:'Not now', pwa_install_cta:'Install',
+    pwa_offline_title:'Offline shell caching', pwa_offline_sub:'For variable mobile data — the app shell, saved searches and recent bookings stay viewable without a connection.',
+    pwa_cache_status:'Shell cached · 2.1 MB', pwa_push_title:'Web push opt-in',
+    push_booking:'Booking updates', push_payment:'Payments & payouts', push_promo:'Offers & promotions', push_price:'Price-drop alerts', pwa_installed:'Installed (demo)',
     h_seo:'Area + type landing pages · FR-S12', h_seo_sub:'Structured data, sitemaps, canonical URLs',
     h_nrb:'NRB & visitor stays · FR-C6', nrb_card_title:'Furnished short-stay filter',
     h_tourist:'Tourist destinations · FR-C8', h_tourist_sub:'Hotel & guest-house inventory, seasonal pricing',
@@ -255,11 +360,37 @@ const STATUS_LABEL = {
 };
 function badgeFor(status){ return statusBadge(status, STATUS_LABEL[LANG][status] || status); }
 
-function renderAll(){ renderSeo(); renderNrb(); renderTourist(); renderPartners(); renderCities(); renderKpi(); }
+/* ---- PWA push opt-in ---- */
+let pushPrefs = {push_booking:true, push_payment:true, push_promo:false, push_price:false};
+function renderPush(){
+  document.getElementById('pushRows').innerHTML = Object.keys(pushPrefs).map(k=>`
+    <div class="push-row">
+      <div class="push-ic">${icon('bell','icon-sm')}</div>
+      <div style="flex:1;font-size:13px;font-weight:600">${window.I18N[LANG][k]}</div>
+      <div class="toggle ${pushPrefs[k]?'on':''}" data-push-toggle="${k}"></div>
+    </div>`).join('');
+}
+
+function renderAll(){ renderSeo(); renderNrb(); renderTourist(); renderPartners(); renderCities(); renderKpi(); renderPush(); }
+
+function wirePwa(){
+  document.getElementById('pwaInstallBtn').addEventListener('click',()=>{
+    document.getElementById('installSheet').classList.add('hidden-sheet');
+    toastMsg(window.I18N[LANG].pwa_installed, 'check');
+  });
+  document.getElementById('pwaDismissBtn').addEventListener('click',()=>{
+    document.getElementById('installSheet').classList.add('hidden-sheet');
+  });
+  document.addEventListener('click',e=>{
+    const pt=e.target.closest('[data-push-toggle]');
+    if(pt){ const k=pt.dataset.pushToggle; pushPrefs[k]=!pushPrefs[k]; renderPush(); }
+  });
+}
 
 document.addEventListener('DOMContentLoaded', ()=>{
   hydrateIcons(document);
   renderAll();
+  wirePwa();
   initNav('seo');
   initLang();
   window.onLangChange = renderAll;

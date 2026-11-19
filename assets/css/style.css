@@ -289,7 +289,7 @@ tbody tr:hover{background:var(--surface-2)}
   .app-topbar h1{font-size:16px}
   .app-topbar .lang-toggle{order:1;margin-left:0}
 }
-.app-view{padding:26px 28px 0;max-width:1220px;flex:1;display:flex;flex-direction:column;width:100%}
+.app-view{padding:26px 28px 0;flex:1;display:flex;flex-direction:column;width:100%}
 .view-section{display:none}
 .view-section.active{display:block;animation:fadein .18s ease}
 .app-footer{
