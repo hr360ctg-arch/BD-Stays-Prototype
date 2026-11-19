@@ -53,6 +53,8 @@
     <button class="sb-link" data-view="loyalty"><i data-icon="gift"></i><span data-t="nav_loyalty">CBS Club Loyalty</span></button>
     <button class="sb-link" data-view="matcher"><i data-icon="users"></i><span data-t="nav_matcher">Roommate Matcher</span></button>
     <button class="sb-link" data-view="agreement"><i data-icon="file"></i><span data-t="nav_agreement">Rental Agreement</span></button>
+    <button class="sb-link" data-view="notifications"><i data-icon="bell"></i><span data-t="nav_notif">Notifications</span></button>
+    <button class="sb-link" data-view="noshow"><i data-icon="shield"></i><span data-t="nav_noshow">No-Show &amp; Suspension</span></button>
 
     <div class="phase-switch">
       <div class="phase-switch-label" data-t="other_phases">Other phases</div>
@@ -176,6 +178,7 @@
             <div class="ag-field"><span data-t="ag_term">Term</span><span>12 months, from Dec 1, 2026</span></div>
             <div class="ag-field"><span data-t="ag_rent">Monthly rent</span><span>৳ 22,000</span></div>
             <div class="ag-field"><span data-t="ag_deposit">Security deposit</span><span>৳ 44,000 (2 months)</span></div>
+            <div class="ag-field"><span data-t="ag_stamp">Stamp paper (e-stamp)</span><span class="stamp-pill"><i data-icon="shield" data-icon-cls="icon-sm"></i>৳ 300 — <span data-t="ag_stamp_status">attached on final sign</span></span></div>
             <div class="sign-box" id="ownerSign" data-t="ag_owner_wait">Awaiting owner e-signature</div>
             <div class="sign-box" id="tenantSign" data-t="ag_tenant_wait">Awaiting tenant e-signature</div>
           </div>
@@ -194,6 +197,10 @@
         </div>
       </section>
 
+      <div class="app-footer">
+        <span data-t="footer_note">CBS Stays Bangladesh · Phase 3 prototype · all data on this page is simulated</span>
+        <a href="../index.html" data-t="footer_hub">← Back to prototype hub</a>
+      </div>
     </div>
   </div>
 </div>
@@ -205,6 +212,7 @@ window.I18N = {
   bn:{
     nav_group:'ডিফারেনশিয়েটর', nav_pap:'পে অ্যাট প্রপার্টি', nav_reviews:'ভেরিফাইড রিভিউ', nav_loyalty:'CBS ক্লাব লয়্যালটি',
     nav_matcher:'রুমমেট ম্যাচার', nav_agreement:'রেন্টাল এগ্রিমেন্ট', other_phases:'অন্য ফেজ', role_tenant:'CBS ক্লাব · লেভেল ২ প্লাস',
+    footer_note:'CBS Stays Bangladesh · ফেজ ৩ প্রোটোটাইপ · এই পেজের সব ডেটা সিমুলেটেড', footer_hub:'← প্রোটোটাইপ হাবে ফিরে যান',
     pap_title:'টোকেন ডিপোজিট যোগ্যতা · FR-B4', pap_sub:'অ্যাডমিন-কনফিগারযোগ্য নিয়ম ঠিক করে কে সম্পূর্ণ অনলাইন পেমেন্টের বদলে পে অ্যাট প্রপার্টি ব্যবহার করতে পারবে।',
     pap_c1:'NID ও ফোন ভেরিফায়েড', pap_c2:'মালিক পে অ্যাট প্রপার্টি অনুমতি দিয়েছেন', pap_c3:'নো-শো হিস্টরি', pap_c4:'টোকেন পরিমাণ (প্রথম মাসের ১৫%)', pap_clean:'পরিষ্কার',
     pap_secure:'টোকেন দিয়ে বুকিং নিশ্চিত করুন',
@@ -228,6 +236,7 @@ window.I18N = {
   en:{
     nav_group:'Differentiators', nav_pap:'Pay at Property', nav_reviews:'Verified Reviews', nav_loyalty:'CBS Club Loyalty',
     nav_matcher:'Roommate Matcher', nav_agreement:'Rental Agreement', other_phases:'Other phases', role_tenant:'CBS Club · Level 2 Plus',
+    footer_note:'CBS Stays Bangladesh · Phase 3 prototype · all data on this page is simulated', footer_hub:'← Back to prototype hub',
     pap_title:'Token deposit eligibility · FR-B4', pap_sub:'Admin-configurable rules decide who can use Pay at Property instead of full online payment.',
     pap_c1:'NID & phone verified', pap_c2:'Owner allows Pay at Property', pap_c3:'No-show history', pap_c4:'Token amount (15% of first month)', pap_clean:'Clean',
     pap_secure:'Secure booking with token',

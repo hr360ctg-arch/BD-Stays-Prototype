@@ -52,7 +52,7 @@
 }
 .map-pin{position:absolute;background:var(--fg);color:var(--bg);font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;box-shadow:var(--shadow-md);transform:translate(-50%,-50%);cursor:pointer;white-space:nowrap}
 .map-pin.active{background:var(--brand);color:var(--brand-fg)}
-.map-inner{position:relative;flex:1}
+.map-inner{position:relative;flex:1;transition:opacity .25s ease}
 
 /* ---- unit table ---- */
 .unit-row{display:grid;grid-template-columns:72px minmax(0,1.6fr) minmax(0,1fr) auto;gap:14px;align-items:center;padding:16px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);transition:.12s ease}
@@ -104,6 +104,37 @@
 .job-route .pt.end .d{background:var(--danger)}
 .job-route .ln{flex:1;height:2px;background:repeating-linear-gradient(90deg,var(--border-strong) 0 6px, transparent 6px 11px);margin:0 6px}
 .job-route .lbl{font-size:11.5px;color:var(--fg-muted);margin-top:4px;max-width:120px}
+
+/* ---- owner onboarding wizard ---- */
+.wizard-steps{display:flex;gap:6px;flex-wrap:wrap}
+.wizard-step{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;border:1px solid var(--border-strong);background:var(--surface);font-size:12px;font-weight:600;color:var(--fg-muted);cursor:pointer}
+.wizard-step .num{width:18px;height:18px;border-radius:999px;background:var(--surface-3);display:flex;align-items:center;justify-content:center;font-size:10px;flex:none}
+.wizard-step.done{color:var(--ok);border-color:var(--ok)}
+.wizard-step.done .num{background:var(--ok-soft);color:var(--ok)}
+.wizard-step.on{color:var(--brand);border-color:var(--brand);background:var(--brand-soft)}
+.wizard-step.on .num{background:var(--brand);color:var(--brand-fg)}
+.wiz-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:620px){.wiz-grid{grid-template-columns:minmax(0,1fr)}}
+.wiz-photo-slot{aspect-ratio:4/3;border:1.5px dashed var(--border-strong);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;color:var(--fg-faint);background:var(--surface-2)}
+.wiz-actions{display:flex;justify-content:space-between;margin-top:20px;gap:10px}
+
+/* ---- availability calendar ---- */
+.cal-legend{display:flex;gap:18px;margin-bottom:14px;flex-wrap:wrap}
+.cal-legend span{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--fg-muted)}
+.cal-dot{width:11px;height:11px;border-radius:4px;display:inline-block}
+.cal-avail{background:var(--ok-soft);border:1px solid var(--ok)}
+.cal-booked{background:var(--danger-soft);border:1px solid var(--danger)}
+.cal-blocked{background:var(--surface-3);border:1px solid var(--border-strong)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.cal-cell{aspect-ratio:1;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-family:var(--font-mono);cursor:pointer;transition:.1s ease}
+.cal-cell.avail{background:var(--ok-soft);color:var(--ok)}
+.cal-cell.booked{background:var(--danger-soft);color:var(--danger)}
+.cal-cell.blocked{background:var(--surface-3);color:var(--fg-faint)}
+.cal-cell:hover{filter:brightness(0.95)}
+
+/* ---- disputes ---- */
+.dispute-card{display:flex;gap:14px;align-items:flex-start}
+.dispute-ic{width:38px;height:38px;border-radius:10px;background:var(--danger-soft);color:var(--danger);display:flex;align-items:center;justify-content:center;flex:none}
 </style>
 </head>
 <body>
@@ -124,6 +155,12 @@
     <button class="sb-link" data-view="food"><i data-icon="food"></i><span data-t="nav_food_disc">Discovery</span></button>
     <button class="sb-link" data-view="restaurant"><i data-icon="building"></i><span data-t="nav_rest_dash">Restaurant Dashboard</span></button>
     <button class="sb-link" data-view="rider"><i data-icon="bike"></i><span data-t="nav_rider">Rider App</span></button>
+
+    <div class="sb-group" data-t="nav_ops">Owner &amp; operations</div>
+    <button class="sb-link" data-view="onboarding"><i data-icon="building"></i><span data-t="nav_onboarding">Owner Onboarding</span></button>
+    <button class="sb-link" data-view="calendar"><i data-icon="calendar"></i><span data-t="nav_calendar">Availability &amp; iCal</span></button>
+    <button class="sb-link" data-view="disputes"><i data-icon="shield"></i><span data-t="nav_disputes">Disputes</span></button>
+    <button class="sb-link" data-view="reconcile"><i data-icon="wallet"></i><span data-t="nav_reconcile">Payment Reconciliation</span></button>
 
     <div class="phase-switch">
       <div class="phase-switch-label" data-t="other_phases">Other phases</div>
@@ -176,6 +213,7 @@
               <span class="badge badge-brand" data-t="map_live">Live as you move</span>
             </div>
             <div class="map-inner" id="mapInner"></div>
+            <button class="btn btn-outline btn-sm btn-block" style="margin-top:12px" id="mapRefreshBtn"><i data-icon="map" data-icon-cls="icon-sm"></i><span data-t="map_refresh">Simulate panning the map (FR-S2)</span></button>
           </div>
         </div>
       </section>
@@ -301,6 +339,63 @@
         </div>
       </section>
 
+      <!-- ===== OWNER ONBOARDING WIZARD (FR-H1) ===== -->
+      <section class="view-section" id="view-onboarding">
+        <div class="section-title"><h2 data-t="h_onboard">Owner onboarding wizard · FR-H1</h2><span class="count" data-t="h_onboard_sub">Bangla + English · phone-assisted onboarding supported</span></div>
+        <div class="wizard-steps" id="wizardSteps"></div>
+        <div class="card" id="wizardBody" style="margin-top:16px"></div>
+      </section>
+
+      <!-- ===== AVAILABILITY & iCAL (FR-H4) ===== -->
+      <section class="view-section" id="view-calendar">
+        <div class="section-title"><h2 data-t="h_cal">Per-unit availability calendar · FR-H4</h2><span class="count" id="calUnitLabel"></span></div>
+        <div class="filter-bar" id="calUnitTabs"></div>
+        <div class="card">
+          <div class="cal-legend">
+            <span><i class="cal-dot cal-avail"></i><span data-t="cal_avail">Available</span></span>
+            <span><i class="cal-dot cal-booked"></i><span data-t="cal_booked">Booked</span></span>
+            <span><i class="cal-dot cal-blocked"></i><span data-t="cal_blocked">Owner-blocked</span></span>
+          </div>
+          <div class="cal-grid" id="calGrid"></div>
+        </div>
+        <div class="card" style="margin-top:16px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap">
+          <div>
+            <div style="font-weight:700;font-size:13.5px" data-t="ical_title">iCal sync</div>
+            <div class="muted" style="font-size:12px" data-t="ical_sub">Import or export this unit's calendar to avoid double-booking with other channels</div>
+          </div>
+          <div style="display:flex;gap:9px">
+            <button class="btn btn-outline btn-sm" id="icalImportBtn"><i data-icon="file" data-icon-cls="icon-sm"></i><span data-t="ical_import">Import .ics</span></button>
+            <button class="btn btn-outline btn-sm" id="icalExportBtn"><i data-icon="file" data-icon-cls="icon-sm"></i><span data-t="ical_export">Export .ics link</span></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== DISPUTES (FR-B13) ===== -->
+      <section class="view-section" id="view-disputes">
+        <div class="section-title"><h2 data-t="h_disp">Dispute handling · FR-B13</h2><span class="count" data-t="h_disp_sub">Tenant may report an issue within 24h of check-in; payout held pending resolution</span></div>
+        <div style="display:flex;flex-direction:column;gap:14px" id="disputeList"></div>
+      </section>
+
+      <!-- ===== PAYMENT RECONCILIATION (FR-B14) ===== -->
+      <section class="view-section" id="view-reconcile">
+        <div class="section-title"><h2 data-t="h_rec">Payment reconciliation · FR-B14</h2><span class="count" data-t="h_rec_sub">Matching aggregator settlements with platform records</span></div>
+        <div class="grid cards-3" style="margin-bottom:18px">
+          <div class="card"><div class="stat-label"><i data-icon="wallet" data-icon-cls="icon-sm"></i><span data-t="rec_total">Settled today</span></div><div class="stat-value tabular">৳ 1,84,620</div><div class="stat-sub up"><i data-icon="check" data-icon-cls="icon-sm"></i><span data-t="rec_matched">38 of 39 matched</span></div></div>
+          <div class="card"><div class="stat-label"><i data-icon="shield" data-icon-cls="icon-sm" style="color:var(--warn)"></i><span data-t="rec_flag">Flagged</span></div><div class="stat-value tabular" style="color:var(--warn)">1</div><div class="stat-sub muted" data-t="rec_flag_sub">Amount mismatch — needs review</div></div>
+          <div class="card"><div class="stat-label"><i data-icon="database" data-icon-cls="icon-sm"></i><span data-t="rec_aggr">Aggregator</span></div><div class="stat-value" style="font-size:16px">SSLCommerz</div><div class="stat-sub muted" data-t="rec_aggr_sub">Daily settlement file, 06:00 BST</div></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th data-t="col_txn">Transaction</th><th data-t="col_booking">Booking</th><th data-t="col_aggramt">Aggregator amount</th><th data-t="col_platamt">Platform record</th><th data-t="col_status">Status</th></tr></thead>
+            <tbody id="recTbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="app-footer">
+        <span data-t="footer_note">CBS Stays Bangladesh · Phase 2 prototype · all data on this page is simulated</span>
+        <a href="../index.html" data-t="footer_hub">← Back to prototype hub</a>
+      </div>
     </div>
   </div>
 </div>
@@ -313,9 +408,10 @@ window.I18N = {
     nav_stays:'স্টে মার্কেটপ্লেস', nav_search:'সার্চ ও ম্যাপ', nav_detail:'প্রপার্টি ডিটেইল', nav_booking:'বুকিং ও পেমেন্ট',
     nav_food:'ফুড অর্ডারিং', nav_food_disc:'ডিসকভারি', nav_rest_dash:'রেস্টুরেন্ট ড্যাশবোর্ড', nav_rider:'রাইডার অ্যাপ',
     other_phases:'অন্য ফেজ', role_tenant:'টেন্যান্ট · NID ভেরিফায়েড',
+    footer_note:'CBS Stays Bangladesh · ফেজ ২ প্রোটোটাইপ · এই পেজের সব ডেটা সিমুলেটেড', footer_hub:'← প্রোটোটাইপ হাবে ফিরে যান',
     f_any:'যেকোনো টেন্যান্ট', f_family:'শুধু ফ্যামিলি', f_bachelor:'ব্যাচেলর অ্যালাউড', f_student:'স্টুডেন্ট',
     f_instant:'ইনস্ট্যান্ট বুকিং', f_cancel:'ফ্রি ক্যান্সেলেশন',
-    map_title:'ঢাকা — বাউন্ডিং-বক্স সার্চ', map_live:'ম্যাপ নড়লে লাইভ',
+    map_title:'ঢাকা — বাউন্ডিং-বক্স সার্চ', map_live:'ম্যাপ নড়লে লাইভ', map_refresh:'ম্যাপ প্যান করার সিমুলেশন (FR-S2)',
     gallery_more:'+১১টি আরও ছবি', prop_title:'সানরাইজ রেসিডেন্সি — ৬-ইউনিট অ্যাপার্টমেন্ট ফ্লোর',
     prop_addr:'রোড ২৭, ধানমন্ডি, ঢাকা · বুকিংয়ের পর সঠিক ঠিকানা দেখানো হবে',
     dep_note:'পুরো ফ্ল্যাট বুক করলে নিচের সব রুম ও সিট সেই তারিখের জন্য ব্লক হয়ে যাবে — আবার যেকোনো রুম বুক করলে পুরো ফ্ল্যাট ব্লক হয়ে যাবে। নিচে সিলেক্ট করার সাথে সাথে এটা লাইভ কার্যকর হয় (FR-H3)। চেষ্টা করে দেখুন।',
@@ -337,14 +433,34 @@ window.I18N = {
     r_rating:'রাইডার রেটিং', r_rating_sub:'মোট ১৮২টি ডেলিভারি',
     h_job:'নতুন জব অফার', job_pickup:'বিরিয়ানি বাড়ি, ধানমন্ডি', job_drop:'সানরাইজ রেসিডেন্সি, রোড ২৭',
     job_dist:'২.১ কিমি · ~৯ মিনিট', job_fee:'ডেলিভারি ফি: ৳ ৫৫', job_reject:'প্রত্যাখ্যান', job_accept:'জব গ্রহণ করুন',
+    nav_ops:'মালিক ও অপারেশন', nav_onboarding:'ওনার অনবোর্ডিং', nav_calendar:'অ্যাভেইলেবিলিটি ও iCal', nav_disputes:'ডিসপিউট', nav_reconcile:'পেমেন্ট রিকনসিলিয়েশন',
+    h_onboard:'ওনার অনবোর্ডিং উইজার্ড · FR-H1', h_onboard_sub:'বাংলা + ইংরেজি · ফোন-অ্যাসিস্টেড অনবোর্ডিং সাপোর্টেড',
+    wiz_step1:'প্রপার্টি টাইপ', wiz_step2:'ঠিকানা', wiz_step3:'ছবি', wiz_step4:'সুযোগসুবিধা ও নিয়ম', wiz_step5:'টেন্যান্ট টাইপ ও মূল্য',
+    wiz1_q:'এটি কোন ধরনের প্রপার্টি?', wiz1_a:'ফ্ল্যাট (পুরো)', wiz1_b:'রুম / সিট', wiz1_c:'মেস', wiz1_d:'ট্যুরিস্ট/গেস্ট হাউস',
+    wiz2_title:'ঠিকানা দিন', wiz2_hint:'সঠিক ঠিকানা বুকিং না হওয়া পর্যন্ত গোপন থাকবে — শুধু এলাকা পাবলিক দেখানো হবে।',
+    wiz2_division:'বিভাগ', wiz2_district:'জেলা', wiz2_thana:'থানা', wiz2_area:'এলাকা / মহল্লা', wiz2_exact:'সঠিক ঠিকানা (গোপন)',
+    wiz3_title:'ছবি আপলোড করুন', wiz3_hint:'লাইভ লিস্টিংয়ের জন্য কমপক্ষে ৫টি ছবি প্রয়োজন (ড্রাফটের জন্য ১টি) — FR-H7',
+    wiz4_title:'সুযোগসুবিধা ও বাড়ির নিয়ম বাছাই করুন',
+    wiz5_title:'টেন্যান্ট টাইপ ও মূল্য নির্ধারণ করুন', wiz5_tt:'টেন্যান্ট টাইপ', wiz5_price:'মাসিক ভাড়া (৳)',
+    wiz_back:'পেছনে', wiz_next:'পরবর্তী', wiz_submit:'রিভিউর জন্য জমা দিন', wiz_agent:'এজেন্ট সাহায্যের জন্য অনুরোধ করুন',
+    wiz_submitted_title:'রিভিউর জন্য জমা হয়েছে', wiz_submitted_sub:'প্রথম প্রকাশের আগে অ্যাডমিন অনুমোদন প্রয়োজন (FR-H8)। মালিক ড্যাশবোর্ডে স্ট্যাটাস দেখতে পারবেন।',
+    h_cal:'প্রতি-ইউনিট অ্যাভেইলেবিলিটি ক্যালেন্ডার · FR-H4', cal_avail:'উপলব্ধ', cal_booked:'বুকড', cal_blocked:'মালিক-ব্লকড',
+    ical_title:'iCal সিঙ্ক', ical_sub:'অন্য চ্যানেলের সাথে ডাবল-বুকিং এড়াতে এই ইউনিটের ক্যালেন্ডার ইমপোর্ট/এক্সপোর্ট করুন',
+    ical_import:'.ics ইমপোর্ট করুন', ical_export:'.ics লিংক এক্সপোর্ট করুন',
+    h_disp:'ডিসপিউট হ্যান্ডলিং · FR-B13', h_disp_sub:'চেক-ইনের ২৪ ঘণ্টার মধ্যে টেন্যান্ট সমস্যা রিপোর্ট করতে পারবেন; সমাধান না হওয়া পর্যন্ত পেআউট হোল্ড থাকবে',
+    h_rec:'পেমেন্ট রিকনসিলিয়েশন · FR-B14', h_rec_sub:'অ্যাগ্রিগেটর সেটেলমেন্টের সাথে প্ল্যাটফর্ম রেকর্ড মেলানো',
+    rec_total:'আজ সেটেলড', rec_matched:'৩৯টির মধ্যে ৩৮টি মিলেছে', rec_flag:'ফ্ল্যাগড', rec_flag_sub:'পরিমাণ অমিল — রিভিউ প্রয়োজন',
+    rec_aggr:'অ্যাগ্রিগেটর', rec_aggr_sub:'দৈনিক সেটেলমেন্ট ফাইল, ভোর ৬:০০',
+    col_txn:'ট্রানজ্যাকশন', col_booking:'বুকিং', col_aggramt:'অ্যাগ্রিগেটর পরিমাণ', col_platamt:'প্ল্যাটফর্ম রেকর্ড',
   },
   en:{
     nav_stays:'Stays marketplace', nav_search:'Search & Map', nav_detail:'Property Detail', nav_booking:'Booking & Payment',
     nav_food:'Food ordering', nav_food_disc:'Discovery', nav_rest_dash:'Restaurant Dashboard', nav_rider:'Rider App',
     other_phases:'Other phases', role_tenant:'Tenant · NID verified',
+    footer_note:'CBS Stays Bangladesh · Phase 2 prototype · all data on this page is simulated', footer_hub:'← Back to prototype hub',
     f_any:'Any tenant', f_family:'Family only', f_bachelor:'Bachelor allowed', f_student:'Student',
     f_instant:'Instant booking', f_cancel:'Free cancellation',
-    map_title:'Dhaka — bounding-box search', map_live:'Live as you move',
+    map_title:'Dhaka — bounding-box search', map_live:'Live as you move', map_refresh:'Simulate panning the map (FR-S2)',
     gallery_more:'+11 more photos', prop_title:'Sunrise Residency — 6-unit apartment floor',
     prop_addr:'Road 27, Dhanmondi, Dhaka · exact address shown after booking',
     dep_note:'Booking the whole flat blocks every room and seat below for those dates — and booking any single room blocks the whole flat. This is enforced live as you select below (FR-H3). Try it.',
@@ -366,6 +482,25 @@ window.I18N = {
     r_rating:'Rider rating', r_rating_sub:'182 deliveries total',
     h_job:'New job offer', job_pickup:'Biriyani Bari, Dhanmondi', job_drop:'Sunrise Residency, Road 27',
     job_dist:'2.1 km · ~9 min', job_fee:'Delivery fee: ৳ 55', job_reject:'Decline', job_accept:'Accept job',
+    nav_ops:'Owner & operations', nav_onboarding:'Owner Onboarding', nav_calendar:'Availability & iCal', nav_disputes:'Disputes', nav_reconcile:'Payment Reconciliation',
+    h_onboard:'Owner onboarding wizard · FR-H1', h_onboard_sub:'Bangla + English · phone-assisted onboarding supported',
+    wiz_step1:'Property type', wiz_step2:'Address', wiz_step3:'Photos', wiz_step4:'Amenities & rules', wiz_step5:'Tenant type & pricing',
+    wiz1_q:'What type of property is this?', wiz1_a:'Whole flat', wiz1_b:'Room / seat', wiz1_c:'Mess', wiz1_d:'Tourist / guest house',
+    wiz2_title:'Enter the address', wiz2_hint:'The exact address stays hidden until booking — only the area is shown publicly.',
+    wiz2_division:'Division', wiz2_district:'District', wiz2_thana:'Thana', wiz2_area:'Area / neighbourhood', wiz2_exact:'Exact address (hidden)',
+    wiz3_title:'Upload photos', wiz3_hint:'At least 5 photos required for a live listing (1 for draft) — FR-H7',
+    wiz4_title:'Select amenities and house rules',
+    wiz5_title:'Set tenant type and pricing', wiz5_tt:'Tenant type', wiz5_price:'Monthly rent (৳)',
+    wiz_back:'Back', wiz_next:'Next', wiz_submit:'Submit for review', wiz_agent:'Request agent assistance',
+    wiz_submitted_title:'Submitted for review', wiz_submitted_sub:'Admin approval is required before first publication (FR-H8). The owner sees the status on their dashboard.',
+    h_cal:'Per-unit availability calendar · FR-H4', cal_avail:'Available', cal_booked:'Booked', cal_blocked:'Owner-blocked',
+    ical_title:'iCal sync', ical_sub:"Import or export this unit's calendar to avoid double-booking with other channels",
+    ical_import:'Import .ics', ical_export:'Export .ics link',
+    h_disp:'Dispute handling · FR-B13', h_disp_sub:'Tenant may report an issue within 24h of check-in; payout held pending resolution',
+    h_rec:'Payment reconciliation · FR-B14', h_rec_sub:'Matching aggregator settlements with platform records',
+    rec_total:'Settled today', rec_matched:'38 of 39 matched', rec_flag:'Flagged', rec_flag_sub:'Amount mismatch — needs review',
+    rec_aggr:'Aggregator', rec_aggr_sub:'Daily settlement file, 06:00 BST',
+    col_txn:'Transaction', col_booking:'Booking', col_aggramt:'Aggregator amount', col_platamt:'Platform record',
   }
 };
 
@@ -402,6 +537,17 @@ function renderListings(filter){
 function renderMap(){
   const pins=[{x:28,y:35,n:'1'},{x:55,y:22,n:'2'},{x:40,y:62,n:'3',on:true},{x:72,y:48,n:'4'},{x:60,y:75,n:'5'},{x:20,y:68,n:'6'}];
   document.getElementById('mapInner').innerHTML = pins.map(p=>`<span class="map-pin ${p.on?'active':''}" style="left:${p.x}%;top:${p.y}%">${p.n==='3'?'৳ 4,500':'৳ '+(10+p.n)+',000'}</span>`).join('');
+}
+function simulateMapPan(){
+  const inner = document.getElementById('mapInner');
+  inner.style.opacity = '.35';
+  setTimeout(()=>{
+    const pins = Array.from({length:6}).map((_,i)=>({x:12+Math.random()*76,y:12+Math.random()*76,n:String(i+1),on:i===2}));
+    inner.innerHTML = pins.map(p=>`<span class="map-pin ${p.on?'active':''}" style="left:${p.x.toFixed(0)}%;top:${p.y.toFixed(0)}%">৳ ${(6+Math.round(Math.random()*30))*1000}</span>`).join('');
+    inner.style.opacity = '1';
+    renderListings('any');
+    toastMsg(LANG==='bn' ? listings.length+'টি লিস্টিং এই এলাকায় পাওয়া গেছে' : listings.length+' listings found in this area','map');
+  },350);
 }
 
 /* ---- unit table / inventory dependency (FR-H3) ---- */
@@ -501,6 +647,130 @@ function renderMenu(){
     </div>`).join('');
 }
 
+/* ---- owner onboarding wizard (FR-H1) ---- */
+let wizStep = 1;
+let wizSubmitted = false;
+let wizPropType = 'whole';
+const wizStepKeys = ['wiz_step1','wiz_step2','wiz_step3','wiz_step4','wiz_step5'];
+function renderWizardSteps(){
+  document.getElementById('wizardSteps').innerHTML = wizStepKeys.map((k,i)=>{
+    const n=i+1;
+    const cls = wizSubmitted ? 'done' : (n===wizStep ? 'on' : (n<wizStep?'done':''));
+    return `<div class="wizard-step ${cls}" data-wiz-jump="${n}"><span class="num">${n<wizStep||wizSubmitted?icon('check','icon-sm'):n}</span>${window.I18N[LANG][k]}</div>`;
+  }).join('');
+}
+function renderWizardBody(){
+  const t = window.I18N[LANG];
+  const body = document.getElementById('wizardBody');
+  if(wizSubmitted){
+    body.innerHTML = `<div class="empty"><div class="badge badge-ok" style="margin-bottom:8px">${icon('check','icon-sm')}${LANG==='bn'?'জমা হয়েছে':'Submitted'}</div>
+      <b style="font-size:14px;color:var(--fg)">${t.wiz_submitted_title}</b>
+      <span style="max-width:46ch">${t.wiz_submitted_sub}</span></div>`;
+    return;
+  }
+  let html = '';
+  if(wizStep===1){
+    html = `<div style="font-weight:700;font-size:14px;margin-bottom:14px">${t.wiz1_q}</div>
+      <div class="wiz-grid">
+        ${[['whole',t.wiz1_a,'home'],['room',t.wiz1_b,'users'],['mess',t.wiz1_c,'building'],['tourist',t.wiz1_d,'plane']].map(([id,label,ic])=>`
+          <div class="pay-method ${wizPropType===id?'on':''}" data-wiz-prop="${id}"><div class="pm-mark" style="background:var(--brand)">${icon(ic,'icon-sm')}</div><div style="font-weight:700;font-size:13px">${label}</div></div>
+        `).join('')}
+      </div>`;
+  } else if(wizStep===2){
+    html = `<div style="font-weight:700;font-size:14px;margin-bottom:4px">${t.wiz2_title}</div>
+      <div class="muted" style="font-size:12px;margin-bottom:16px">${t.wiz2_hint}</div>
+      <div class="wiz-grid">
+        <div class="field"><label>${t.wiz2_division}</label><select><option>Dhaka</option><option>Chattogram</option><option>Sylhet</option></select></div>
+        <div class="field"><label>${t.wiz2_district}</label><select><option>Dhaka</option></select></div>
+        <div class="field"><label>${t.wiz2_thana}</label><select><option>Dhanmondi</option><option>Mirpur</option></select></div>
+        <div class="field"><label>${t.wiz2_area}</label><input type="text" value="Road 27, Dhanmondi"></div>
+      </div>
+      <div class="field" style="margin-top:14px"><label>${t.wiz2_exact}<span class="badge badge-muted" style="margin-left:6px">${icon('shield','icon-sm')}${LANG==='bn'?'গোপন':'Hidden'}</span></label><input type="text" value="House 14, Road 27, Dhanmondi, Dhaka"></div>`;
+  } else if(wizStep===3){
+    html = `<div style="font-weight:700;font-size:14px;margin-bottom:4px">${t.wiz3_title}</div>
+      <div class="muted" style="font-size:12px;margin-bottom:16px">${t.wiz3_hint}</div>
+      <div class="wiz-grid" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+        ${[1,2,3,4,5].map(i=>`<div class="wiz-photo-slot">${icon('file','icon-lg')}</div>`).join('')}
+      </div>`;
+  } else if(wizStep===4){
+    html = `<div style="font-weight:700;font-size:14px;margin-bottom:14px">${t.wiz4_title}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        ${['Lift','Generator / IPS','Gas supply','Water','Parking','Wi-Fi','CCTV','Security guard'].map((a,i)=>`<span class="chip ${i<4?'on':''}" data-wiz-amenity>${a}</span>`).join('')}
+      </div>`;
+  } else if(wizStep===5){
+    html = `<div style="font-weight:700;font-size:14px;margin-bottom:14px">${t.wiz5_title}</div>
+      <div class="wiz-grid">
+        <div class="field"><label>${t.wiz5_tt}</label><select><option>Family only</option><option>Bachelor allowed</option><option>Student</option><option>Any</option></select></div>
+        <div class="field"><label>${t.wiz5_price}</label><input type="text" value="22,000"></div>
+      </div>`;
+  }
+  html += `<div class="wiz-actions">
+    <button class="btn btn-ghost btn-sm" id="wizAgentBtn"><i data-icon="users" data-icon-cls="icon-sm"></i>${t.wiz_agent}</button>
+    <div style="display:flex;gap:9px">
+      ${wizStep>1?`<button class="btn btn-outline btn-sm" id="wizBackBtn">${t.wiz_back}</button>`:''}
+      ${wizStep<5?`<button class="btn btn-primary btn-sm" id="wizNextBtn">${t.wiz_next}</button>`:`<button class="btn btn-primary btn-sm" id="wizSubmitBtn"><i data-icon="check" data-icon-cls="icon-sm"></i>${t.wiz_submit}</button>`}
+    </div>
+  </div>`;
+  body.innerHTML = html;
+  hydrateIcons(body);
+}
+function renderWizard(){ renderWizardSteps(); renderWizardBody(); }
+
+/* ---- availability calendar (FR-H4) ---- */
+const calUnits = units.map(u=>u.id);
+let calActiveUnit = 'A';
+function dayState(unitId, day){
+  const h = (unitId.charCodeAt(0)*7 + day*3) % 9;
+  if(h<1) return 'blocked';
+  if(h<4) return 'booked';
+  return 'avail';
+}
+function renderCalTabs(){
+  document.getElementById('calUnitTabs').innerHTML = calUnits.map(id=>{
+    const u = units.find(x=>x.id===id);
+    return `<span class="chip ${calActiveUnit===id?'on':''}" data-cal-unit="${id}">${u.name}</span>`;
+  }).join('');
+  document.getElementById('calUnitLabel').textContent = LANG==='bn' ? 'নভেম্বর ২০২৬' : 'November 2026';
+}
+function renderCalGrid(){
+  const cells = [];
+  for(let d=1; d<=30; d++){
+    const st = dayState(calActiveUnit, d);
+    cells.push(`<div class="cal-cell ${st}" title="${st}">${d}</div>`);
+  }
+  document.getElementById('calGrid').innerHTML = cells.join('');
+}
+function renderCalendar(){ renderCalTabs(); renderCalGrid(); }
+
+/* ---- disputes (FR-B13) ---- */
+const disputes=[
+  {id:'#CBS-B-5521',name:'Jannatul Ferdous',issue:{bn:'ফ্ল্যাটে এসি কাজ করছিল না, মালিক সাথে সাথে ঠিক করাননি।',en:'AC was not working on arrival; owner did not fix it promptly.'},status:'review',held:'৳ 22,000'},
+  {id:'#CBS-B-5498',name:'Abu Rayhan Chowdhury',issue:{bn:'লিস্টিংয়ের ছবির সাথে প্রকৃত ফ্ল্যাটের মিল নেই।',en:'Listing photos did not match the actual flat.'},status:'resolved',held:'৳ 0'},
+];
+function renderDisputes(){
+  document.getElementById('disputeList').innerHTML = disputes.map(d=>`
+    <div class="card dispute-card">
+      <div class="dispute-ic">${icon('shield')}</div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b style="font-size:13.5px">${d.id} — ${d.name}</b>${statusBadge(d.status, d.status==='review'?(LANG==='bn'?'পর্যালোচনায়':'In review'):(LANG==='bn'?'সমাধান হয়েছে':'Resolved'))}</div>
+        <div class="muted" style="font-size:12.5px;margin-top:5px;line-height:1.5">${d.issue[LANG]}</div>
+        <div style="margin-top:9px;font-size:12px" class="tabular"><b>${LANG==='bn'?'হোল্ড করা পেআউট:':'Payout held:'}</b> ${d.held}</div>
+      </div>
+    </div>`).join('');
+}
+
+/* ---- reconciliation (FR-B14) ---- */
+const recRows=[
+  {txn:'TXN-88231',booking:'#CBS-B-5602',agg:'৳ 34,318',plat:'৳ 34,318',status:'ok'},
+  {txn:'TXN-88230',booking:'#CBS-B-5601',agg:'৳ 9,450',plat:'৳ 9,450',status:'ok'},
+  {txn:'TXN-88229',booking:'#CBS-B-5600',agg:'৳ 12,000',plat:'৳ 11,500',status:'warn'},
+  {txn:'TXN-88228',booking:'#CBS-B-5599',agg:'৳ 22,000',plat:'৳ 22,000',status:'ok'},
+];
+function renderReconcile(){
+  document.getElementById('recTbody').innerHTML = recRows.map(r=>`
+    <tr><td class="mono">${r.txn}</td><td class="mono">${r.booking}</td><td class="tabular">${r.agg}</td><td class="tabular">${r.plat}</td><td>${statusBadge(r.status, r.status==='ok'?(LANG==='bn'?'মিলেছে':'Matched'):(LANG==='bn'?'অমিল':'Mismatch'))}</td></tr>`).join('');
+}
+
 /* ---- wiring ---- */
 function wirePage(){
   document.querySelectorAll('.filter-bar .chip').forEach(c=>{
@@ -541,7 +811,26 @@ function wirePage(){
     if(oa){ decideOrder(parseInt(oa.dataset.index,10), oa.dataset.orderAction); return; }
     const mt=e.target.closest('[data-menu-toggle]');
     if(mt){ const i=parseInt(mt.dataset.menuToggle,10); menuItems[i].on=!menuItems[i].on; renderMenu(); return; }
+
+    const wj=e.target.closest('[data-wiz-jump]');
+    if(wj){ const n=parseInt(wj.dataset.wizJump,10); if(wizSubmitted || n<=wizStep){ wizStep=n; renderWizard(); } return; }
+    const wp=e.target.closest('[data-wiz-prop]');
+    if(wp){ wizPropType=wp.dataset.wizProp; renderWizardBody(); return; }
+    const wa=e.target.closest('[data-wiz-amenity]');
+    if(wa){ wa.classList.toggle('on'); return; }
+    if(e.target.closest('#wizNextBtn')){ wizStep=Math.min(5,wizStep+1); renderWizard(); return; }
+    if(e.target.closest('#wizBackBtn')){ wizStep=Math.max(1,wizStep-1); renderWizard(); return; }
+    if(e.target.closest('#wizSubmitBtn')){ wizSubmitted=true; renderWizard(); toastMsg(LANG==='bn'?'রিভিউর জন্য জমা হয়েছে':'Submitted for review','check'); return; }
+    if(e.target.closest('#wizAgentBtn')){ toastMsg(LANG==='bn'?'এজেন্ট কল শিডিউল করা হয়েছে (ডেমো)':'Agent call scheduled (demo)','users'); return; }
+
+    const cu=e.target.closest('[data-cal-unit]');
+    if(cu){ calActiveUnit=cu.dataset.calUnit; renderCalendar(); return; }
+    const cc=e.target.closest('.cal-cell');
+    if(cc && cc.textContent) toastMsg((LANG==='bn'?'তারিখ ':'Day ')+cc.textContent+' — '+cc.title);
   });
+  document.getElementById('mapRefreshBtn').addEventListener('click', simulateMapPan);
+  document.getElementById('icalImportBtn').addEventListener('click',()=>toastMsg(LANG==='bn'?'.ics ফাইল ইমপোর্ট করা হয়েছে (ডেমো)':'.ics file imported (demo)','file'));
+  document.getElementById('icalExportBtn').addEventListener('click',()=>toastMsg(LANG==='bn'?'iCal লিংক কপি হয়েছে: webcal://cbsstays.com/u/A.ics':'iCal link copied: webcal://cbsstays.com/u/A.ics','file'));
   document.getElementById('acceptJobBtn').addEventListener('click',()=>{
     toastMsg(LANG==='bn'?'জব গ্রহণ করা হয়েছে — নেভিগেশন শুরু হচ্ছে':'Job accepted — starting navigation','bike');
   });
@@ -551,12 +840,14 @@ function wirePage(){
 
   window.onLangChange = ()=>{
     renderListings('any'); renderMap(); renderUnits(); renderRestaurants(); renderOrders(); renderMenu();
+    renderWizard(); renderCalendar(); renderDisputes(); renderReconcile();
   };
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{
   hydrateIcons(document);
   renderListings('any'); renderMap(); renderUnits(); renderRestaurants(); renderOrders(); renderMenu();
+  renderWizard(); renderCalendar(); renderDisputes(); renderReconcile();
   wirePage();
   initNav('search');
   initLang();
