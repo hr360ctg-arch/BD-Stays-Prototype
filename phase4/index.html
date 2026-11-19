@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBS Stays — Phase 4 Scale</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<style>
+.seo-card{display:flex;flex-direction:column;gap:5px}
+.seo-url{font-family:var(--font-mono);font-size:11.5px;color:var(--ok)}
+.seo-title{font-size:15px;color:#1a0dab}
+.seo-desc{font-size:12.5px;color:var(--fg-muted);line-height:1.5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .seo-title{color:#8ab4f8}}
+:root[data-theme="dark"] .seo-title{color:#8ab4f8}
+
+.city-card{display:flex;align-items:center;gap:14px}
+.city-flag{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;flex:none}
+.city-stat{display:flex;gap:18px;margin-top:6px}
+.city-stat div{display:flex;flex-direction:column}
+.city-stat .n{font-weight:700;font-family:var(--font-display);font-size:14px}
+.city-stat .l{font-size:10.5px;color:var(--fg-muted)}
+
+.partner-card{display:flex;flex-direction:column;gap:10px;text-align:center;align-items:center;padding:22px 16px}
+.partner-ic{width:46px;height:46px;border-radius:12px;background:var(--brand-soft);color:var(--brand-soft-ink);display:flex;align-items:center;justify-content:center}
+
+.nrb-row{display:flex;gap:14px;align-items:center}
+.nrb-flag{width:38px;height:28px;border-radius:5px;background:var(--surface-3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--fg-muted);flex:none}
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <aside class="app-sidebar" id="sidebar">
+    <a class="sb-brand" href="../index.html">
+      <div class="sb-brand-mark">CS</div>
+      <div><div class="sb-brand-name">CBS Stays</div><div class="sb-brand-sub">Phase 4 · Scale</div></div>
+    </a>
+
+    <div class="sb-group" data-t="nav_group">Scale</div>
+    <button class="sb-link active" data-view="seo"><i data-icon="search"></i><span data-t="nav_seo">SEO Landing Pages</span></button>
+    <button class="sb-link" data-view="nrb"><i data-icon="plane"></i><span data-t="nav_nrb">NRB &amp; Tourist Stays</span></button>
+    <button class="sb-link" data-view="partners"><i data-icon="tools"></i><span data-t="nav_partners">Partner Services</span></button>
+    <button class="sb-link" data-view="cities"><i data-icon="globe"></i><span data-t="nav_cities">City Expansion</span></button>
+    <button class="sb-link" data-view="kpi"><i data-icon="layout"></i><span data-t="nav_kpi">KPI Scorecard</span></button>
+
+    <div class="phase-switch">
+      <div class="phase-switch-label" data-t="other_phases">Other phases</div>
+      <a href="../phase1/index.html">Phase 1 · Foundation<span class="chip">W1–6</span></a>
+      <a href="../phase2/index.html">Phase 2 · Core MVP<span class="chip">M2–4</span></a>
+      <a href="../phase3/index.html">Phase 3 · Differentiators<span class="chip">M4–8</span></a>
+    </div>
+
+    <div class="sb-foot">
+      <div class="sb-acct">
+        <div class="avatar">CL</div>
+        <div><div class="sb-acct-name">CBS Leadership</div><div class="sb-acct-role" data-t="role_lead">Growth &amp; scale view</div></div>
+        <a class="sb-logout" href="../index.html" title="Exit prototype"><i data-icon="back" data-icon-cls="icon-sm"></i></a>
+      </div>
+    </div>
+  </aside>
+
+  <div class="app-main">
+    <div class="app-topbar">
+      <button class="menu-btn" id="menuBtn"><i data-icon="menu" data-icon-cls="icon-sm"></i></button>
+      <div><h1 id="viewTitle" data-t="nav_seo">SEO Landing Pages</h1><div class="crumbs" id="viewCrumb">Phase 4 · Scale</div></div>
+      <span class="phase-pill">Phase 4</span>
+      <div class="lang-toggle" style="margin-left:0"><button class="active" data-lang="bn">বাং</button><button data-lang="en">EN</button></div>
+    </div>
+
+    <div class="app-view">
+
+      <!-- ===== SEO ===== -->
+      <section class="view-section active" id="view-seo">
+        <div class="section-title"><h2 data-t="h_seo">Area + type landing pages · FR-S12</h2><span class="count" data-t="h_seo_sub">Structured data, sitemaps, canonical URLs</span></div>
+        <div style="display:flex;flex-direction:column;gap:16px;max-width:680px" id="seoList"></div>
+      </section>
+
+      <!-- ===== NRB & TOURIST ===== -->
+      <section class="view-section" id="view-nrb">
+        <div class="section-title"><h2 data-t="h_nrb">NRB &amp; visitor stays · FR-C6</h2></div>
+        <div class="card" style="margin-bottom:22px">
+          <div style="font-weight:700;font-size:14px;margin-bottom:14px" data-t="nrb_card_title">Furnished short-stay filter</div>
+          <div style="display:flex;flex-direction:column;gap:12px" id="nrbList"></div>
+        </div>
+
+        <div class="section-title"><h2 data-t="h_tourist">Tourist destinations · FR-C8</h2><span class="count" data-t="h_tourist_sub">Hotel &amp; guest-house inventory, seasonal pricing</span></div>
+        <div class="grid cards-3" id="touristList"></div>
+      </section>
+
+      <!-- ===== PARTNER SERVICES ===== -->
+      <section class="view-section" id="view-partners">
+        <div class="section-title"><h2 data-t="h_partners">Partner services marketplace · FR-C9</h2><span class="count" data-t="h_partners_sub">Bookable at checkout, commission-based</span></div>
+        <div class="grid cards-4" id="partnerList"></div>
+      </section>
+
+      <!-- ===== CITIES ===== -->
+      <section class="view-section" id="view-cities">
+        <div class="section-title"><h2 data-t="h_cities">Beyond Dhaka</h2><span class="count" data-t="h_cities_sub">Field-agent playbook repeated per city</span></div>
+        <div style="display:flex;flex-direction:column;gap:12px" id="cityList"></div>
+      </section>
+
+      <!-- ===== KPI ===== -->
+      <section class="view-section" id="view-kpi">
+        <div class="section-title"><h2 data-t="h_kpi">Section 2 targets — 12-month scorecard</h2></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th data-t="col_kpi">KPI</th><th data-t="col_target">Target</th><th data-t="col_current">Current</th><th data-t="col_status">Status</th></tr></thead>
+            <tbody id="kpiTbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/common.js"></script>
+<script>
+window.PAGE_CRUMB = 'Phase 4 · Scale';
+window.I18N = {
+  bn:{
+    nav_group:'স্কেল', nav_seo:'SEO ল্যান্ডিং পেজ', nav_nrb:'NRB ও ট্যুরিস্ট স্টে', nav_partners:'পার্টনার সার্ভিসেস', nav_cities:'সিটি এক্সপ্যানশন', nav_kpi:'KPI স্কোরকার্ড',
+    other_phases:'অন্য ফেজ', role_lead:'গ্রোথ ও স্কেল ভিউ',
+    h_seo:'এরিয়া + টাইপ ল্যান্ডিং পেজ · FR-S12', h_seo_sub:'স্ট্রাকচার্ড ডেটা, সাইটম্যাপ, ক্যানোনিক্যাল URL',
+    h_nrb:'NRB ও ভিজিটর স্টে · FR-C6', nrb_card_title:'ফার্নিশড শর্ট-স্টে ফিল্টার',
+    h_tourist:'ট্যুরিস্ট গন্তব্য · FR-C8', h_tourist_sub:'হোটেল ও গেস্ট-হাউস ইনভেন্টরি, সিজনাল প্রাইসিং',
+    h_partners:'পার্টনার সার্ভিসেস মার্কেটপ্লেস · FR-C9', h_partners_sub:'চেকআউটে বুকিংযোগ্য, কমিশন-ভিত্তিক',
+    h_cities:'ঢাকার বাইরে', h_cities_sub:'প্রতিটি শহরে ফিল্ড-এজেন্ট প্লেবুক পুনরাবৃত্ত',
+    h_kpi:'সেকশন ২ টার্গেট — ১২-মাসের স্কোরকার্ড', col_kpi:'KPI', col_target:'টার্গেট', col_current:'বর্তমান', col_status:'অবস্থা',
+  },
+  en:{
+    nav_group:'Scale', nav_seo:'SEO Landing Pages', nav_nrb:'NRB & Tourist Stays', nav_partners:'Partner Services', nav_cities:'City Expansion', nav_kpi:'KPI Scorecard',
+    other_phases:'Other phases', role_lead:'Growth & scale view',
+    h_seo:'Area + type landing pages · FR-S12', h_seo_sub:'Structured data, sitemaps, canonical URLs',
+    h_nrb:'NRB & visitor stays · FR-C6', nrb_card_title:'Furnished short-stay filter',
+    h_tourist:'Tourist destinations · FR-C8', h_tourist_sub:'Hotel & guest-house inventory, seasonal pricing',
+    h_partners:'Partner services marketplace · FR-C9', h_partners_sub:'Bookable at checkout, commission-based',
+    h_cities:'Beyond Dhaka', h_cities_sub:'Field-agent playbook repeated per city',
+    h_kpi:'Section 2 targets — 12-month scorecard', col_kpi:'KPI', col_target:'Target', col_current:'Current', col_status:'Status',
+  }
+};
+
+const seoPages={
+  bn:[
+    {url:'cbsstays.com/dhaka/mirpur/bachelor-flats', title:'মিরপুরে ব্যাচেলর ফ্ল্যাট — ভেরিফাইড লিস্টিং | CBS Stays', desc:'মিরপুর-১০, মিরপুর-২ এবং আশেপাশে ভেরিফাইড ব্যাচেলর-অ্যালাউড ফ্ল্যাট ও রুম দেখুন। কোনো দালাল ফি ছাড়া, বিকাশে টোকেন দিয়ে বুক করুন।'},
+    {url:'cbsstays.com/dhaka/dhanmondi/family-flats', title:'ধানমন্ডিতে ফ্যামিলি ফ্ল্যাট ভাড়া — CBS Stays', desc:'ধানমন্ডি ও আশেপাশে ১-৪ বেডরুমের ফ্যামিলি-অনলি ফ্ল্যাট, ভেরিফাইড মালিক, ডিজিটাল রেন্টাল এগ্রিমেন্ট সহ।'},
+    {url:'cbsstays.com/sylhet/mess-seats', title:'সিলেটে মেস সিট ভাড়া — স্টুডেন্টদের জন্য | CBS Stays', desc:'সিলেটে বিশ্ববিদ্যালয়ের কাছে মেস সিট, মিল সহ বা ছাড়া। ছোট টোকেন পেমেন্টে সিট বুক করুন।'},
+  ],
+  en:[
+    {url:'cbsstays.com/dhaka/mirpur/bachelor-flats', title:'Bachelor Flats in Mirpur — Verified Listings | CBS Stays', desc:'Browse verified bachelor-allowed flats and rooms in Mirpur-10, Mirpur-2 and nearby. No broker fee, book with a bKash token.'},
+    {url:'cbsstays.com/dhaka/dhanmondi/family-flats', title:'Family Flats for Rent in Dhanmondi — CBS Stays', desc:'1-4 bedroom family-only flats in Dhanmondi and nearby, verified owners, with digital rental agreement support.'},
+    {url:'cbsstays.com/sylhet/mess-seats', title:'Mess Seats for Rent in Sylhet — For Students | CBS Stays', desc:'Mess seats near universities in Sylhet, with or without meals. Book a seat with a small token payment.'},
+  ],
+};
+function renderSeo(){
+  document.getElementById('seoList').innerHTML = seoPages[LANG].map(p=>`
+    <div class="card seo-card">
+      <div class="seo-url">${p.url}</div>
+      <div class="seo-title">${p.title}</div>
+      <div class="seo-desc">${p.desc}</div>
+    </div>`).join('');
+}
+
+const nrbRows={
+  bn:[
+    {flag:'CA',name:'Rashed Karim — Toronto, Canada',note:'জুলাইতে পরিবার নিয়ে ৩ সপ্তাহের ফার্নিশড স্টে, এয়ারপোর্ট পিকআপসহ।'},
+    {flag:'UK',name:'Nasreen Begum — London, UK',note:'বিদেশি কার্ডে অগ্রিম পেমেন্ট, ট্রাস্টেড-হোস্ট ব্যাজ দেখে বুক করেছেন।'},
+    {flag:'US',name:'Imran Hossain — New York, USA',note:'গুলশানে ফ্যামিলি-ফ্রেন্ডলি কেয়ার কন্ট্যাক্ট সহ ২-মাসের স্টে।'},
+  ],
+  en:[
+    {flag:'CA',name:'Rashed Karim — Toronto, Canada',note:'3-week furnished family stay in July, with airport pickup.'},
+    {flag:'UK',name:'Nasreen Begum — London, UK',note:'Paid in advance with a foreign-issued card, booked via the trusted-host badge.'},
+    {flag:'US',name:'Imran Hossain — New York, USA',note:'2-month stay in Gulshan with a family-friendly care contact.'},
+  ],
+};
+function renderNrb(){
+  document.getElementById('nrbList').innerHTML = nrbRows[LANG].map(r=>`
+    <div class="nrb-row">
+      <div class="nrb-flag">${r.flag}</div>
+      <div><div style="font-weight:700;font-size:13px">${r.name}</div><div class="muted" style="font-size:12px">${r.note}</div></div>
+    </div>`).join('');
+}
+
+const touristSpots=[
+  {ph:'linear-gradient(140deg,#1f6b8a,#0e3b4f)',name:{bn:'কক্সবাজার — সি-ভিউ গেস্ট হাউস',en:"Cox's Bazar — Sea-view Guest House"},price:'৳ 3,200',season:{bn:'পিক সিজন প্রাইসিং সক্রিয়',en:'Peak-season pricing active'}},
+  {ph:'linear-gradient(140deg,#2a6b3f,#0e3b1f)',name:{bn:'সিলেট — টি গার্ডেন রিসোর্ট',en:'Sylhet — Tea Garden Resort'},price:'৳ 4,500',season:{bn:'সাপ্তাহিক ছাড় প্রযোজ্য',en:'Weekend discount applied'}},
+  {ph:'linear-gradient(140deg,#4f6b2a,#2a3b0e)',name:{bn:'সুন্দরবন — ইকো লজ',en:'Sundarbans — Eco Lodge'},price:'৳ 5,800',season:{bn:'গাইডেড ট্যুর প্যাকেজ',en:'Guided tour package'}},
+];
+function renderTourist(){
+  document.getElementById('touristList').innerHTML = touristSpots.map(t=>`
+    <div class="card card-hover">
+      <div class="photo" style="background:${t.ph};aspect-ratio:16/11;margin-bottom:10px"><span class="ph-label">${icon('map','icon-sm')}${t.season[LANG]}</span></div>
+      <div style="font-weight:700;font-size:13.5px">${t.name[LANG]}</div>
+      <div class="tabular" style="font-weight:700;margin-top:4px">${t.price} <small class="muted" style="font-weight:500;font-size:11px">/${LANG==='bn'?'রাত':'night'}</small></div>
+    </div>`).join('');
+}
+
+const partners=[
+  {ic:'tools',name:{bn:'হোম রিপেয়ার',en:'Home Repair'}},
+  {ic:'layers',name:{bn:'মুভার্স',en:'Movers'}},
+  {ic:'shield',name:{bn:'ক্লিনিং সার্ভিস',en:'Cleaning Service'}},
+  {ic:'building',name:{bn:'ফার্নিচার রেন্টাল',en:'Furniture Rental'}},
+];
+function renderPartners(){
+  document.getElementById('partnerList').innerHTML = partners.map(p=>`
+    <div class="card partner-card card-hover">
+      <div class="partner-ic">${icon(p.ic,'icon-lg')}</div>
+      <div style="font-weight:700;font-size:13px">${p.name[LANG]}</div>
+      <button class="btn btn-outline btn-sm">${LANG==='bn'?'চেকআউটে যোগ করুন':'Add at checkout'}</button>
+    </div>`).join('');
+}
+
+const cities=[
+  {code:'CTG',color:'#2a6b58',name:{bn:'চট্টগ্রাম',en:'Chattogram'},listings:'640',status:'active'},
+  {code:'SYL',color:'#6b4a1f',name:{bn:'সিলেট',en:'Sylhet'},listings:'410',status:'active'},
+  {code:'KHL',color:'#2a4a6b',name:{bn:'খুলনা',en:'Khulna'},listings:'180',status:'pending'},
+  {code:'RAJ',color:'#6b2a55',name:{bn:'রাজশাহী',en:'Rajshahi'},listings:'0',status:'review'},
+];
+function renderCities(){
+  document.getElementById('cityList').innerHTML = cities.map(c=>`
+    <div class="card city-card">
+      <div class="city-flag" style="background:${c.color}">${c.code}</div>
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:14px">${c.name[LANG]}</div>
+        <div class="city-stat">
+          <div><span class="n tabular">${c.listings}</span><span class="l">${LANG==='bn'?'ভেরিফাইড লিস্টিং':'verified listings'}</span></div>
+        </div>
+      </div>
+      ${badgeFor(c.status)}
+    </div>`).join('');
+}
+
+const kpis=[
+  {k:{bn:'অ্যাক্টিভ ভেরিফাইড লিস্টিং',en:'Active verified listings'},target:'5,000',cur:'5,240',st:'ok'},
+  {k:{bn:'ভিজিট-টু-এনকোয়ারি রেট',en:'Visit-to-enquiry rate'},target:'8%',cur:'8.6%',st:'ok'},
+  {k:{bn:'বিকাশ/নগদ/কার্ড/টোকেনে পেমেন্ট',en:'Bookings paid via wallet/card/token'},target:'70%',cur:'64%',st:'warn'},
+  {k:{bn:'মালিক NID-ভেরিফায়েড',en:'Owners NID-verified'},target:'90%',cur:'91%',st:'ok'},
+  {k:{bn:'মাসিক ব্রেক-ইভেন',en:'Monthly break-even'},target:{bn:'মাস ১২',en:'Month 12'},cur:{bn:'ট্র্যাকে',en:'On track'},st:'ok'},
+  {k:{bn:'রিপিট টেন্যান্ট রেট',en:'Repeat tenant rate'},target:'25%',cur:'19%',st:'warn'},
+  {k:{bn:'অ্যাক্টিভ রেস্টুরেন্ট',en:'Active restaurants'},target:'300',cur:'312',st:'ok'},
+];
+function renderKpi(){
+  document.getElementById('kpiTbody').innerHTML = kpis.map(k=>`
+    <tr><td style="font-weight:600">${k.k[LANG]}</td><td class="mono">${typeof k.target==='string'?k.target:k.target[LANG]}</td><td class="mono">${typeof k.cur==='string'?k.cur:k.cur[LANG]}</td><td>${badgeFor(k.st)}</td></tr>`).join('');
+}
+const STATUS_LABEL = {
+  bn:{active:'সক্রিয়',pending:'পেন্ডিং',review:'পর্যালোচনায়',ok:'লক্ষ্যে',warn:'পিছিয়ে'},
+  en:{active:'Active',pending:'Pending',review:'In review',ok:'On target',warn:'Behind'},
+};
+function badgeFor(status){ return statusBadge(status, STATUS_LABEL[LANG][status] || status); }
+
+function renderAll(){ renderSeo(); renderNrb(); renderTourist(); renderPartners(); renderCities(); renderKpi(); }
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  hydrateIcons(document);
+  renderAll();
+  initNav('seo');
+  initLang();
+  window.onLangChange = renderAll;
+});
+</script>
+</body>
+</html>

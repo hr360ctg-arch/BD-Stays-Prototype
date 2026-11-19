@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBS Stays — Phase 1 Foundation</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<style>
+/* ---- auth screen (page-specific) ---- */
+#auth{
+  min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px 16px;
+  background:
+    radial-gradient(900px 500px at 15% -10%, var(--brand-soft), transparent 60%),
+    radial-gradient(700px 420px at 100% 100%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 60%),
+    var(--bg);
+}
+.auth-card{width:100%;max-width:392px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:30px 28px 28px;box-shadow:var(--shadow-lg)}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:24px}
+.brand-mark{width:38px;height:38px;border-radius:10px;background:linear-gradient(155deg,var(--brand),var(--brand-ink));color:var(--brand-fg);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:15px;flex:none;box-shadow:var(--shadow-sm)}
+.brand-name{font-family:var(--font-display);font-weight:700;font-size:15.5px}
+.brand-sub{font-size:11.5px;color:var(--fg-muted)}
+.auth-progress{display:flex;gap:5px;margin-bottom:22px}
+.auth-progress span{height:3px;flex:1;border-radius:99px;background:var(--surface-3)}
+.auth-progress span.on{background:var(--brand)}
+.auth-step-title{font-size:20px;font-weight:700;margin-bottom:5px;font-family:var(--font-display)}
+.auth-step-hint{color:var(--fg-muted);font-size:13px;margin-bottom:22px;line-height:1.55}
+.phone-input{display:flex;border:1px solid var(--border-strong);border-radius:var(--radius-sm);overflow:hidden;background:var(--surface);transition:border-color .12s ease, box-shadow .12s ease}
+.phone-input:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.phone-input .cc{padding:10px 11px;color:var(--fg-muted);border-right:1px solid var(--border);font-family:var(--font-mono);font-size:13px;background:var(--surface-2);display:flex;align-items:center}
+.phone-input input{border:none;padding:10px 12px;font-size:14px;width:100%;background:transparent;color:var(--fg);outline:none}
+.otp-row{display:flex;gap:9px;justify-content:space-between;margin-bottom:8px}
+.otp-row input{
+  width:46px;height:52px;text-align:center;font-size:19px;font-family:var(--font-mono);font-weight:600;
+  border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface);color:var(--fg);outline:none;
+  transition:border-color .12s ease, box-shadow .12s ease;
+}
+.otp-row input:focus-visible{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.resend{font-size:12.5px;color:var(--fg-muted);text-align:center;margin-top:12px}
+.resend button{background:none;border:none;color:var(--brand);font-weight:700;cursor:pointer;padding:0;font-size:inherit}
+.auth-foot{margin-top:20px;padding-top:16px;border-top:1px solid var(--border);font-size:11.5px;color:var(--fg-faint);text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
+.demo-note{margin-top:16px;background:var(--surface-2);border:1px dashed var(--border-strong);border-radius:var(--radius-sm);padding:10px 12px;font-size:11.5px;color:var(--fg-muted);display:flex;gap:8px;align-items:flex-start}
+.demo-note b{color:var(--fg)}
+.demo-note .icon{margin-top:1px;color:var(--brand)}
+.field{margin-bottom:15px}
+
+/* ---- audit entry ---- */
+.audit-entry{display:flex;gap:13px;padding:14px 0;border-bottom:1px solid var(--border)}
+.audit-entry:last-child{border-bottom:none}
+.audit-ic{width:30px;height:30px;border-radius:9px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;flex:none}
+.audit-ic .icon{width:14px;height:14px}
+.audit-body{flex:1;min-width:0}
+.audit-top{display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.audit-actor{font-weight:700;font-size:13px}
+.audit-action{color:var(--fg-muted);font-size:12.5px}
+.audit-time{margin-left:auto;font-size:11px;color:var(--fg-faint);font-family:var(--font-mono);white-space:nowrap}
+.audit-diff{margin-top:7px;background:var(--surface-2);border-radius:8px;padding:8px 11px;font-family:var(--font-mono);font-size:11.5px;display:flex;gap:16px;flex-wrap:wrap}
+.audit-diff .before{color:var(--danger)}
+.audit-diff .after{color:var(--ok)}
+
+.cms-list{display:flex;flex-direction:column;gap:9px}
+.cms-item{display:flex;align-items:center;gap:13px;padding:13px 15px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);transition:box-shadow .12s ease}
+.cms-item:hover{box-shadow:var(--shadow-sm)}
+.cms-ic{width:34px;height:34px;border-radius:9px;background:var(--brand-soft);color:var(--brand-soft-ink);display:flex;align-items:center;justify-content:center;flex:none}
+.cms-item .ttl{font-weight:700;font-size:13px}
+.cms-item .sub{font-size:11.5px;color:var(--fg-muted);margin-top:1px}
+
+.exit-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px;font-size:13px}
+.exit-row .lbl{display:flex;align-items:center;gap:9px}
+.exit-row .lbl .icon{color:var(--fg-faint)}
+</style>
+</head>
+<body>
+
+<!-- ============ AUTH ============ -->
+<div id="auth">
+  <div class="auth-card">
+    <div class="brand">
+      <div class="brand-mark">CS</div>
+      <div style="flex:1">
+        <div class="brand-name">CBS Stays</div>
+        <div class="brand-sub">Admin Console</div>
+      </div>
+      <div class="lang-toggle">
+        <button class="active" data-lang="bn">বাং</button>
+        <button data-lang="en">EN</button>
+      </div>
+    </div>
+
+    <div class="auth-progress">
+      <span class="on" id="prog1"></span><span id="prog2"></span><span id="prog3"></span>
+    </div>
+
+    <div id="stepPhone">
+      <div class="auth-step-title" data-t="phone_title">Sign in to admin</div>
+      <div class="auth-step-hint" data-t="phone_hint">Enter your registered phone number. We'll send a one-time code.</div>
+      <div class="field">
+        <label data-t="phone_label" style="font-size:12px;font-weight:600;color:var(--fg-muted);display:block;margin-bottom:6px">Phone number</label>
+        <div class="phone-input">
+          <span class="cc">+880</span>
+          <input type="text" id="phoneInput" placeholder="1XXXXXXXXX" maxlength="11" inputmode="numeric">
+        </div>
+      </div>
+      <div class="err-text" id="phoneErr"></div>
+      <button class="btn btn-primary btn-block" id="sendOtpBtn" data-t="phone_cta">Send code</button>
+      <div class="demo-note"><i data-icon="sparkle" data-icon-cls="icon-sm"></i><span><b data-t="demo_label">Prototype:</b> <span data-t="demo_phone">any number works — code is always 1234.</span></span></div>
+    </div>
+
+    <div id="stepOtp" hidden>
+      <div class="auth-step-title" data-t="otp_title">Enter the code</div>
+      <div class="auth-step-hint"><span data-t="otp_hint">We sent a 4-digit code by SMS to</span> <span class="mono" id="otpPhoneShown" style="color:var(--fg)"></span></div>
+      <div class="otp-row">
+        <input maxlength="1" inputmode="numeric" class="otp-digit" data-idx="0" id="otp0">
+        <input maxlength="1" inputmode="numeric" class="otp-digit" data-idx="1" id="otp1">
+        <input maxlength="1" inputmode="numeric" class="otp-digit" data-idx="2" id="otp2">
+        <input maxlength="1" inputmode="numeric" class="otp-digit" data-idx="3" id="otp3">
+      </div>
+      <div class="err-text" id="otpErr"></div>
+      <button class="btn btn-primary btn-block" id="verifyOtpBtn" data-t="otp_cta">Verify</button>
+      <div class="resend">
+        <span data-t="otp_resend_pre">Didn't get it?</span>
+        <button id="resendOtpBtn" data-t="otp_resend">Resend code</button>
+      </div>
+    </div>
+
+    <div id="step2fa" hidden>
+      <div class="auth-step-title" data-t="tfa_title">Admin verification</div>
+      <div class="auth-step-hint" data-t="tfa_hint">This account has an admin role — enter your 6-digit authenticator code (FR-A1).</div>
+      <div class="field">
+        <label style="font-size:12px;font-weight:600;color:var(--fg-muted);display:block;margin-bottom:6px" data-t="tfa_label">Authenticator code</label>
+        <input type="text" id="tfaInput" class="mono" placeholder="000000" maxlength="6" inputmode="numeric">
+      </div>
+      <div class="err-text" id="tfaErr"></div>
+      <button class="btn btn-primary btn-block" id="verify2faBtn" data-t="tfa_cta">Verify &amp; continue</button>
+      <div class="demo-note"><i data-icon="sparkle" data-icon-cls="icon-sm"></i><span><b data-t="demo_label">Prototype:</b> <span data-t="demo_tfa">any 6 digits work.</span></span></div>
+    </div>
+
+    <div class="auth-foot"><i data-icon="shield" data-icon-cls="icon-sm"></i><span data-t="auth_foot">Mandatory 2FA for all admin roles · CBS Stays Bangladesh</span></div>
+  </div>
+</div>
+
+<!-- ============ CONSOLE ============ -->
+<div id="console" hidden>
+<div class="app-shell">
+  <aside class="app-sidebar" id="sidebar">
+    <a class="sb-brand" href="../index.html">
+      <div class="sb-brand-mark">CS</div>
+      <div>
+        <div class="sb-brand-name">CBS Stays</div>
+        <div class="sb-brand-sub">Phase 1 · Foundation</div>
+      </div>
+    </a>
+
+    <div class="sb-group" data-t="nav_overview">Overview</div>
+    <button class="sb-link active" data-view="dashboard"><i data-icon="grid"></i><span data-t="nav_dashboard">Dashboard</span></button>
+
+    <div class="sb-group" data-t="nav_trust">Trust &amp; Access</div>
+    <button class="sb-link" data-view="users"><i data-icon="users"></i><span data-t="nav_users">Admin Users &amp; Roles</span></button>
+    <button class="sb-link" data-view="verification"><i data-icon="check"></i><span data-t="nav_verification">Verification Queue</span></button>
+
+    <div class="sb-group" data-t="nav_platform">Platform</div>
+    <button class="sb-link" data-view="audit"><i data-icon="log"></i><span data-t="nav_audit">Audit Log</span></button>
+    <button class="sb-link" data-view="trash"><i data-icon="trash"></i><span data-t="nav_trash">Trash / Soft Delete</span></button>
+    <button class="sb-link" data-view="backups"><i data-icon="database"></i><span data-t="nav_backups">Backups</span></button>
+    <button class="sb-link" data-view="cms"><i data-icon="file"></i><span data-t="nav_cms">CMS &amp; Legal Pages</span></button>
+
+    <div class="phase-switch">
+      <div class="phase-switch-label" data-t="other_phases">Other phases</div>
+      <a href="../phase2/index.html">Phase 2 · Core MVP<span class="chip">M2–4</span></a>
+      <a href="../phase3/index.html">Phase 3 · Differentiators<span class="chip">M4–8</span></a>
+      <a href="../phase4/index.html">Phase 4 · Scale<span class="chip">M8–12</span></a>
+    </div>
+
+    <div class="sb-foot">
+      <div class="sb-acct">
+        <div class="avatar">AR</div>
+        <div>
+          <div class="sb-acct-name">Ariyan Rahman</div>
+          <div class="sb-acct-role">Super Admin</div>
+        </div>
+        <button class="sb-logout" id="logoutBtn" title="Log out"><i data-icon="power" data-icon-cls="icon-sm"></i></button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="app-main">
+    <div class="app-topbar">
+      <button class="menu-btn" id="menuBtn"><i data-icon="menu" data-icon-cls="icon-sm"></i></button>
+      <div>
+        <h1 id="viewTitle" data-t="t_dashboard">Dashboard</h1>
+        <div class="crumbs" id="viewCrumb">Phase 1 · Platform foundation</div>
+      </div>
+      <span class="phase-pill">Phase 1</span>
+      <span class="env-pill" data-t="env_staging">Staging</span>
+    </div>
+
+    <div class="app-view">
+
+      <!-- DASHBOARD -->
+      <section class="view-section active" id="view-dashboard">
+        <div class="grid cards-4">
+          <div class="card">
+            <div class="stat-label"><i data-icon="database" data-icon-cls="icon-sm" style="color:var(--ok)"></i><span data-t="k_backup">Last backup</span></div>
+            <div class="stat-value tabular">02:14</div>
+            <div class="stat-sub up"><i data-icon="check" data-icon-cls="icon-sm"></i><span data-t="k_backup_sub">Completed · off-server</span></div>
+          </div>
+          <div class="card">
+            <div class="stat-label"><i data-icon="shield" data-icon-cls="icon-sm" style="color:var(--ok)"></i><span data-t="k_uptime">Uptime (30d)</span></div>
+            <div class="stat-value tabular">99.7%</div>
+            <div class="stat-sub up" data-t="k_uptime_sub">↑ above 99.5% target</div>
+          </div>
+          <div class="card">
+            <div class="stat-label"><i data-icon="users" data-icon-cls="icon-sm" style="color:var(--warn)"></i><span data-t="k_pending">Pending verifications</span></div>
+            <div class="stat-value tabular">7</div>
+            <div class="stat-sub muted" data-t="k_pending_sub">3 owners, 4 admins</div>
+          </div>
+          <div class="card">
+            <div class="stat-label"><i data-icon="rocket" data-icon-cls="icon-sm" style="color:var(--brand)"></i><span data-t="k_restore">Last restore test</span></div>
+            <div class="stat-value tabular">Oct 21</div>
+            <div class="stat-sub up"><i data-icon="check" data-icon-cls="icon-sm"></i><span data-t="k_restore_sub">Passed · RTO 1h 48m</span></div>
+          </div>
+        </div>
+
+        <div class="section-title"><h2 data-t="h_exit">Phase 1 exit criteria</h2></div>
+        <div class="card">
+          <div class="exit-row"><span class="lbl"><i data-icon="check" data-icon-cls="icon-sm"></i><span data-t="ec_1">Restore test passed within RTO/RPO</span></span><span class="badge badge-ok"><i data-icon="check" data-icon-cls="icon-sm"></i><span data-t="done">Done</span></span></div>
+          <div class="exit-row"><span class="lbl"><i data-icon="check" data-icon-cls="icon-sm"></i><span data-t="ec_2">No placeholder content or broken links</span></span><span class="badge badge-ok"><i data-icon="check" data-icon-cls="icon-sm"></i><span data-t="done">Done</span></span></div>
+          <div class="exit-row"><span class="lbl"><i data-icon="check" data-icon-cls="icon-sm"></i><span data-t="ec_3">2FA enforced for every admin role</span></span><span class="badge badge-ok"><i data-icon="check" data-icon-cls="icon-sm"></i><span data-t="done">Done</span></span></div>
+          <div class="exit-row" style="margin-bottom:10px"><span class="lbl"><i data-icon="trash" data-icon-cls="icon-sm"></i><span data-t="ec_4">Soft delete &amp; restore verified (owner + admin)</span></span><span class="badge badge-warn"><i data-icon="bell" data-icon-cls="icon-sm"></i><span data-t="inprog">In review</span></span></div>
+          <div class="progress"><span style="width:82%"></span></div>
+        </div>
+
+        <div class="section-title"><h2 data-t="h_activity">Recent admin activity</h2><span class="spacer"></span><button class="sb-link" data-view="audit" style="width:auto;padding:5px 10px;font-size:12px"><span data-t="viewall">View audit log</span><i data-icon="chevronRight" data-icon-cls="icon-sm"></i></button></div>
+        <div class="card" style="padding:4px 18px" id="dashAuditPreview"></div>
+      </section>
+
+      <!-- USERS -->
+      <section class="view-section" id="view-users">
+        <div class="section-title"><h2 data-t="h_roles">Role-based access · FR-A1</h2><span class="count" id="usersCount"></span></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th data-t="col_name">Name</th><th data-t="col_role">Role</th><th data-t="col_2fa">2FA</th><th data-t="col_status">Status</th><th data-t="col_lastlogin">Last login</th><th></th></tr></thead>
+            <tbody id="usersTbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- VERIFICATION -->
+      <section class="view-section" id="view-verification">
+        <div class="section-title"><h2 data-t="h_verif">NID / ownership verification queue · FR-T1, FR-T2, FR-T8</h2><span class="count" id="verifCount"></span></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th data-t="col_applicant">Applicant</th><th data-t="col_type">Type</th><th data-t="col_doc">Document</th><th data-t="col_submitted">Submitted</th><th data-t="col_status">Status</th><th></th></tr></thead>
+            <tbody id="verifTbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- AUDIT -->
+      <section class="view-section" id="view-audit">
+        <div class="section-title"><h2 data-t="h_audit">Audit log · FR-A2</h2><span class="count" data-t="audit_sub">Every admin action: who, what, when, before/after</span></div>
+        <div class="card" id="auditFull"></div>
+      </section>
+
+      <!-- TRASH -->
+      <section class="view-section" id="view-trash">
+        <div class="section-title"><h2 data-t="h_trash">Trash · FR-H9</h2><span class="count" data-t="trash_sub">Soft delete only — no hard delete in the UI</span></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th data-t="col_item">Item</th><th data-t="col_type">Type</th><th data-t="col_deletedby">Deleted by</th><th data-t="col_deletedon">Deleted on</th><th data-t="col_purge">Auto-purge</th><th></th></tr></thead>
+            <tbody id="trashTbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- BACKUPS -->
+      <section class="view-section" id="view-backups">
+        <div class="section-title"><h2 data-t="h_backups">Backups &amp; restore · FR-A6</h2></div>
+        <div class="two-col">
+          <div class="card">
+            <div class="stat-label" data-t="bk_schedule">Backup schedule</div>
+            <div style="margin-top:12px;display:flex;flex-direction:column;gap:11px">
+              <div style="display:flex;justify-content:space-between;align-items:center"><span data-t="bk_db">Database · daily, 02:00 BST</span><span class="badge badge-ok"><i data-icon="check" data-icon-cls="icon-sm"></i>Active</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center"><span data-t="bk_files">File storage · daily, 02:20 BST</span><span class="badge badge-ok"><i data-icon="check" data-icon-cls="icon-sm"></i>Active</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center"><span data-t="bk_offserver">Off-server replication · Singapore region</span><span class="badge badge-ok"><i data-icon="check" data-icon-cls="icon-sm"></i>Active</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center"><span data-t="bk_restore">Monthly restore test</span><span class="badge badge-brand" data-t="bk_next">Next: Nov 21</span></div>
+            </div>
+            <div style="margin-top:18px;display:flex;gap:9px">
+              <button class="btn btn-primary btn-sm" id="runBackupBtn"><i data-icon="database" data-icon-cls="icon-sm"></i><span data-t="bk_runnow">Run backup now</span></button>
+              <button class="btn btn-outline btn-sm" id="openRestoreModalBtn"><i data-icon="rocket" data-icon-cls="icon-sm"></i><span data-t="bk_test">Run restore test</span></button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="stat-label" data-t="bk_targets">Targets (NFR-2)</div>
+            <div style="margin-top:14px;display:flex;flex-direction:column;gap:14px">
+              <div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px"><span data-t="bk_rpo">RPO target</span><span class="mono muted">≤ 24h</span></div><div class="progress"><span style="width:95%;background:var(--ok)"></span></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px"><span data-t="bk_rto">RTO target</span><span class="mono muted">≤ 4h</span></div><div class="progress"><span style="width:45%;background:var(--ok)"></span></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px"><span data-t="bk_uptime2">Uptime target</span><span class="mono muted">≥ 99.5%</span></div><div class="progress"><span style="width:99.7%;background:var(--ok)"></span></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="section-title"><h2 data-t="bk_history">Backup history</h2></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th data-t="col_date">Date</th><th data-t="col_type2">Type</th><th data-t="col_size">Size</th><th data-t="col_duration">Duration</th><th data-t="col_status">Status</th></tr></thead>
+            <tbody id="backupTbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- CMS -->
+      <section class="view-section" id="view-cms">
+        <div class="section-title"><h2 data-t="h_cms">CMS &amp; legal pages · FR-A7</h2><span class="count" data-t="cms_sub">Real content only — no placeholders</span></div>
+        <div class="cms-list" id="cmsList"></div>
+      </section>
+
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="modal-backdrop" id="restoreModal">
+  <div class="modal">
+    <h3 data-t="m_restore_title">Run a restore test?</h3>
+    <p data-t="m_restore_body">This restores the latest backup into an isolated staging copy and verifies data integrity. It does not affect production. Estimated time: ~12 minutes.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost btn-sm" id="modalCancelBtn" data-t="cancel">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="modalConfirmBtn" data-t="m_restore_cta">Start restore test</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/common.js"></script>
+<script>
+window.PAGE_CRUMB = 'Phase 1 · Foundation';
+window.I18N = {
+  bn:{
+    phone_title:'অ্যাডমিন কনসোলে সাইন ইন করুন', phone_hint:'আপনার নিবন্ধিত ফোন নম্বর দিন। আমরা একটি ওয়ান-টাইম কোড পাঠাব।',
+    phone_label:'ফোন নম্বর', phone_cta:'কোড পাঠান', demo_label:'প্রোটোটাইপ:', demo_phone:'যেকোনো নম্বর কাজ করবে — কোড সবসময় ১২৩৪।',
+    otp_title:'কোড লিখুন', otp_hint:'৪-সংখ্যার কোড এসএমএস করা হয়েছে', otp_cta:'ভেরিফাই করুন', otp_resend_pre:'কোড পাননি?', otp_resend:'আবার পাঠান',
+    tfa_title:'অ্যাডমিন ভেরিফিকেশন', tfa_hint:'এই অ্যাকাউন্টে অ্যাডমিন রোল আছে — আপনার ৬-সংখ্যার অথেন্টিকেটর কোড দিন (FR-A1)।',
+    tfa_label:'অথেন্টিকেটর কোড', tfa_cta:'ভেরিফাই করে চালিয়ে যান', demo_tfa:'যেকোনো ৬ সংখ্যা কাজ করবে।',
+    auth_foot:'সব অ্যাডমিন রোলের জন্য বাধ্যতামূলক 2FA · CBS Stays Bangladesh',
+    nav_overview:'ওভারভিউ', nav_dashboard:'ড্যাশবোর্ড', nav_trust:'ট্রাস্ট ও অ্যাক্সেস', nav_users:'অ্যাডমিন ইউজার ও রোল',
+    nav_verification:'ভেরিফিকেশন কিউ', nav_platform:'প্ল্যাটফর্ম', nav_audit:'অডিট লগ', nav_trash:'ট্র্যাশ / সফট ডিলিট',
+    nav_backups:'ব্যাকআপ', nav_cms:'সিএমএস ও আইনি পেজ', other_phases:'অন্য ফেজ',
+    t_dashboard:'ড্যাশবোর্ড', env_staging:'স্টেজিং',
+    k_backup:'সর্বশেষ ব্যাকআপ', k_backup_sub:'সম্পন্ন · অফ-সার্ভার', k_uptime:'আপটাইম (৩০দিন)', k_uptime_sub:'↑ ৯৯.৫% টার্গেটের উপরে',
+    k_pending:'বিচারাধীন ভেরিফিকেশন', k_pending_sub:'৩ জন মালিক, ৪ জন অ্যাডমিন', k_restore:'সর্বশেষ রিস্টোর টেস্ট', k_restore_sub:'পাস · RTO ১ঘ ৪৮মি',
+    h_exit:'ফেজ ১ এক্সিট ক্রাইটেরিয়া', ec_1:'RTO/RPO-এর মধ্যে রিস্টোর টেস্ট পাস', ec_2:'কোনো প্লেসহোল্ডার কনটেন্ট বা ভাঙা লিংক নেই',
+    ec_3:'প্রতিটি অ্যাডমিন রোলে 2FA বাধ্যতামূলক', ec_4:'সফট ডিলিট ও রিস্টোর যাচাইকৃত (মালিক + অ্যাডমিন)', done:'সম্পন্ন', inprog:'পর্যালোচনায়',
+    h_activity:'সাম্প্রতিক অ্যাডমিন কার্যক্রম', viewall:'অডিট লগ দেখুন',
+    h_roles:'রোল-ভিত্তিক অ্যাক্সেস · FR-A1', col_name:'নাম', col_role:'রোল', col_2fa:'2FA', col_status:'অবস্থা', col_lastlogin:'সর্বশেষ লগইন',
+    h_verif:'এনআইডি / মালিকানা ভেরিফিকেশন কিউ · FR-T1, FR-T2, FR-T8', col_applicant:'আবেদনকারী', col_type:'ধরন', col_doc:'ডকুমেন্ট', col_submitted:'জমা দেওয়া হয়েছে',
+    h_audit:'অডিট লগ · FR-A2', audit_sub:'প্রতিটি অ্যাডমিন অ্যাকশন: কে, কী, কখন, আগে/পরে',
+    h_trash:'ট্র্যাশ · FR-H9', trash_sub:'শুধু সফট ডিলিট — UI-তে কোনো হার্ড ডিলিট নেই',
+    col_item:'আইটেম', col_deletedby:'ডিলিট করেছেন', col_deletedon:'ডিলিটের তারিখ', col_purge:'অটো-পার্জ',
+    h_backups:'ব্যাকআপ ও রিস্টোর · FR-A6', bk_schedule:'ব্যাকআপ শিডিউল', bk_db:'ডেটাবেস · প্রতিদিন, ভোর ২:০০',
+    bk_files:'ফাইল স্টোরেজ · প্রতিদিন, ভোর ২:২০', bk_offserver:'অফ-সার্ভার রেপ্লিকেশন · সিঙ্গাপুর অঞ্চল', bk_restore:'মাসিক রিস্টোর টেস্ট', bk_next:'পরবর্তী: নভে ২১',
+    bk_runnow:'এখনই ব্যাকআপ চালান', bk_test:'রিস্টোর টেস্ট চালান', bk_targets:'টার্গেট (NFR-2)', bk_rpo:'RPO টার্গেট', bk_rto:'RTO টার্গেট', bk_uptime2:'আপটাইম টার্গেট',
+    bk_history:'ব্যাকআপ হিস্টরি', col_date:'তারিখ', col_type2:'ধরন', col_size:'সাইজ', col_duration:'সময়কাল',
+    h_cms:'সিএমএস ও আইনি পেজ · FR-A7', cms_sub:'শুধু বাস্তব কনটেন্ট — কোনো প্লেসহোল্ডার নয়',
+    m_restore_title:'রিস্টোর টেস্ট চালাবেন?', m_restore_body:'এটি সর্বশেষ ব্যাকআপ একটি আলাদা স্টেজিং কপিতে রিস্টোর করে ডেটা ইন্টিগ্রিটি যাচাই করবে। প্রোডাকশনে প্রভাব ফেলবে না। আনুমানিক সময়: ~১২ মিনিট।',
+    cancel:'বাতিল', m_restore_cta:'রিস্টোর টেস্ট শুরু করুন',
+  },
+  en:{
+    phone_title:'Sign in to admin', phone_hint:"Enter your registered phone number. We'll send a one-time code.",
+    phone_label:'Phone number', phone_cta:'Send code', demo_label:'Prototype:', demo_phone:'any number works — code is always 1234.',
+    otp_title:'Enter the code', otp_hint:'We sent a 4-digit code by SMS to', otp_cta:'Verify', otp_resend_pre:"Didn't get it?", otp_resend:'Resend code',
+    tfa_title:'Admin verification', tfa_hint:'This account has an admin role — enter your 6-digit authenticator code (FR-A1).',
+    tfa_label:'Authenticator code', tfa_cta:'Verify & continue', demo_tfa:'any 6 digits work.',
+    auth_foot:'Mandatory 2FA for all admin roles · CBS Stays Bangladesh',
+    nav_overview:'Overview', nav_dashboard:'Dashboard', nav_trust:'Trust & Access', nav_users:'Admin Users & Roles',
+    nav_verification:'Verification Queue', nav_platform:'Platform', nav_audit:'Audit Log', nav_trash:'Trash / Soft Delete',
+    nav_backups:'Backups', nav_cms:'CMS & Legal Pages', other_phases:'Other phases',
+    t_dashboard:'Dashboard', env_staging:'Staging',
+    k_backup:'Last backup', k_backup_sub:'Completed · off-server', k_uptime:'Uptime (30d)', k_uptime_sub:'↑ above 99.5% target',
+    k_pending:'Pending verifications', k_pending_sub:'3 owners, 4 admins', k_restore:'Last restore test', k_restore_sub:'Passed · RTO 1h 48m',
+    h_exit:'Phase 1 exit criteria', ec_1:'Restore test passed within RTO/RPO', ec_2:'No placeholder content or broken links',
+    ec_3:'2FA enforced for every admin role', ec_4:'Soft delete & restore verified (owner + admin)', done:'Done', inprog:'In review',
+    h_activity:'Recent admin activity', viewall:'View audit log',
+    h_roles:'Role-based access · FR-A1', col_name:'Name', col_role:'Role', col_2fa:'2FA', col_status:'Status', col_lastlogin:'Last login',
+    h_verif:'NID / ownership verification queue · FR-T1, FR-T2, FR-T8', col_applicant:'Applicant', col_type:'Type', col_doc:'Document', col_submitted:'Submitted',
+    h_audit:'Audit log · FR-A2', audit_sub:'Every admin action: who, what, when, before/after',
+    h_trash:'Trash · FR-H9', trash_sub:'Soft delete only — no hard delete in the UI',
+    col_item:'Item', col_deletedby:'Deleted by', col_deletedon:'Deleted on', col_purge:'Auto-purge',
+    h_backups:'Backups & restore · FR-A6', bk_schedule:'Backup schedule', bk_db:'Database · daily, 02:00 BST',
+    bk_files:'File storage · daily, 02:20 BST', bk_offserver:'Off-server replication · Singapore region', bk_restore:'Monthly restore test', bk_next:'Next: Nov 21',
+    bk_runnow:'Run backup now', bk_test:'Run restore test', bk_targets:'Targets (NFR-2)', bk_rpo:'RPO target', bk_rto:'RTO target', bk_uptime2:'Uptime target',
+    bk_history:'Backup history', col_date:'Date', col_type2:'Type', col_size:'Size', col_duration:'Duration',
+    h_cms:'CMS & legal pages · FR-A7', cms_sub:'Real content only — no placeholders',
+    m_restore_title:'Run a restore test?', m_restore_body:'This restores the latest backup into an isolated staging copy and verifies data integrity. It does not affect production. Estimated time: ~12 minutes.',
+    cancel:'Cancel', m_restore_cta:'Start restore test',
+  }
+};
+
+/* ---------------- auth flow ---------------- */
+let pendingPhone='';
+function setStep(n){
+  document.getElementById('prog1').classList.toggle('on', n>=1);
+  document.getElementById('prog2').classList.toggle('on', n>=2);
+  document.getElementById('prog3').classList.toggle('on', n>=3);
+}
+function sendOtp(){
+  const v=document.getElementById('phoneInput').value.trim();
+  const err=document.getElementById('phoneErr');
+  if(!/^1[0-9]{9}$/.test(v)){ err.textContent = LANG==='bn' ? 'একটি সঠিক ১০-সংখ্যার নম্বর দিন (১ দিয়ে শুরু)।' : 'Enter a valid 10-digit number starting with 1.'; return; }
+  err.textContent='';
+  pendingPhone='+880 '+v;
+  document.getElementById('otpPhoneShown').textContent=pendingPhone;
+  document.getElementById('stepPhone').hidden=true;
+  document.getElementById('stepOtp').hidden=false;
+  setStep(2);
+  setTimeout(()=>document.getElementById('otp0').focus(),50);
+  toastMsg(LANG==='bn' ? 'SMS কোড পাঠানো হয়েছে (ডেমো: 1234)' : 'SMS code sent (demo: 1234)');
+}
+function otpMove(el){
+  el.value=el.value.replace(/[^0-9]/g,'');
+  const idx=parseInt(el.dataset.idx,10);
+  if(el.value && idx<3) document.getElementById('otp'+(idx+1)).focus();
+}
+function verifyOtp(){
+  const code=['otp0','otp1','otp2','otp3'].map(id=>document.getElementById(id).value).join('');
+  const err=document.getElementById('otpErr');
+  if(code.length<4){ err.textContent = LANG==='bn' ? 'পুরো কোড লিখুন।' : 'Enter the full code.'; return; }
+  if(code!=='1234'){ err.textContent = LANG==='bn' ? 'কোড সঠিক নয়। (ডেমো: 1234)' : 'Incorrect code. (demo: 1234)'; return; }
+  err.textContent='';
+  document.getElementById('stepOtp').hidden=true;
+  document.getElementById('step2fa').hidden=false;
+  setStep(3);
+  setTimeout(()=>document.getElementById('tfaInput').focus(),50);
+}
+function verify2fa(){
+  const v=document.getElementById('tfaInput').value.trim();
+  const err=document.getElementById('tfaErr');
+  if(!/^[0-9]{6}$/.test(v)){ err.textContent = LANG==='bn' ? '৬-সংখ্যার কোড দিন।' : 'Enter a 6-digit code.'; return; }
+  err.textContent='';
+  document.getElementById('auth').hidden=true;
+  document.getElementById('console').hidden=false;
+  logAction(LANG==='bn'?'লগইন সফল হয়েছে (OTP + 2FA)':'Logged in successfully (OTP + 2FA)','key');
+  renderAll();
+}
+function logout(){
+  document.getElementById('console').hidden=true;
+  document.getElementById('auth').hidden=false;
+  document.getElementById('stepOtp').hidden=true;
+  document.getElementById('step2fa').hidden=true;
+  document.getElementById('stepPhone').hidden=false;
+  setStep(1);
+  document.getElementById('phoneInput').value='';
+  ['otp0','otp1','otp2','otp3'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('tfaInput').value='';
+}
+
+/* ---------------- modal ---------------- */
+function runRestoreTest(){
+  closeModal('restoreModal');
+  toastMsg(LANG==='bn'?'রিস্টোর টেস্ট চলছে…':'Restore test running…','rocket');
+  setTimeout(()=>{
+    logAction('ran a monthly restore test — passed','check','—','result: passed, RTO 1h 52m');
+    toastMsg(LANG==='bn'?'রিস্টোর টেস্ট পাস হয়েছে':'Restore test passed');
+  },1100);
+}
+
+/* ---------------- mock data ---------------- */
+const users=[
+  {name:'Ariyan Rahman',role:'Super Admin',tfa:true,status:'active',last:'2 min ago',init:'AR'},
+  {name:'Sumaiya Haque',role:'Moderator',tfa:true,status:'active',last:'18 min ago',init:'SH'},
+  {name:'Kamal Hossain',role:'Field Agent',tfa:true,status:'active',last:'1h ago',init:'KH'},
+  {name:'Nusrat Jahan',role:'Support',tfa:false,status:'pending',last:'—',init:'NJ'},
+  {name:'Tanvir Alam',role:'Finance',tfa:true,status:'active',last:'3h ago',init:'TA'},
+  {name:'Rafiq Islam',role:'Moderator',tfa:true,status:'suspended',last:'6d ago',init:'RI'},
+];
+const verifs=[
+  {name:'Mahbub Properties Ltd.',type:'Owner · authority doc',doc:'Trade licence + NID',sub:'Nov 17, 11:02',status:'pending'},
+  {name:'Farzana Yasmin',type:'Tenant · NID',doc:'NID front/back',sub:'Nov 17, 09:40',status:'pending'},
+  {name:'Golam Mostofa',type:'Owner · ownership',doc:'Holding no. + NID',sub:'Nov 16, 17:12',status:'review'},
+  {name:'Abu Rayhan Chowdhury',type:'Tenant · passport',doc:'Passport (NRB)',sub:'Nov 16, 14:55',status:'pending'},
+  {name:'Dhaka Mess Points',type:'Owner · authority doc',doc:'Manager authorization',sub:'Nov 15, 10:21',status:'approved'},
+  {name:'Jannatul Ferdous',type:'Tenant · NID',doc:'NID front/back',sub:'Nov 14, 16:03',status:'rejected'},
+];
+const trashItems=[
+  {item:'Flat listing — Mirpur-10, 2BR',type:'Listing',by:'Owner: Kazi Nasrin',on:'Nov 16',purge:'Dec 16'},
+  {item:'Admin user — Rafiq Islam',type:'Admin account',by:'Super Admin: Ariyan Rahman',on:'Nov 12',purge:'Dec 12'},
+  {item:'Mess seat — Dhanmondi 27',type:'Listing',by:'Owner: Shafiul Azam',on:'Nov 10',purge:'Dec 10'},
+  {item:'CMS draft — Refund Policy v1',type:'CMS page',by:'Moderator: Sumaiya Haque',on:'Nov 8',purge:'Dec 8'},
+];
+const backupHistory=[
+  {date:'Nov 18, 02:00',type:'Database',size:'4.8 GB',dur:'6m 12s',status:'ok'},
+  {date:'Nov 18, 02:20',type:'File storage',size:'21.3 GB',dur:'19m 40s',status:'ok'},
+  {date:'Nov 17, 02:00',type:'Database',size:'4.7 GB',dur:'5m 58s',status:'ok'},
+  {date:'Nov 17, 02:20',type:'File storage',size:'21.1 GB',dur:'18m 55s',status:'ok'},
+  {date:'Nov 16, 02:00',type:'Database',size:'4.7 GB',dur:'6m 03s',status:'ok'},
+  {date:'Nov 15, 02:00',type:'Database',size:'4.6 GB',dur:'14m 21s',status:'warn'},
+];
+let auditLog=[
+  {actor:'Ariyan Rahman',action:'approved owner verification for Mahbub Properties Ltd.',ic:'check',time:'10:42',before:'status: pending',after:'status: verified'},
+  {actor:'Sumaiya Haque',action:'soft-deleted listing "Flat — Mirpur-10, 2BR"',ic:'trash',time:'09:58',before:'state: live',after:'state: deleted (soft)'},
+  {actor:'System',action:'completed scheduled database backup',ic:'database',time:'02:06',before:'—',after:'backup_id: bkp_1118_0200'},
+  {actor:'Tanvir Alam',action:'updated commission rule for finance config',ic:'settings',time:'Nov 17, 18:20',before:'rate: 8%',after:'rate: 10%'},
+  {actor:'Ariyan Rahman',action:'suspended admin account "Rafiq Islam"',ic:'shield',time:'Nov 17, 15:03',before:'status: active',after:'status: suspended'},
+  {actor:'Kamal Hossain',action:'uploaded field verification photos for Golam Mostofa',ic:'file',time:'Nov 17, 11:47',before:'—',after:'photos: 6 added'},
+];
+const cmsPages=[
+  {title:'Terms of Service',sub:'Last updated Nov 12, 2026 · Bangla + English'},
+  {title:'Privacy Policy',sub:'Last updated Nov 12, 2026 · Bangla + English'},
+  {title:'Refund & Cancellation Policy',sub:'Last updated Nov 9, 2026 · Bangla + English'},
+  {title:'Contact Us',sub:'Support line, WhatsApp, office address'},
+  {title:'About CBS Stays',sub:'Last updated Nov 5, 2026 · Bangla + English'},
+];
+
+const STATUS_LABEL = {
+  bn:{active:'সক্রিয়',pending:'বিচারাধীন',suspended:'স্থগিত',review:'পর্যালোচনায়',approved:'অনুমোদিত',rejected:'প্রত্যাখ্যাত',ok:'সফল',warn:'ধীর'},
+  en:{active:'Active',pending:'Pending',suspended:'Suspended',review:'In review',approved:'Approved',rejected:'Rejected',ok:'Success',warn:'Slow'},
+};
+function badgeFor(status){ return statusBadge(status, STATUS_LABEL[LANG][status] || status); }
+
+function renderUsers(){
+  document.getElementById('usersCount').textContent=users.length+' users';
+  document.getElementById('usersTbody').innerHTML=users.map(u=>`
+    <tr>
+      <td><div style="display:flex;align-items:center;gap:10px"><div class="avatar" style="width:28px;height:28px;font-size:10.5px">${u.init}</div><span style="font-weight:600">${u.name}</span></div></td>
+      <td>${u.role}</td>
+      <td>${u.tfa? '<span class="badge badge-ok">'+icon('check','icon-sm')+'On</span>' : '<span class="badge badge-warn">Off</span>'}</td>
+      <td>${badgeFor(u.status)}</td>
+      <td class="mono muted">${u.last}</td>
+      <td class="row-actions"><button class="btn btn-sm btn-outline" data-action="edit-role">Edit</button></td>
+    </tr>`).join('');
+}
+function renderVerifs(){
+  document.getElementById('verifCount').textContent=verifs.filter(v=>v.status==='pending'||v.status==='review').length+' open';
+  document.getElementById('verifTbody').innerHTML=verifs.map((v,i)=>`
+    <tr>
+      <td style="font-weight:600">${v.name}</td>
+      <td>${v.type}</td>
+      <td class="mono muted">${v.doc}</td>
+      <td class="mono muted">${v.sub}</td>
+      <td>${badgeFor(v.status)}</td>
+      <td class="row-actions">
+        ${v.status==='pending'||v.status==='review' ? `<button class="btn btn-sm btn-ok" data-action="decide-verif" data-index="${i}" data-status="approved">Approve</button><button class="btn btn-sm btn-danger-outline" data-action="decide-verif" data-index="${i}" data-status="rejected">Reject</button>` : '<span class="faint" style="font-size:12px">—</span>'}
+      </td>
+    </tr>`).join('');
+}
+function decideVerif(i,status){
+  const name=verifs[i].name;
+  verifs[i].status=status;
+  renderVerifs();
+  logAction((status==='approved'?'approved':'rejected')+' verification for '+name, status==='approved'?'check':'shield', 'status: pending', 'status: '+status);
+  toastMsg((status==='approved'?'Approved: ':'Rejected: ')+name);
+}
+function renderTrash(){
+  document.getElementById('trashTbody').innerHTML=trashItems.map((t,i)=>`
+    <tr id="trash-row-${i}">
+      <td style="font-weight:600">${t.item}</td>
+      <td>${t.type}</td>
+      <td class="muted">${t.by}</td>
+      <td class="mono muted">${t.on}</td>
+      <td class="mono muted">${t.purge}</td>
+      <td class="row-actions"><button class="btn btn-sm btn-outline" data-action="restore-trash" data-index="${i}">Restore</button></td>
+    </tr>`).join('');
+}
+function restoreTrash(i){
+  const item=trashItems[i].item;
+  trashItems.splice(i,1);
+  renderTrash();
+  logAction('restored "'+item+'" from trash','trash','state: deleted (soft)','state: restored');
+  toastMsg('Restored: '+item);
+}
+function renderBackupTbl(){
+  document.getElementById('backupTbody').innerHTML=backupHistory.map(b=>`
+    <tr><td class="mono">${b.date}</td><td>${b.type}</td><td class="mono">${b.size}</td><td class="mono">${b.dur}</td><td>${badgeFor(b.status)}</td></tr>`).join('');
+}
+function runBackupNow(){
+  toastMsg(LANG==='bn'?'ম্যানুয়াল ব্যাকআপ শুরু হয়েছে…':'Manual backup started…','database');
+  setTimeout(()=>{
+    backupHistory.unshift({date:'Just now',type:'Database',size:'4.8 GB',dur:'5m 40s',status:'ok'});
+    renderBackupTbl();
+    logAction('triggered a manual database backup','database','—','backup_id: bkp_manual');
+    toastMsg(LANG==='bn'?'ব্যাকআপ সম্পন্ন হয়েছে':'Backup completed');
+  },900);
+}
+function renderCms(){
+  document.getElementById('cmsList').innerHTML=cmsPages.map(p=>`
+    <div class="cms-item">
+      <div class="cms-ic">${icon('file','icon-sm')}</div>
+      <div style="flex:1;min-width:0"><div class="ttl">${p.title}</div><div class="sub">${p.sub}</div></div>
+      <span class="badge badge-ok">${icon('check','icon-sm')}Published</span>
+      <button class="btn btn-sm btn-outline" data-action="edit-cms">Edit</button>
+    </div>`).join('');
+}
+function auditRowHtml(a){
+  return `<div class="audit-entry">
+    <div class="audit-ic">${icon(a.ic)}</div>
+    <div class="audit-body">
+      <div class="audit-top"><span class="audit-actor">${a.actor}</span><span class="audit-action">${a.action}</span><span class="audit-time">${a.time}</span></div>
+      <div class="audit-diff"><span class="before">− ${a.before}</span><span class="after">+ ${a.after}</span></div>
+    </div>
+  </div>`;
+}
+function renderAudit(){
+  document.getElementById('auditFull').innerHTML=auditLog.map(auditRowHtml).join('');
+  document.getElementById('dashAuditPreview').innerHTML=auditLog.slice(0,3).map(auditRowHtml).join('');
+}
+function logAction(action,ic,before,after){
+  auditLog.unshift({actor:'Ariyan Rahman',action,ic:ic||'check',time:'now',before:before||'—',after:after||'—'});
+  renderAudit();
+}
+function renderAll(){ renderUsers(); renderVerifs(); renderTrash(); renderBackupTbl(); renderCms(); renderAudit(); }
+
+/* ---------------- wiring ---------------- */
+function wirePage(){
+  document.getElementById('sendOtpBtn').addEventListener('click',sendOtp);
+  document.getElementById('verifyOtpBtn').addEventListener('click',verifyOtp);
+  document.getElementById('resendOtpBtn').addEventListener('click',()=>{
+    toastMsg(LANG==='bn' ? 'নতুন কোড পাঠানো হয়েছে (ডেমো: 1234)' : 'New code sent (demo: 1234)');
+  });
+  document.getElementById('verify2faBtn').addEventListener('click',verify2fa);
+  document.querySelectorAll('.otp-digit').forEach(inp=>inp.addEventListener('input',()=>otpMove(inp)));
+  document.getElementById('phoneInput').addEventListener('keydown',e=>{ if(e.key==='Enter') sendOtp(); });
+  document.getElementById('tfaInput').addEventListener('keydown',e=>{ if(e.key==='Enter') verify2fa(); });
+  document.getElementById('logoutBtn').addEventListener('click',logout);
+  document.getElementById('runBackupBtn').addEventListener('click',runBackupNow);
+  document.getElementById('openRestoreModalBtn').addEventListener('click',()=>openModal('restoreModal'));
+  document.getElementById('modalCancelBtn').addEventListener('click',()=>closeModal('restoreModal'));
+  document.getElementById('modalConfirmBtn').addEventListener('click',runRestoreTest);
+
+  document.addEventListener('click',e=>{
+    const btn=e.target.closest('[data-action]');
+    if(!btn) return;
+    const action=btn.dataset.action;
+    if(action==='edit-role') toastMsg(LANG==='bn' ? 'রোল এডিটর (প্রোটোটাইপ)' : 'Role editor (prototype)');
+    else if(action==='edit-cms') toastMsg(LANG==='bn' ? 'পেজ এডিটর (প্রোটোটাইপ)' : 'Page editor (prototype)');
+    else if(action==='decide-verif') decideVerif(parseInt(btn.dataset.index,10), btn.dataset.status);
+    else if(action==='restore-trash') restoreTrash(parseInt(btn.dataset.index,10));
+  });
+
+  window.onLangChange = ()=>{ renderAll(); };
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  hydrateIcons(document);
+  wirePage();
+  initNav('dashboard');
+  initLang();
+});
+</script>
+</body>
+</html>

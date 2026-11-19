@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBS Stays — Prototype Hub</title>
+<link rel="stylesheet" href="./assets/css/style.css">
+<style>
+body{background:
+  radial-gradient(1100px 560px at 10% -12%, color-mix(in srgb, var(--brand) 14%, transparent), transparent 60%),
+  radial-gradient(900px 500px at 100% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 55%),
+  var(--bg);
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.hub-top{display:flex;align-items:center;gap:14px;padding:22px 0}
+.hub-brand{display:flex;align-items:center;gap:11px}
+.hub-brand-mark{width:40px;height:40px;border-radius:11px;background:linear-gradient(155deg,var(--brand),var(--brand-ink));color:var(--brand-fg);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:16px;box-shadow:var(--shadow-sm)}
+.hub-brand-name{font-family:var(--font-display);font-weight:700;font-size:15.5px}
+.hub-brand-sub{font-size:11.5px;color:var(--fg-muted)}
+
+.hero{padding:40px 0 10px}
+.hero .eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;color:var(--brand-soft-ink);background:var(--brand-soft);padding:6px 13px;border-radius:999px;margin-bottom:18px}
+.hero h1{font-size:clamp(28px,4.4vw,42px);max-width:15ch;line-height:1.08}
+.hero p{margin-top:16px;color:var(--fg-muted);max-width:56ch;font-size:15px;line-height:1.6}
+.hero-meta{display:flex;gap:22px;margin-top:26px;flex-wrap:wrap}
+.hero-meta div{display:flex;flex-direction:column;gap:2px}
+.hero-meta .n{font-family:var(--font-display);font-weight:700;font-size:20px}
+.hero-meta .l{font-size:11px;color:var(--fg-muted)}
+
+.phase-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:44px 0}
+@media (max-width:760px){.phase-grid{grid-template-columns:1fr}}
+.phase-card{
+  position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:22px;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:12px;
+  box-shadow:var(--shadow-sm);transition:box-shadow .18s ease, transform .18s ease, border-color .18s ease;
+  overflow:hidden;
+}
+.phase-card::before{
+  content:'';position:absolute;inset:0;opacity:0;transition:opacity .18s ease;
+  background:linear-gradient(135deg, color-mix(in srgb, var(--brand) 6%, transparent), transparent 55%);
+}
+.phase-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px);border-color:var(--border-strong)}
+.phase-card:hover::before{opacity:1}
+.phase-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;position:relative}
+.phase-num{
+  width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex:none;
+  font-family:var(--font-display);font-weight:800;font-size:16px;
+}
+.ph1 .phase-num{background:var(--brand-soft);color:var(--brand-soft-ink)}
+.ph2 .phase-num{background:var(--accent-soft);color:var(--accent-ink)}
+.ph3 .phase-num{background:var(--info-soft);color:var(--info)}
+.ph4 .phase-num{background:var(--ok-soft);color:var(--ok)}
+.phase-status{font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:999px;letter-spacing:.02em}
+.status-live{background:var(--ok-soft);color:var(--ok)}
+.status-progress{background:var(--warn-soft);color:var(--warn)}
+.status-planned{background:var(--surface-3);color:var(--fg-muted)}
+.phase-card h3{font-size:16.5px;margin-top:2px;position:relative}
+.phase-card .timing{font-size:11.5px;color:var(--fg-muted);font-weight:600;position:relative}
+.phase-card .desc{font-size:13px;color:var(--fg-muted);line-height:1.55;position:relative}
+.phase-card .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;position:relative}
+.phase-card .tags span{font-size:10.5px;font-weight:600;background:var(--surface-2);border:1px solid var(--border);color:var(--fg-muted);padding:3px 9px;border-radius:999px}
+.phase-card .go{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--brand);margin-top:4px;position:relative}
+.phase-card .go .icon{transition:transform .15s ease}
+.phase-card:hover .go .icon{transform:translateX(3px)}
+
+.foot{border-top:1px solid var(--border);margin-top:40px;padding:26px 0 40px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--fg-faint);font-size:12px}
+.foot a{color:var(--fg-muted);text-decoration:none;font-weight:600}
+.foot a:hover{color:var(--brand)}
+
+.src-note{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--fg-muted);background:var(--surface-2);border:1px solid var(--border);padding:10px 14px;border-radius:10px;margin-top:30px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="hub-top">
+    <div class="hub-brand">
+      <div class="hub-brand-mark">CS</div>
+      <div>
+        <div class="hub-brand-name">CBS Stays</div>
+        <div class="hub-brand-sub" data-t="hub_sub">Clickable prototype hub</div>
+      </div>
+    </div>
+    <div style="margin-left:auto" class="lang-toggle">
+      <button class="active" data-lang="bn">বাং</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="eyebrow"><i data-icon="sparkle" data-icon-cls="icon-sm"></i><span data-t="hero_eyebrow">Business Requirements Document → clickable prototypes</span></div>
+    <h1 data-t="hero_title">Bangladesh rental &amp; stay marketplace, built in four phases</h1>
+    <p data-t="hero_desc">A hybrid of Airbnb and Booking.com, localized for Bangladesh — rooms, flats, mess seats and short stays, with bKash/Nagad payments, NID verification and a built-in food ordering vertical. Each phase below is a working, clickable prototype of that stage of the BRD release plan.</p>
+    <div class="hero-meta">
+      <div><span class="n">4</span><span class="l" data-t="meta_phases">release phases</span></div>
+      <div><span class="n">~12</span><span class="l" data-t="meta_months">months, end to end</span></div>
+      <div><span class="n">60+</span><span class="l" data-t="meta_reqs">BRD requirements covered</span></div>
+      <div><span class="n">৳</span><span class="l" data-t="meta_bd">built for Bangladesh</span></div>
+    </div>
+  </div>
+
+  <div class="phase-grid">
+    <a class="phase-card ph1" href="./phase1/index.html">
+      <div class="phase-card-top">
+        <div class="phase-num">01</div>
+        <span class="phase-status status-live" data-t="status_live">Prototype ready</span>
+      </div>
+      <h3 data-t="p1_title">Foundation</h3>
+      <div class="timing" data-t="p1_timing">Weeks 1–6</div>
+      <div class="desc" data-t="p1_desc">Admin console with OTP + mandatory 2FA, role-based access, audit log, soft delete and restore, automated backups, and real CMS/legal pages. The platform everything else is built on.</div>
+      <div class="tags"><span>FR-A1–A7</span><span>FR-H9</span><span>FR-T7–T8</span></div>
+      <div class="go"><span data-t="open_prototype">Open prototype</span><i data-icon="arrowRight" data-icon-cls="icon-sm"></i></div>
+    </a>
+
+    <a class="phase-card ph2" href="./phase2/index.html">
+      <div class="phase-card-top">
+        <div class="phase-num">02</div>
+        <span class="phase-status status-live" data-t="status_live">Prototype ready</span>
+      </div>
+      <h3 data-t="p2_title">Core Listing MVP</h3>
+      <div class="timing" data-t="p2_timing">Months 2–4</div>
+      <div class="desc" data-t="p2_desc">Search &amp; map, multi-room unit tables, NID verification, booking with payment hold, and a parallel food-ordering MVP — restaurants, riders, dispatch and commission.</div>
+      <div class="tags"><span>FR-S1–S5</span><span>FR-H1–H8</span><span>FR-F1–F18</span></div>
+      <div class="go"><span data-t="open_prototype">Open prototype</span><i data-icon="arrowRight" data-icon-cls="icon-sm"></i></div>
+    </a>
+
+    <a class="phase-card ph3" href="./phase3/index.html">
+      <div class="phase-card-top">
+        <div class="phase-num">03</div>
+        <span class="phase-status status-live" data-t="status_live">Prototype ready</span>
+      </div>
+      <h3 data-t="p3_title">Differentiators</h3>
+      <div class="timing" data-t="p3_timing">Months 4–8</div>
+      <div class="desc" data-t="p3_desc">Pay-at-property with token deposits, verified reviews, the CBS Club loyalty tiers, the roommate matcher, and the digital rental agreement (bhara chukti).</div>
+      <div class="tags"><span>FR-B2–B5</span><span>FR-T9</span><span>FR-C3–C5</span></div>
+      <div class="go"><span data-t="open_prototype">Open prototype</span><i data-icon="arrowRight" data-icon-cls="icon-sm"></i></div>
+    </a>
+
+    <a class="phase-card ph4" href="./phase4/index.html">
+      <div class="phase-card-top">
+        <div class="phase-num">04</div>
+        <span class="phase-status status-live" data-t="status_live">Prototype ready</span>
+      </div>
+      <h3 data-t="p4_title">Scale</h3>
+      <div class="timing" data-t="p4_timing">Months 8–12</div>
+      <div class="desc" data-t="p4_desc">SEO landing pages, NRB &amp; tourist stays, the partner-services marketplace, and expansion beyond Dhaka to Chattogram, Sylhet, Khulna and Rajshahi.</div>
+      <div class="tags"><span>FR-S12</span><span>FR-C6, C8, C9</span></div>
+      <div class="go"><span data-t="open_prototype">Open prototype</span><i data-icon="arrowRight" data-icon-cls="icon-sm"></i></div>
+    </a>
+  </div>
+
+  <div class="src-note">
+    <i data-icon="file" data-icon-cls="icon-sm"></i>
+    <span data-t="src_note">Built from the CBS Stays Bangladesh BRD and its four-phase release plan. These are clickable prototypes with mock data — no real backend, payments or SMS are sent.</span>
+  </div>
+
+  <div class="foot">
+    <span data-t="foot_note">CBS Stays Bangladesh · Prototype hub</span>
+    <a href="https://github.com" target="_blank" rel="noopener" data-t="foot_gh">Deployed via GitHub Pages</a>
+  </div>
+</div>
+
+<script src="./assets/js/common.js"></script>
+<script>
+window.I18N = {
+  bn:{
+    hub_sub:'ক্লিকযোগ্য প্রোটোটাইপ হাব',
+    hero_eyebrow:'বিজনেস রিকোয়ারমেন্টস ডকুমেন্ট → ক্লিকযোগ্য প্রোটোটাইপ',
+    hero_title:'বাংলাদেশের রেন্টাল ও স্টে মার্কেটপ্লেস, চারটি ফেজে তৈরি',
+    hero_desc:'Airbnb ও Booking.com-এর হাইব্রিড, বাংলাদেশের জন্য লোকালাইজড — রুম, ফ্ল্যাট, মেস সিট ও শর্ট স্টে, bKash/Nagad পেমেন্ট, NID ভেরিফিকেশন এবং একটি বিল্ট-ইন ফুড অর্ডারিং ভার্টিকাল সহ। নিচের প্রতিটি ফেজ BRD রিলিজ প্ল্যানের ওই ধাপের একটি কার্যকরী, ক্লিকযোগ্য প্রোটোটাইপ।',
+    meta_phases:'রিলিজ ফেজ', meta_months:'মাস, শুরু থেকে শেষ', meta_reqs:'BRD রিকোয়ারমেন্ট কভার করা', meta_bd:'বাংলাদেশের জন্য তৈরি',
+    status_live:'প্রোটোটাইপ প্রস্তুত', open_prototype:'প্রোটোটাইপ খুলুন',
+    p1_title:'ফাউন্ডেশন', p1_timing:'সপ্তাহ ১–৬',
+    p1_desc:'OTP + বাধ্যতামূলক 2FA সহ অ্যাডমিন কনসোল, রোল-ভিত্তিক অ্যাক্সেস, অডিট লগ, সফট ডিলিট ও রিস্টোর, অটোমেটেড ব্যাকআপ, এবং বাস্তব CMS/আইনি পেজ। বাকি সবকিছু যার উপর তৈরি হবে।',
+    p2_title:'কোর লিস্টিং MVP', p2_timing:'মাস ২–৪',
+    p2_desc:'সার্চ ও ম্যাপ, মাল্টি-রুম ইউনিট টেবিল, NID ভেরিফিকেশন, পেমেন্ট হোল্ড সহ বুকিং, এবং একই সাথে একটি ফুড-অর্ডারিং MVP — রেস্টুরেন্ট, রাইডার, ডিসপ্যাচ ও কমিশন।',
+    p3_title:'ডিফারেনশিয়েটর', p3_timing:'মাস ৪–৮',
+    p3_desc:'টোকেন ডিপোজিট সহ পে-অ্যাট-প্রপার্টি, ভেরিফাইড রিভিউ, CBS ক্লাব লয়্যালটি টিয়ার, রুমমেট ম্যাচার, এবং ডিজিটাল রেন্টাল এগ্রিমেন্ট (ভাড়া চুক্তি)।',
+    p4_title:'স্কেল', p4_timing:'মাস ৮–১২',
+    p4_desc:'SEO ল্যান্ডিং পেজ, NRB ও ট্যুরিস্ট স্টে, পার্টনার-সার্ভিসেস মার্কেটপ্লেস, এবং ঢাকার বাইরে চট্টগ্রাম, সিলেট, খুলনা ও রাজশাহীতে সম্প্রসারণ।',
+    src_note:'CBS Stays Bangladesh BRD ও এর চার-ফেজ রিলিজ প্ল্যান থেকে তৈরি। এগুলো মক ডেটাসহ ক্লিকযোগ্য প্রোটোটাইপ — কোনো বাস্তব ব্যাকএন্ড, পেমেন্ট বা SMS পাঠানো হয় না।',
+    foot_note:'CBS Stays Bangladesh · প্রোটোটাইপ হাব', foot_gh:'GitHub Pages-এ ডিপ্লয়কৃত',
+  },
+  en:{
+    hub_sub:'Clickable prototype hub',
+    hero_eyebrow:'Business Requirements Document → clickable prototypes',
+    hero_title:'Bangladesh rental & stay marketplace, built in four phases',
+    hero_desc:'A hybrid of Airbnb and Booking.com, localized for Bangladesh — rooms, flats, mess seats and short stays, with bKash/Nagad payments, NID verification and a built-in food ordering vertical. Each phase below is a working, clickable prototype of that stage of the BRD release plan.',
+    meta_phases:'release phases', meta_months:'months, end to end', meta_reqs:'BRD requirements covered', meta_bd:'built for Bangladesh',
+    status_live:'Prototype ready', open_prototype:'Open prototype',
+    p1_title:'Foundation', p1_timing:'Weeks 1–6',
+    p1_desc:'Admin console with OTP + mandatory 2FA, role-based access, audit log, soft delete and restore, automated backups, and real CMS/legal pages. The platform everything else is built on.',
+    p2_title:'Core Listing MVP', p2_timing:'Months 2–4',
+    p2_desc:'Search & map, multi-room unit tables, NID verification, booking with payment hold, and a parallel food-ordering MVP — restaurants, riders, dispatch and commission.',
+    p3_title:'Differentiators', p3_timing:'Months 4–8',
+    p3_desc:'Pay-at-property with token deposits, verified reviews, the CBS Club loyalty tiers, the roommate matcher, and the digital rental agreement (bhara chukti).',
+    p4_title:'Scale', p4_timing:'Months 8–12',
+    p4_desc:'SEO landing pages, NRB & tourist stays, the partner-services marketplace, and expansion beyond Dhaka to Chattogram, Sylhet, Khulna and Rajshahi.',
+    src_note:'Built from the CBS Stays Bangladesh BRD and its four-phase release plan. These are clickable prototypes with mock data — no real backend, payments or SMS are sent.',
+    foot_note:'CBS Stays Bangladesh · Prototype hub', foot_gh:'Deployed via GitHub Pages',
+  }
+};
+initLang();
+</script>
+</body>
+</html>

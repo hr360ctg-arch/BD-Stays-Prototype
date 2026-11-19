@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBS Stays — Phase 2 Core MVP</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<style>
+/* ---- photo placeholder (no external images — consistent, no broken links) ---- */
+.photo{
+  position:relative;border-radius:var(--radius-md);overflow:hidden;aspect-ratio:4/3;flex:none;
+  display:flex;align-items:flex-end;color:#fff;
+}
+.photo::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg, transparent 45%, rgba(0,0,0,.55) 100%)}
+.photo .ph-label{position:relative;z-index:1;padding:9px 11px;font-size:11px;font-weight:700;display:flex;align-items:center;gap:5px}
+.ph1{background:linear-gradient(140deg,#2a6b58,#0e3b30)}
+.ph2{background:linear-gradient(140deg,#6b4a2a,#3b260e)}
+.ph3{background:linear-gradient(140deg,#2a4a6b,#0e233b)}
+.ph4{background:linear-gradient(140deg,#6b2a55,#3b0e2c)}
+.ph5{background:linear-gradient(140deg,#5a6b2a,#2e3b0e)}
+.ph6{background:linear-gradient(140deg,#2a5f6b,#0e2f3b)}
+
+/* ---- search filters ---- */
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:999px;border:1px solid var(--border-strong);background:var(--surface);font-size:12.5px;font-weight:600;color:var(--fg-muted);cursor:pointer;transition:.12s ease}
+.chip:hover{background:var(--surface-2)}
+.chip.on{background:var(--brand);border-color:var(--brand);color:var(--brand-fg)}
+.chip .icon{width:13px;height:13px}
+
+.search-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:980px){.search-layout{grid-template-columns:1fr}}
+.listing-list{display:flex;flex-direction:column;gap:14px}
+.listing-card{display:flex;gap:14px;cursor:pointer}
+.listing-card:hover{border-color:var(--border-strong)}
+.listing-card .photo{width:132px;height:100px;aspect-ratio:auto}
+.listing-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.listing-top{display:flex;justify-content:space-between;gap:8px}
+.listing-title{font-weight:700;font-size:14px}
+.listing-area{font-size:12px;color:var(--fg-muted);display:flex;align-items:center;gap:5px}
+.listing-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:2px}
+.listing-tags span{font-size:10.5px;font-weight:600;background:var(--surface-2);border:1px solid var(--border);color:var(--fg-muted);padding:2px 8px;border-radius:999px}
+.listing-price{font-family:var(--font-display);font-weight:700;font-size:15px;white-space:nowrap}
+.listing-price small{font-size:10.5px;color:var(--fg-muted);font-weight:500;font-family:var(--font-body)}
+.listing-rating{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:700}
+.listing-rating .icon{color:var(--accent);width:13px;height:13px}
+
+.map-panel{position:sticky;top:90px;height:fit-content;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);background:
+  repeating-linear-gradient(0deg, var(--surface-2) 0 1px, transparent 1px 40px),
+  repeating-linear-gradient(90deg, var(--surface-2) 0 1px, transparent 1px 40px),
+  var(--surface);
+  aspect-ratio:1/1.05; padding:14px; display:flex; flex-direction:column;
+}
+.map-pin{position:absolute;background:var(--fg);color:var(--bg);font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;box-shadow:var(--shadow-md);transform:translate(-50%,-50%);cursor:pointer;white-space:nowrap}
+.map-pin.active{background:var(--brand);color:var(--brand-fg)}
+.map-inner{position:relative;flex:1}
+
+/* ---- unit table ---- */
+.unit-row{display:grid;grid-template-columns:72px minmax(0,1.6fr) minmax(0,1fr) auto;gap:14px;align-items:center;padding:16px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);transition:.12s ease}
+.unit-row > div{min-width:0}
+.unit-row.selected{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.unit-row.blocked{opacity:.45;pointer-events:none}
+.unit-row + .unit-row{margin-top:10px}
+.unit-thumb{width:72px;height:56px;border-radius:9px}
+.unit-name{font-weight:700;font-size:13.5px}
+.unit-meta{font-size:11.5px;color:var(--fg-muted);margin-top:3px;display:flex;gap:10px;flex-wrap:wrap}
+.unit-meta span{display:flex;align-items:center;gap:4px}
+.unit-price{text-align:right;font-family:var(--font-display);font-weight:700;font-size:15px}
+.unit-price small{display:block;font-size:10.5px;color:var(--fg-muted);font-weight:500;font-family:var(--font-body)}
+@media (max-width:620px){.unit-row{grid-template-columns:1fr;text-align:left}.unit-thumb{width:100%;height:120px}.unit-price{text-align:left}}
+
+.dep-note{display:flex;gap:9px;align-items:flex-start;background:var(--info-soft);color:var(--info);border-radius:var(--radius-md);padding:12px 14px;font-size:12.5px;margin-bottom:16px}
+.dep-note .icon{margin-top:1px;flex:none}
+
+/* ---- price breakdown ---- */
+.price-row{display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px dashed var(--border)}
+.price-row.total{border-bottom:none;padding-top:13px;font-weight:700;font-size:15px;font-family:var(--font-display)}
+.pay-method{display:flex;align-items:center;gap:11px;padding:12px 14px;border:1px solid var(--border-strong);border-radius:var(--radius-md);cursor:pointer;transition:.12s ease}
+.pay-method:hover{background:var(--surface-2)}
+.pay-method.on{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.pay-method .pm-mark{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:#fff;flex:none}
+.pm-bkash{background:#e2136e}.pm-nagad{background:#f6921e}.pm-rocket{background:#8a3ffc}.pm-card{background:#1f5fa6}
+
+.arrival-pass{border:1px dashed var(--brand);border-radius:var(--radius-lg);padding:20px;background:var(--brand-soft)}
+.arrival-pass .ap-row{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid color-mix(in srgb, var(--brand) 20%, transparent)}
+.arrival-pass .ap-row:last-child{border-bottom:none}
+.arrival-pass .ap-row .icon{color:var(--brand-soft-ink);margin-top:2px}
+
+/* ---- food discovery ---- */
+.rest-card{display:flex;flex-direction:column;gap:10px}
+.rest-card .photo{width:100%;height:120px;aspect-ratio:auto}
+.rest-meta{display:flex;gap:10px;font-size:11.5px;color:var(--fg-muted);flex-wrap:wrap}
+.rest-meta span{display:flex;align-items:center;gap:4px}
+
+/* ---- order queue ---- */
+.order-card{display:flex;gap:14px;align-items:flex-start}
+.order-timer{width:52px;height:52px;border-radius:999px;background:var(--warn-soft);color:var(--warn);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:700;font-size:13px;flex:none}
+.order-items{font-size:12.5px;color:var(--fg-muted);margin-top:4px;line-height:1.6}
+
+/* ---- rider job card ---- */
+.job-card{border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;background:var(--surface)}
+.job-route{display:flex;align-items:center;gap:0;margin:14px 0}
+.job-route .pt{display:flex;flex-direction:column;align-items:center;gap:3px;flex:none}
+.job-route .pt .d{width:9px;height:9px;border-radius:999px;background:var(--brand)}
+.job-route .pt.end .d{background:var(--danger)}
+.job-route .ln{flex:1;height:2px;background:repeating-linear-gradient(90deg,var(--border-strong) 0 6px, transparent 6px 11px);margin:0 6px}
+.job-route .lbl{font-size:11.5px;color:var(--fg-muted);margin-top:4px;max-width:120px}
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <aside class="app-sidebar" id="sidebar">
+    <a class="sb-brand" href="../index.html">
+      <div class="sb-brand-mark">CS</div>
+      <div><div class="sb-brand-name">CBS Stays</div><div class="sb-brand-sub">Phase 2 · Core MVP</div></div>
+    </a>
+
+    <div class="sb-group" data-t="nav_stays">Stays marketplace</div>
+    <button class="sb-link active" data-view="search"><i data-icon="search"></i><span data-t="nav_search">Search &amp; Map</span></button>
+    <button class="sb-link" data-view="detail"><i data-icon="layers"></i><span data-t="nav_detail">Property Detail</span></button>
+    <button class="sb-link" data-view="booking"><i data-icon="wallet"></i><span data-t="nav_booking">Booking &amp; Payment</span></button>
+
+    <div class="sb-group" data-t="nav_food">Food ordering</div>
+    <button class="sb-link" data-view="food"><i data-icon="food"></i><span data-t="nav_food_disc">Discovery</span></button>
+    <button class="sb-link" data-view="restaurant"><i data-icon="building"></i><span data-t="nav_rest_dash">Restaurant Dashboard</span></button>
+    <button class="sb-link" data-view="rider"><i data-icon="bike"></i><span data-t="nav_rider">Rider App</span></button>
+
+    <div class="phase-switch">
+      <div class="phase-switch-label" data-t="other_phases">Other phases</div>
+      <a href="../phase1/index.html">Phase 1 · Foundation<span class="chip">W1–6</span></a>
+      <a href="../phase3/index.html">Phase 3 · Differentiators<span class="chip">M4–8</span></a>
+      <a href="../phase4/index.html">Phase 4 · Scale<span class="chip">M8–12</span></a>
+    </div>
+
+    <div class="sb-foot">
+      <div class="sb-acct">
+        <div class="avatar">FY</div>
+        <div><div class="sb-acct-name">Farzana Yasmin</div><div class="sb-acct-role" data-t="role_tenant">Tenant · NID verified</div></div>
+        <a class="sb-logout" href="../index.html" title="Exit prototype"><i data-icon="back" data-icon-cls="icon-sm"></i></a>
+      </div>
+    </div>
+  </aside>
+
+  <div class="app-main">
+    <div class="app-topbar">
+      <button class="menu-btn" id="menuBtn"><i data-icon="menu" data-icon-cls="icon-sm"></i></button>
+      <div>
+        <h1 id="viewTitle" data-t="nav_search">Search &amp; Map</h1>
+        <div class="crumbs" id="viewCrumb">Phase 2 · Core Listing MVP</div>
+      </div>
+      <span class="phase-pill">Phase 2</span>
+      <div class="lang-toggle" style="margin-left:0">
+        <button class="active" data-lang="bn">বাং</button>
+        <button data-lang="en">EN</button>
+      </div>
+    </div>
+
+    <div class="app-view">
+
+      <!-- ===== SEARCH & MAP ===== -->
+      <section class="view-section active" id="view-search">
+        <div class="filter-bar">
+          <span class="chip on" data-filter="any"><i data-icon="users"></i><span data-t="f_any">Any tenant</span></span>
+          <span class="chip" data-filter="family"><i data-icon="home"></i><span data-t="f_family">Family only</span></span>
+          <span class="chip" data-filter="bachelor"><i data-icon="users"></i><span data-t="f_bachelor">Bachelor allowed</span></span>
+          <span class="chip" data-filter="student"><i data-icon="building"></i><span data-t="f_student">Student</span></span>
+          <span class="chip" data-filter="instant"><i data-icon="rocket"></i><span data-t="f_instant">Instant booking</span></span>
+          <span class="chip" data-filter="cancel"><i data-icon="shield"></i><span data-t="f_cancel">Free cancellation</span></span>
+        </div>
+
+        <div class="search-layout">
+          <div class="listing-list" id="listingList"></div>
+          <div class="map-panel">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+              <span style="font-size:12px;font-weight:700;color:var(--fg-muted);display:flex;align-items:center;gap:6px"><i data-icon="map" data-icon-cls="icon-sm"></i><span data-t="map_title">Dhaka — bounding-box search</span></span>
+              <span class="badge badge-brand" data-t="map_live">Live as you move</span>
+            </div>
+            <div class="map-inner" id="mapInner"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== PROPERTY DETAIL ===== -->
+      <section class="view-section" id="view-detail">
+        <div class="two-col">
+          <div>
+            <div class="grid cards-2" style="margin-bottom:18px">
+              <div class="photo ph1" style="aspect-ratio:16/11"><span class="ph-label"><i data-icon="map" data-icon-cls="icon-sm"></i>Dhanmondi 27, Dhaka</span></div>
+              <div class="photo ph2" style="aspect-ratio:16/11"><span class="ph-label" data-t="gallery_more">+11 more photos</span></div>
+            </div>
+
+            <h2 style="font-size:19px;margin-bottom:4px" data-t="prop_title">Sunrise Residency — 6-unit apartment floor</h2>
+            <div class="muted" style="font-size:13px;display:flex;align-items:center;gap:6px;margin-bottom:16px"><i data-icon="map" data-icon-cls="icon-sm"></i><span data-t="prop_addr">Road 27, Dhanmondi, Dhaka · exact address shown after booking</span></div>
+
+            <div class="dep-note"><i data-icon="shield" data-icon-cls="icon-sm"></i><span data-t="dep_note">Booking the whole flat blocks every room and seat below for those dates — and booking any single room blocks the whole flat. This is enforced live as you select below (FR-H3). Try it.</span></div>
+
+            <div id="unitTable"></div>
+          </div>
+
+          <div>
+            <div class="card" style="position:sticky;top:90px">
+              <div style="font-weight:700;font-size:14px;margin-bottom:4px" data-t="selected_title">Your selection</div>
+              <div id="selectedSummary" class="muted" style="font-size:12.5px;margin-bottom:14px" data-t="selected_empty">No unit selected yet — pick one from the table.</div>
+              <button class="btn btn-primary btn-block" id="goBookingBtn" data-t="continue_booking">Continue to booking</button>
+              <div style="margin-top:16px;display:flex;flex-direction:column;gap:9px">
+                <div style="display:flex;gap:9px;align-items:center;font-size:12.5px"><i data-icon="shield" data-icon-cls="icon-sm" style="color:var(--brand)"></i><span data-t="prop_v1">Verified Owner · Verified Property</span></div>
+                <div style="display:flex;gap:9px;align-items:center;font-size:12.5px"><i data-icon="star" data-icon-cls="icon-sm" style="color:var(--accent)"></i><span data-t="prop_v2">4.8 rating · 32 verified reviews</span></div>
+                <div style="display:flex;gap:9px;align-items:center;font-size:12.5px"><i data-icon="check" data-icon-cls="icon-sm" style="color:var(--ok)"></i><span data-t="prop_v3">Flexible cancellation up to 24h before check-in</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== BOOKING & PAYMENT ===== -->
+      <section class="view-section" id="view-booking">
+        <div class="two-col">
+          <div>
+            <div class="card" style="margin-bottom:16px">
+              <div style="font-weight:700;font-size:14px;margin-bottom:12px" data-t="price_breakdown">Price breakdown</div>
+              <div class="price-row"><span data-t="pr_rent">Room B · 6 nights</span><span class="tabular">৳ 9,000</span></div>
+              <div class="price-row"><span data-t="pr_deposit">Security deposit (2 months)</span><span class="tabular">৳ 24,000</span></div>
+              <div class="price-row"><span data-t="pr_service">Service charge</span><span class="tabular">৳ 800</span></div>
+              <div class="price-row"><span data-t="pr_fee">Platform fee</span><span class="tabular">৳ 450</span></div>
+              <div class="price-row"><span data-t="pr_vat">VAT (15% on platform fee)</span><span class="tabular">৳ 68</span></div>
+              <div class="price-row total"><span data-t="pr_total">Total due now</span><span class="tabular">৳ 34,318</span></div>
+            </div>
+
+            <div class="card">
+              <div style="font-weight:700;font-size:14px;margin-bottom:4px" data-t="pm_title">How would you like to pay?</div>
+              <div class="muted" style="font-size:12px;margin-bottom:14px" data-t="pm_sub">Pay the full amount now (held until 24h after check-in), or secure with a small token and pay the rest at the property.</div>
+              <div style="display:flex;flex-direction:column;gap:9px" id="payMethods">
+                <label class="pay-method on" data-pm="bkash"><div class="pm-mark pm-bkash">bK</div><div><div style="font-weight:700;font-size:13px" data-t="pm_bkash">bKash — full payment, held</div><div class="muted" style="font-size:11.5px" data-t="pm_bkash_sub">Released to owner 24h after check-in</div></div></label>
+                <label class="pay-method" data-pm="nagad"><div class="pm-mark pm-nagad">N</div><div><div style="font-weight:700;font-size:13px" data-t="pm_nagad">Nagad — full payment, held</div><div class="muted" style="font-size:11.5px" data-t="pm_bkash_sub">Released to owner 24h after check-in</div></div></label>
+                <label class="pay-method" data-pm="card"><div class="pm-mark pm-card">▮▮</div><div><div style="font-weight:700;font-size:13px" data-t="pm_card">Visa / Mastercard / DBBL Nexus</div><div class="muted" style="font-size:11.5px" data-t="pm_bkash_sub">Released to owner 24h after check-in</div></div></label>
+                <label class="pay-method" data-pm="token"><div class="pm-mark" style="background:var(--brand)"><i data-icon="key" data-icon-cls="icon-sm"></i></div><div><div style="font-weight:700;font-size:13px" data-t="pm_token">Pay at Property — 15% token via bKash</div><div class="muted" style="font-size:11.5px" data-t="pm_token_sub">Balance in cash or wallet at check-in (FR-B2)</div></div></label>
+              </div>
+              <button class="btn btn-primary btn-block" style="margin-top:16px" id="confirmBookingBtn"><i data-icon="shield" data-icon-cls="icon-sm"></i><span data-t="confirm_booking">Confirm &amp; pay</span></button>
+            </div>
+          </div>
+
+          <div>
+            <div id="arrivalPassWrap" class="card" style="text-align:center;padding:36px 20px">
+              <i data-icon="key" data-icon-cls="icon-lg" style="color:var(--fg-faint);margin:0 auto 10px;display:block"></i>
+              <div style="font-weight:700;font-size:14px" data-t="pass_wait_title">Arrival pass not released yet</div>
+              <div class="muted" style="font-size:12.5px;margin-top:5px" data-t="pass_wait_sub">Released automatically once payment or the token is received. The owner's phone number stays masked until then (FR-T5).</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== FOOD DISCOVERY ===== -->
+      <section class="view-section" id="view-food">
+        <div class="filter-bar">
+          <span class="chip on"><i data-icon="food"></i><span data-t="f_all">All cuisines</span></span>
+          <span class="chip"><i data-icon="check"></i><span data-t="f_halal">Halal</span></span>
+          <span class="chip"><i data-icon="rocket"></i><span data-t="f_fast">Under 30 min</span></span>
+          <span class="chip"><i data-icon="tag"></i><span data-t="f_offer">Offers</span></span>
+        </div>
+        <div class="grid cards-3" id="restList"></div>
+      </section>
+
+      <!-- ===== RESTAURANT DASHBOARD ===== -->
+      <section class="view-section" id="view-restaurant">
+        <div class="section-title"><h2 data-t="h_orders">Incoming orders</h2><span class="count" data-t="h_orders_sub">Accept within 2 minutes or the order auto-reassigns</span></div>
+        <div style="display:flex;flex-direction:column;gap:12px" id="orderQueue"></div>
+
+        <div class="section-title"><h2 data-t="h_menu">Menu status</h2></div>
+        <div class="card">
+          <div id="menuRows"></div>
+        </div>
+      </section>
+
+      <!-- ===== RIDER APP ===== -->
+      <section class="view-section" id="view-rider">
+        <div class="grid cards-3" style="margin-bottom:22px">
+          <div class="card"><div class="stat-label"><i data-icon="wallet" data-icon-cls="icon-sm"></i><span data-t="r_earn">Today's earnings</span></div><div class="stat-value tabular">৳ 1,240</div><div class="stat-sub muted" data-t="r_earn_sub">11 deliveries</div></div>
+          <div class="card"><div class="stat-label"><i data-icon="bike" data-icon-cls="icon-sm"></i><span data-t="r_status">Status</span></div><div class="stat-value" style="font-size:18px;color:var(--ok)" data-t="r_online">Online</div><div class="stat-sub muted" data-t="r_status_sub">Accepting new jobs</div></div>
+          <div class="card"><div class="stat-label"><i data-icon="star" data-icon-cls="icon-sm"></i><span data-t="r_rating">Rider rating</span></div><div class="stat-value tabular">4.9</div><div class="stat-sub muted" data-t="r_rating_sub">182 deliveries total</div></div>
+        </div>
+
+        <div class="section-title"><h2 data-t="h_job">New job offer</h2></div>
+        <div class="job-card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span class="badge badge-brand"><i data-icon="food" data-icon-cls="icon-sm"></i>Order #CBS-10482</span>
+            <span class="badge badge-warn tabular" id="jobTimer">00:42</span>
+          </div>
+          <div class="job-route">
+            <div class="pt"><span class="d"></span><div class="lbl" data-t="job_pickup">Biriyani Bari, Dhanmondi</div></div>
+            <div class="ln"></div>
+            <div class="pt end"><span class="d"></span><div class="lbl" data-t="job_drop">Sunrise Residency, Rd 27</div></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--fg-muted);margin-bottom:14px">
+            <span data-t="job_dist">2.1 km · ~9 min</span>
+            <span class="tabular" style="font-weight:700;color:var(--fg)" data-t="job_fee">Delivery fee: ৳ 55</span>
+          </div>
+          <div style="display:flex;gap:9px">
+            <button class="btn btn-outline btn-block" id="rejectJobBtn" data-t="job_reject">Decline</button>
+            <button class="btn btn-primary btn-block" id="acceptJobBtn" data-t="job_accept">Accept job</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/common.js"></script>
+<script>
+window.PAGE_CRUMB = 'Phase 2 · Core Listing MVP';
+window.I18N = {
+  bn:{
+    nav_stays:'স্টে মার্কেটপ্লেস', nav_search:'সার্চ ও ম্যাপ', nav_detail:'প্রপার্টি ডিটেইল', nav_booking:'বুকিং ও পেমেন্ট',
+    nav_food:'ফুড অর্ডারিং', nav_food_disc:'ডিসকভারি', nav_rest_dash:'রেস্টুরেন্ট ড্যাশবোর্ড', nav_rider:'রাইডার অ্যাপ',
+    other_phases:'অন্য ফেজ', role_tenant:'টেন্যান্ট · NID ভেরিফায়েড',
+    f_any:'যেকোনো টেন্যান্ট', f_family:'শুধু ফ্যামিলি', f_bachelor:'ব্যাচেলর অ্যালাউড', f_student:'স্টুডেন্ট',
+    f_instant:'ইনস্ট্যান্ট বুকিং', f_cancel:'ফ্রি ক্যান্সেলেশন',
+    map_title:'ঢাকা — বাউন্ডিং-বক্স সার্চ', map_live:'ম্যাপ নড়লে লাইভ',
+    gallery_more:'+১১টি আরও ছবি', prop_title:'সানরাইজ রেসিডেন্সি — ৬-ইউনিট অ্যাপার্টমেন্ট ফ্লোর',
+    prop_addr:'রোড ২৭, ধানমন্ডি, ঢাকা · বুকিংয়ের পর সঠিক ঠিকানা দেখানো হবে',
+    dep_note:'পুরো ফ্ল্যাট বুক করলে নিচের সব রুম ও সিট সেই তারিখের জন্য ব্লক হয়ে যাবে — আবার যেকোনো রুম বুক করলে পুরো ফ্ল্যাট ব্লক হয়ে যাবে। নিচে সিলেক্ট করার সাথে সাথে এটা লাইভ কার্যকর হয় (FR-H3)। চেষ্টা করে দেখুন।',
+    selected_title:'আপনার সিলেকশন', selected_empty:'এখনো কোনো ইউনিট সিলেক্ট করা হয়নি — টেবিল থেকে একটি বেছে নিন।',
+    continue_booking:'বুকিংয়ে এগিয়ে যান',
+    prop_v1:'ভেরিফাইড ওনার · ভেরিফাইড প্রপার্টি', prop_v2:'৪.৮ রেটিং · ৩২টি ভেরিফাইড রিভিউ', prop_v3:'চেক-ইনের ২৪ ঘণ্টা আগ পর্যন্ত ফ্রি ক্যান্সেলেশন',
+    price_breakdown:'মূল্য বিবরণ', pr_rent:'রুম বি · ৬ রাত', pr_deposit:'সিকিউরিটি ডিপোজিট (২ মাস)', pr_service:'সার্ভিস চার্জ',
+    pr_fee:'প্ল্যাটফর্ম ফি', pr_vat:'ভ্যাট (প্ল্যাটফর্ম ফি-এর উপর ১৫%)', pr_total:'এখন পরিশোধযোগ্য মোট',
+    pm_title:'কীভাবে পেমেন্ট করতে চান?', pm_sub:'এখনই পুরো অর্থ পরিশোধ করুন (চেক-ইনের ২৪ ঘণ্টা পর পর্যন্ত হোল্ড থাকবে), অথবা সামান্য টোকেন দিয়ে বুকিং নিশ্চিত করুন এবং বাকিটা প্রপার্টিতে দিন।',
+    pm_bkash:'বিকাশ — সম্পূর্ণ পেমেন্ট, হোল্ড থাকবে', pm_bkash_sub:'চেক-ইনের ২৪ ঘণ্টা পর মালিকের কাছে রিলিজ হবে',
+    pm_nagad:'নগদ — সম্পূর্ণ পেমেন্ট, হোল্ড থাকবে', pm_card:'ভিসা / মাস্টারকার্ড / DBBL নেক্সাস',
+    pm_token:'পে অ্যাট প্রপার্টি — ১৫% টোকেন বিকাশে', pm_token_sub:'বাকিটা চেক-ইনে নগদ বা ওয়ালেটে (FR-B2)',
+    confirm_booking:'নিশ্চিত করুন ও পেমেন্ট করুন',
+    pass_wait_title:'অ্যারাইভাল পাস এখনো রিলিজ হয়নি', pass_wait_sub:'পেমেন্ট বা টোকেন পাওয়ার সাথে সাথে স্বয়ংক্রিয়ভাবে রিলিজ হবে। ততক্ষণ মালিকের ফোন নম্বর মাস্কড থাকবে (FR-T5)।',
+    f_all:'সব কুইজিন', f_halal:'হালাল', f_fast:'৩০ মিনিটের মধ্যে', f_offer:'অফার',
+    h_orders:'আগত অর্ডার', h_orders_sub:'২ মিনিটের মধ্যে গ্রহণ না করলে অটো-রিঅ্যাসাইন হবে',
+    h_menu:'মেনু স্ট্যাটাস',
+    r_earn:'আজকের আয়', r_earn_sub:'১১টি ডেলিভারি', r_status:'স্ট্যাটাস', r_online:'অনলাইন', r_status_sub:'নতুন জব গ্রহণ করছেন',
+    r_rating:'রাইডার রেটিং', r_rating_sub:'মোট ১৮২টি ডেলিভারি',
+    h_job:'নতুন জব অফার', job_pickup:'বিরিয়ানি বাড়ি, ধানমন্ডি', job_drop:'সানরাইজ রেসিডেন্সি, রোড ২৭',
+    job_dist:'২.১ কিমি · ~৯ মিনিট', job_fee:'ডেলিভারি ফি: ৳ ৫৫', job_reject:'প্রত্যাখ্যান', job_accept:'জব গ্রহণ করুন',
+  },
+  en:{
+    nav_stays:'Stays marketplace', nav_search:'Search & Map', nav_detail:'Property Detail', nav_booking:'Booking & Payment',
+    nav_food:'Food ordering', nav_food_disc:'Discovery', nav_rest_dash:'Restaurant Dashboard', nav_rider:'Rider App',
+    other_phases:'Other phases', role_tenant:'Tenant · NID verified',
+    f_any:'Any tenant', f_family:'Family only', f_bachelor:'Bachelor allowed', f_student:'Student',
+    f_instant:'Instant booking', f_cancel:'Free cancellation',
+    map_title:'Dhaka — bounding-box search', map_live:'Live as you move',
+    gallery_more:'+11 more photos', prop_title:'Sunrise Residency — 6-unit apartment floor',
+    prop_addr:'Road 27, Dhanmondi, Dhaka · exact address shown after booking',
+    dep_note:'Booking the whole flat blocks every room and seat below for those dates — and booking any single room blocks the whole flat. This is enforced live as you select below (FR-H3). Try it.',
+    selected_title:'Your selection', selected_empty:'No unit selected yet — pick one from the table.',
+    continue_booking:'Continue to booking',
+    prop_v1:'Verified Owner · Verified Property', prop_v2:'4.8 rating · 32 verified reviews', prop_v3:'Flexible cancellation up to 24h before check-in',
+    price_breakdown:'Price breakdown', pr_rent:'Room B · 6 nights', pr_deposit:'Security deposit (2 months)', pr_service:'Service charge',
+    pr_fee:'Platform fee', pr_vat:'VAT (15% on platform fee)', pr_total:'Total due now',
+    pm_title:'How would you like to pay?', pm_sub:'Pay the full amount now (held until 24h after check-in), or secure with a small token and pay the rest at the property.',
+    pm_bkash:'bKash — full payment, held', pm_bkash_sub:'Released to owner 24h after check-in',
+    pm_nagad:'Nagad — full payment, held', pm_card:'Visa / Mastercard / DBBL Nexus',
+    pm_token:'Pay at Property — 15% token via bKash', pm_token_sub:'Balance in cash or wallet at check-in (FR-B2)',
+    confirm_booking:'Confirm & pay',
+    pass_wait_title:'Arrival pass not released yet', pass_wait_sub:"Released automatically once payment or the token is received. The owner's phone number stays masked until then (FR-T5).",
+    f_all:'All cuisines', f_halal:'Halal', f_fast:'Under 30 min', f_offer:'Offers',
+    h_orders:'Incoming orders', h_orders_sub:'Accept within 2 minutes or the order auto-reassigns',
+    h_menu:'Menu status',
+    r_earn:"Today's earnings", r_earn_sub:'11 deliveries', r_status:'Status', r_online:'Online', r_status_sub:'Accepting new jobs',
+    r_rating:'Rider rating', r_rating_sub:'182 deliveries total',
+    h_job:'New job offer', job_pickup:'Biriyani Bari, Dhanmondi', job_drop:'Sunrise Residency, Road 27',
+    job_dist:'2.1 km · ~9 min', job_fee:'Delivery fee: ৳ 55', job_reject:'Decline', job_accept:'Accept job',
+  }
+};
+
+/* ---------------- mock data ---------------- */
+const listings=[
+  {ph:'ph1',title:'Bachelor flat, 2BR — Mirpur-10',area:'Mirpur-10, Dhaka',price:'12,000',unit:'month',rating:'4.7',tags:['Bachelor allowed','Lift','Gas'],type:'bachelor'},
+  {ph:'ph2',title:'Family flat, 3BR — Mohammadpur',area:'Mohammadpur, Dhaka',price:'22,000',unit:'month',rating:'4.9',tags:['Family only','Generator','Parking'],type:'family'},
+  {ph:'ph3',title:'Mess seat, shared room — Dhanmondi',area:'Dhanmondi 27, Dhaka',price:'4,500',unit:'month',rating:'4.5',tags:['Student','Meals included'],type:'student'},
+  {ph:'ph4',title:'Studio, instant booking — Bashundhara',area:'Bashundhara R/A, Dhaka',price:'1,800',unit:'night',rating:'4.8',tags:['Any','Instant booking','Wi-Fi'],type:'any'},
+  {ph:'ph5',title:'Family flat, 4BR — Gulshan',area:'Gulshan 2, Dhaka',price:'48,000',unit:'month',rating:'4.9',tags:['Family only','Lift','CCTV'],type:'family'},
+  {ph:'ph6',title:'Bachelor room, attached bath — Uttara',area:'Sector 11, Uttara',price:'8,500',unit:'month',rating:'4.6',tags:['Bachelor allowed','Free cancellation'],type:'bachelor'},
+];
+function renderListings(filter){
+  const list = filter==='any' ? listings : listings.filter(l=>l.type===filter || (filter==='instant'&&l.tags.includes('Instant booking')) || (filter==='cancel'&&l.tags.includes('Free cancellation')));
+  document.getElementById('listingList').innerHTML = (list.length?list:listings).map(l=>`
+    <div class="card listing-card card-hover">
+      <div class="photo ${l.ph}"><span class="ph-label">${icon('map','icon-sm')}${l.area.split(',')[0]}</span></div>
+      <div class="listing-body">
+        <div class="listing-top">
+          <div>
+            <div class="listing-title">${l.title}</div>
+            <div class="listing-area">${icon('map','icon-sm')}${l.area}</div>
+          </div>
+          <div class="listing-rating">${icon('star')}${l.rating}</div>
+        </div>
+        <div class="listing-tags">${l.tags.map(t=>`<span>${t}</span>`).join('')}</div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:4px">
+          <div class="listing-price tabular">৳ ${l.price}<small> /${l.unit==='night'?(LANG==='bn'?'রাত':'night'):(LANG==='bn'?'মাস':'month')}</small></div>
+          <span class="badge badge-ok" style="font-size:10px">${icon('check','icon-sm')}${LANG==='bn'?'ভেরিফাইড':'Verified'}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function renderMap(){
+  const pins=[{x:28,y:35,n:'1'},{x:55,y:22,n:'2'},{x:40,y:62,n:'3',on:true},{x:72,y:48,n:'4'},{x:60,y:75,n:'5'},{x:20,y:68,n:'6'}];
+  document.getElementById('mapInner').innerHTML = pins.map(p=>`<span class="map-pin ${p.on?'active':''}" style="left:${p.x}%;top:${p.y}%">${p.n==='3'?'৳ 4,500':'৳ '+(10+p.n)+',000'}</span>`).join('');
+}
+
+/* ---- unit table / inventory dependency (FR-H3) ---- */
+const units=[
+  {id:'whole',ph:'ph1',name:'Whole Flat (3BR)',cap:'6 guests',bed:'3 bedrooms',price:'22,000',unit:'month'},
+  {id:'A',ph:'ph2',name:'Room A — Master, attached bath',cap:'2 guests',bed:'1 double bed',price:'9,000',unit:'month'},
+  {id:'B',ph:'ph3',name:'Room B — Standard',cap:'2 guests',bed:'1 double bed',price:'7,500',unit:'month'},
+  {id:'C',ph:'ph5',name:'Seat — shared room (male)',cap:'1 guest',bed:'1 seat, meals included',price:'4,500',unit:'month'},
+];
+let selectedUnit=null;
+function renderUnits(){
+  document.getElementById('unitTable').innerHTML = units.map(u=>{
+    const blocked = selectedUnit && selectedUnit!=='__none__' && u.id!==selectedUnit && (selectedUnit==='whole' || u.id==='whole');
+    const selected = selectedUnit===u.id;
+    return `<div class="unit-row ${selected?'selected':''} ${blocked?'blocked':''}" data-unit="${u.id}">
+      <div class="photo unit-thumb ${u.ph}"></div>
+      <div>
+        <div class="unit-name">${u.name}</div>
+        <div class="unit-meta"><span>${icon('users','icon-sm')}${u.cap}</span><span>${icon('home','icon-sm')}${u.bed}</span></div>
+      </div>
+      <div class="unit-price tabular">৳ ${u.price}<small>/${LANG==='bn'?'মাস':u.unit}</small></div>
+      <button class="btn ${selected?'btn-primary':'btn-outline'} btn-sm" data-select-unit="${u.id}">${selected ? (LANG==='bn'?'সিলেক্টেড':'Selected') : (LANG==='bn'?'সিলেক্ট':'Select')}</button>
+    </div>`;
+  }).join('');
+  const sumEl = document.getElementById('selectedSummary');
+  if(selectedUnit){
+    const u = units.find(x=>x.id===selectedUnit);
+    sumEl.removeAttribute('data-t');
+    sumEl.innerHTML = `<b style="color:var(--fg)">${u.name}</b><br>৳ ${u.price} /${LANG==='bn'?'মাস':u.unit}`;
+  } else {
+    sumEl.setAttribute('data-t','selected_empty');
+    sumEl.textContent = window.I18N[LANG].selected_empty;
+  }
+}
+function selectUnit(id){
+  selectedUnit = (selectedUnit===id) ? null : id;
+  renderUnits();
+  if(selectedUnit){
+    const u = units.find(x=>x.id===selectedUnit);
+    toastMsg((LANG==='bn'?'সিলেক্ট করা হয়েছে: ':'Selected: ')+u.name, 'layers');
+  }
+}
+
+/* ---- food ---- */
+const restaurants=[
+  {ph:'ph2',name:'Biriyani Bari',cuisine:'Biriyani · Bangladeshi',time:'25–35 min',rating:'4.6',tag:'Halal'},
+  {ph:'ph6',name:'Dhanmondi Dim Chotpoti',cuisine:'Street food · Snacks',time:'15–25 min',rating:'4.4',tag:'Popular'},
+  {ph:'ph5',name:'Grameen Kitchen',cuisine:'Home-style · Bangladeshi',time:'30–40 min',rating:'4.8',tag:'Community cuisine'},
+];
+function renderRestaurants(){
+  document.getElementById('restList').innerHTML = restaurants.map(r=>`
+    <div class="card rest-card card-hover">
+      <div class="photo ${r.ph}"><span class="ph-label">${icon('food','icon-sm')}${r.tag}</span></div>
+      <div style="font-weight:700;font-size:13.5px">${r.name}</div>
+      <div class="muted" style="font-size:12px">${r.cuisine}</div>
+      <div class="rest-meta"><span>${icon('check','icon-sm')}${r.rating}</span><span>${icon('rocket','icon-sm')}${r.time}</span></div>
+    </div>`).join('');
+}
+
+/* ---- restaurant order queue ---- */
+let orders=[
+  {id:'#CBS-10481',items:'1× Kacchi Biriyani (Large), 1× Borhani',total:'৳ 420',t:60},
+  {id:'#CBS-10480',items:'2× Morog Polao, 1× Firni',total:'৳ 560',t:95},
+];
+function renderOrders(){
+  document.getElementById('orderQueue').innerHTML = orders.map((o,i)=>`
+    <div class="card order-card">
+      <div class="order-timer">${Math.floor(o.t/60)}:${String(o.t%60).padStart(2,'0')}</div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;justify-content:space-between;gap:8px"><span style="font-weight:700;font-size:13.5px">${o.id}</span><span class="tabular" style="font-weight:700">${o.total}</span></div>
+        <div class="order-items">${o.items}</div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button class="btn btn-ok btn-sm" data-order-action="accept" data-index="${i}">${icon('check','icon-sm')}${LANG==='bn'?'গ্রহণ করুন':'Accept'}</button>
+          <button class="btn btn-danger-outline btn-sm" data-order-action="reject" data-index="${i}">${LANG==='bn'?'প্রত্যাখ্যান':'Reject'}</button>
+        </div>
+      </div>
+    </div>`).join('') || `<div class="empty">${icon('food','icon-lg')}<span>${LANG==='bn'?'কোনো নতুন অর্ডার নেই':'No new orders'}</span></div>`;
+}
+function decideOrder(i, action){
+  const o = orders[i];
+  orders.splice(i,1);
+  renderOrders();
+  toastMsg((action==='accept'?(LANG==='bn'?'গৃহীত: ':'Accepted: '):(LANG==='bn'?'প্রত্যাখ্যাত: ':'Rejected: '))+o.id, action==='accept'?'check':'shield');
+}
+const menuItems=[
+  {name:'Kacchi Biriyani (Large)',price:'৳ 380',on:true},
+  {name:'Morog Polao',price:'৳ 280',on:true},
+  {name:'Beef Tehari',price:'৳ 250',on:false},
+  {name:'Borhani',price:'৳ 40',on:true},
+];
+function renderMenu(){
+  document.getElementById('menuRows').innerHTML = menuItems.map((m,i)=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)">
+      <div style="flex:1"><div style="font-weight:600;font-size:13px">${m.name}</div><div class="muted tabular" style="font-size:11.5px">${m.price}</div></div>
+      <span class="badge ${m.on?'badge-ok':'badge-muted'}">${m.on?(LANG==='bn'?'অ্যাভেইলেবল':'Available'):(LANG==='bn'?'স্টক শেষ':'Out of stock')}</span>
+      <div class="toggle ${m.on?'on':''}" data-menu-toggle="${i}"></div>
+    </div>`).join('');
+}
+
+/* ---- wiring ---- */
+function wirePage(){
+  document.querySelectorAll('.filter-bar .chip').forEach(c=>{
+    c.addEventListener('click',()=>{
+      document.querySelectorAll('.filter-bar .chip').forEach(x=>x.classList.remove('on'));
+      c.classList.add('on');
+      if(c.dataset.filter) renderListings(c.dataset.filter);
+    });
+  });
+  document.getElementById('goBookingBtn').addEventListener('click',()=>{
+    if(!selectedUnit){ toastMsg(LANG==='bn'?'আগে একটি ইউনিট সিলেক্ট করুন':'Select a unit first','layers'); return; }
+    showView('booking');
+  });
+  document.getElementById('confirmBookingBtn').addEventListener('click',()=>{
+    const el = document.getElementById('arrivalPassWrap');
+    el.innerHTML = `
+      <div class="arrival-pass">
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px"><span class="badge badge-ok">${icon('check','icon-sm')}${LANG==='bn'?'অ্যারাইভাল পাস রিলিজড':'Arrival pass released'}</span></div>
+        <div class="ap-row">${icon('map','icon-sm')}<div><b>${LANG==='bn'?'ঠিকানা':'Address'}</b><br>House 14, Road 27, Dhanmondi, Dhaka — ${LANG==='bn'?'ম্যাপ পিন বুকিং অ্যাপে':'map pin in booking app'}</div></div>
+        <div class="ap-row">${icon('users','icon-sm')}<div><b>${LANG==='bn'?'কেয়ারটেকার':'Caretaker'}</b><br>Md. Jasim — 01••-•••••78 ${LANG==='bn'?'(কল করতে চাপুন)':'(tap to call)'}</div></div>
+        <div class="ap-row">${icon('key','icon-sm')}<div><b>${LANG==='bn'?'গেট/লক':'Gate / lock'}</b><br>${LANG==='bn'?'মেইন গেট কোড: ৪৪৭৭ · ফ্ল্যাট ৩বি':'Main gate code: 4477 · Flat 3B'}</div></div>
+        <div class="ap-row">${icon('globe','icon-sm')}<div><b>Wi-Fi</b><br>SunriseRes_3B / pass: welcome2026</div></div>
+      </div>`;
+    toastMsg(LANG==='bn'?'পেমেন্ট নিশ্চিত হয়েছে':'Payment confirmed','check');
+  });
+  document.querySelectorAll('.pay-method').forEach(p=>{
+    p.addEventListener('click',()=>{
+      document.querySelectorAll('.pay-method').forEach(x=>x.classList.remove('on'));
+      p.classList.add('on');
+    });
+  });
+  document.addEventListener('click',e=>{
+    const sel=e.target.closest('[data-select-unit]');
+    if(sel){ selectUnit(sel.dataset.selectUnit); return; }
+    const row=e.target.closest('.unit-row:not(.blocked)');
+    if(row && !e.target.closest('[data-select-unit]')){ selectUnit(row.dataset.unit); return; }
+    const oa=e.target.closest('[data-order-action]');
+    if(oa){ decideOrder(parseInt(oa.dataset.index,10), oa.dataset.orderAction); return; }
+    const mt=e.target.closest('[data-menu-toggle]');
+    if(mt){ const i=parseInt(mt.dataset.menuToggle,10); menuItems[i].on=!menuItems[i].on; renderMenu(); return; }
+  });
+  document.getElementById('acceptJobBtn').addEventListener('click',()=>{
+    toastMsg(LANG==='bn'?'জব গ্রহণ করা হয়েছে — নেভিগেশন শুরু হচ্ছে':'Job accepted — starting navigation','bike');
+  });
+  document.getElementById('rejectJobBtn').addEventListener('click',()=>{
+    toastMsg(LANG==='bn'?'জব প্রত্যাখ্যাত — পরবর্তী রাইডারকে পাঠানো হচ্ছে':'Job declined — reassigning to next rider','shield');
+  });
+
+  window.onLangChange = ()=>{
+    renderListings('any'); renderMap(); renderUnits(); renderRestaurants(); renderOrders(); renderMenu();
+  };
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  hydrateIcons(document);
+  renderListings('any'); renderMap(); renderUnits(); renderRestaurants(); renderOrders(); renderMenu();
+  wirePage();
+  initNav('search');
+  initLang();
+});
+</script>
+</body>
+</html>

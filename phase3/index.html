@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBS Stays — Phase 3 Differentiators</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+<style>
+.tier-card{border-radius:var(--radius-lg);padding:20px;position:relative;overflow:hidden;color:#fff}
+.tier-1{background:linear-gradient(145deg,#4a5a46,#28331f)}
+.tier-2{background:linear-gradient(145deg,#2a6b58,#0e3b30)}
+.tier-3{background:linear-gradient(145deg,#6b4a1f,#3b260e)}
+.tier-card .tier-label{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.75}
+.tier-card h3{font-size:18px;margin:5px 0 12px}
+.tier-card ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px;font-size:12.5px}
+.tier-card ul li{display:flex;gap:7px;align-items:flex-start;opacity:.92}
+.tier-card .tier-req{font-size:11px;opacity:.7;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.18)}
+.tier-badge-current{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.18);font-size:10px;font-weight:700;padding:4px 10px;border-radius:999px}
+
+.review-card{display:flex;gap:13px}
+.review-stars{display:flex;gap:2px;color:var(--accent)}
+.review-stars .icon{width:13px;height:13px}
+.review-body{flex:1;min-width:0}
+.review-top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.owner-reply{margin-top:10px;background:var(--surface-2);border-radius:9px;padding:10px 12px;font-size:12.5px}
+.owner-reply b{color:var(--brand)}
+
+.match-card{display:flex;gap:13px;align-items:center}
+.match-score{width:46px;height:46px;border-radius:999px;background:var(--brand-soft);color:var(--brand-soft-ink);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex:none}
+.match-meta{display:flex;gap:10px;flex-wrap:wrap;font-size:11.5px;color:var(--fg-muted);margin-top:4px}
+.match-meta span{display:flex;align-items:center;gap:4px}
+
+.agreement-doc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px;font-family:var(--font-mono);font-size:12px;line-height:1.9;box-shadow:var(--shadow-sm)}
+.agreement-doc .ag-title{font-family:var(--font-display);font-size:15px;font-weight:700;margin-bottom:4px;text-align:center}
+.agreement-doc .ag-sub{text-align:center;color:var(--fg-muted);margin-bottom:18px;font-family:var(--font-body);font-size:11.5px}
+.agreement-doc .ag-field{display:flex;justify-content:space-between;border-bottom:1px dotted var(--border-strong);padding:4px 0}
+.sign-box{border:1px dashed var(--border-strong);border-radius:9px;padding:16px;text-align:center;margin-top:8px;font-family:var(--font-body);font-size:12px;color:var(--fg-faint)}
+.sign-box.signed{border-color:var(--brand);color:var(--brand);background:var(--brand-soft);font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <aside class="app-sidebar" id="sidebar">
+    <a class="sb-brand" href="../index.html">
+      <div class="sb-brand-mark">CS</div>
+      <div><div class="sb-brand-name">CBS Stays</div><div class="sb-brand-sub">Phase 3 · Differentiators</div></div>
+    </a>
+
+    <div class="sb-group" data-t="nav_group">Differentiators</div>
+    <button class="sb-link active" data-view="pap"><i data-icon="key"></i><span data-t="nav_pap">Pay at Property</span></button>
+    <button class="sb-link" data-view="reviews"><i data-icon="star"></i><span data-t="nav_reviews">Verified Reviews</span></button>
+    <button class="sb-link" data-view="loyalty"><i data-icon="gift"></i><span data-t="nav_loyalty">CBS Club Loyalty</span></button>
+    <button class="sb-link" data-view="matcher"><i data-icon="users"></i><span data-t="nav_matcher">Roommate Matcher</span></button>
+    <button class="sb-link" data-view="agreement"><i data-icon="file"></i><span data-t="nav_agreement">Rental Agreement</span></button>
+
+    <div class="phase-switch">
+      <div class="phase-switch-label" data-t="other_phases">Other phases</div>
+      <a href="../phase1/index.html">Phase 1 · Foundation<span class="chip">W1–6</span></a>
+      <a href="../phase2/index.html">Phase 2 · Core MVP<span class="chip">M2–4</span></a>
+      <a href="../phase4/index.html">Phase 4 · Scale<span class="chip">M8–12</span></a>
+    </div>
+
+    <div class="sb-foot">
+      <div class="sb-acct">
+        <div class="avatar">FY</div>
+        <div><div class="sb-acct-name">Farzana Yasmin</div><div class="sb-acct-role" data-t="role_tenant">CBS Club · Level 2 Plus</div></div>
+        <a class="sb-logout" href="../index.html" title="Exit prototype"><i data-icon="back" data-icon-cls="icon-sm"></i></a>
+      </div>
+    </div>
+  </aside>
+
+  <div class="app-main">
+    <div class="app-topbar">
+      <button class="menu-btn" id="menuBtn"><i data-icon="menu" data-icon-cls="icon-sm"></i></button>
+      <div><h1 id="viewTitle" data-t="nav_pap">Pay at Property</h1><div class="crumbs" id="viewCrumb">Phase 3 · Differentiators</div></div>
+      <span class="phase-pill">Phase 3</span>
+      <div class="lang-toggle" style="margin-left:0"><button class="active" data-lang="bn">বাং</button><button data-lang="en">EN</button></div>
+    </div>
+
+    <div class="app-view">
+
+      <!-- ===== PAY AT PROPERTY ===== -->
+      <section class="view-section active" id="view-pap">
+        <div class="two-col">
+          <div>
+            <div class="card">
+              <div style="font-weight:700;font-size:14px;margin-bottom:4px" data-t="pap_title">Token deposit eligibility · FR-B4</div>
+              <div class="muted" style="font-size:12.5px;margin-bottom:16px" data-t="pap_sub">Admin-configurable rules decide who can use Pay at Property instead of full online payment.</div>
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px" data-t="pap_c1">NID &amp; phone verified</span><span class="badge badge-ok"><i data-icon="check" data-icon-cls="icon-sm"></i>OK</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px" data-t="pap_c2">Owner allows Pay at Property</span><span class="badge badge-ok"><i data-icon="check" data-icon-cls="icon-sm"></i>OK</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px" data-t="pap_c3">No-show history</span><span class="badge badge-ok"><i data-icon="check" data-icon-cls="icon-sm"></i><span data-t="pap_clean">Clean</span></span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px" data-t="pap_c4">Token amount (15% of first month)</span><span class="tabular" style="font-weight:700">৳ 3,300</span></div>
+              </div>
+              <button class="btn btn-primary btn-block" style="margin-top:18px" id="secureTokenBtn"><i data-icon="key" data-icon-cls="icon-sm"></i><span data-t="pap_secure">Secure booking with token</span></button>
+            </div>
+          </div>
+          <div>
+            <div class="card" id="guaranteePanel">
+              <div style="font-weight:700;font-size:14px;margin-bottom:10px" data-t="pap_status_title">Guarantee status — owner view</div>
+              <div class="empty" style="padding:28px 10px">
+                <i data-icon="key" data-icon-cls="icon-lg"></i>
+                <span data-t="pap_status_empty">No token secured yet. The owner sees this panel update in real time once the tenant pays.</span>
+              </div>
+            </div>
+            <div class="card" style="margin-top:16px">
+              <div style="font-weight:700;font-size:14px;margin-bottom:10px" data-t="pap_noshow_title">No-show handling · FR-B5</div>
+              <div style="font-size:12.5px;color:var(--fg-muted);line-height:1.6" data-t="pap_noshow_body">If the tenant does not arrive, the token deposit is forfeited to the owner (minus the platform fee). Two no-shows in a rolling 6 months automatically suspends the tenant's Pay-at-Property privilege — full online payment is still available.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== REVIEWS ===== -->
+      <section class="view-section" id="view-reviews">
+        <div class="grid cards-3" style="margin-bottom:22px">
+          <div class="card"><div class="stat-label"><i data-icon="star" data-icon-cls="icon-sm"></i><span data-t="rv_avg">Average rating</span></div><div class="stat-value tabular">4.8</div><div class="stat-sub muted" data-t="rv_avg_sub">32 verified reviews</div></div>
+          <div class="card"><div class="stat-label"><i data-icon="check" data-icon-cls="icon-sm"></i><span data-t="rv_verified">Verified-stay only</span></div><div class="stat-value" style="font-size:18px;color:var(--ok)" data-t="rv_enforced">Enforced</div><div class="stat-sub muted" data-t="rv_verified_sub">No review without a completed stay</div></div>
+          <div class="card"><div class="stat-label"><i data-icon="shield" data-icon-cls="icon-sm"></i><span data-t="rv_super">Superhost status</span></div><div class="stat-value" style="font-size:18px;color:var(--brand)" data-t="rv_yes">Yes</div><div class="stat-sub muted" data-t="rv_super_sub">Rating, response rate, low cancellations</div></div>
+        </div>
+        <div class="section-title"><h2 data-t="h_reviews">Recent reviews</h2></div>
+        <div style="display:flex;flex-direction:column;gap:14px" id="reviewList"></div>
+      </section>
+
+      <!-- ===== LOYALTY ===== -->
+      <section class="view-section" id="view-loyalty">
+        <div class="section-title"><h2 data-t="h_loyalty">CBS Club tiers · FR-T9</h2><span class="count" data-t="h_loyalty_sub">Discounts apply automatically at checkout, capped by admin rules</span></div>
+        <div class="grid cards-3">
+          <div class="tier-card tier-1">
+            <div class="tier-label" data-t="t1_label">Level 1 · Member</div>
+            <h3 data-t="t1_name">First completed stay</h3>
+            <ul>
+              <li><i data-icon="check" data-icon-cls="icon-sm"></i><span data-t="t1_b1">5% off platform fee on partner services</span></li>
+              <li><i data-icon="check" data-icon-cls="icon-sm"></i><span data-t="t1_b2">Movers, cleaning, furniture rental</span></li>
+            </ul>
+            <div class="tier-req" data-t="t1_req">Unlocked after 1 completed stay</div>
+          </div>
+          <div class="tier-card tier-2">
+            <div class="tier-badge-current" data-t="current_tier">Your tier</div>
+            <div class="tier-label" data-t="t2_label">Level 2 · Plus</div>
+            <h3 data-t="t2_name">2 completed stays</h3>
+            <ul>
+              <li><i data-icon="check" data-icon-cls="icon-sm"></i><span data-t="t2_b1">10% off service fees</span></li>
+              <li><i data-icon="check" data-icon-cls="icon-sm"></i><span data-t="t2_b2">Free early check-in, subject to availability</span></li>
+            </ul>
+            <div class="tier-req" data-t="t2_req">You are here — 2 stays completed</div>
+          </div>
+          <div class="tier-card tier-3">
+            <div class="tier-label" data-t="t3_label">Level 3 · VIP</div>
+            <h3 data-t="t3_name">5 stays or 6-month tenancy</h3>
+            <ul>
+              <li><i data-icon="check" data-icon-cls="icon-sm"></i><span data-t="t3_b1">15% off service fees</span></li>
+              <li><i data-icon="check" data-icon-cls="icon-sm"></i><span data-t="t3_b2">Priority support</span></li>
+            </ul>
+            <div class="tier-req" data-t="t3_req">3 more stays to unlock</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== MATCHER ===== -->
+      <section class="view-section" id="view-matcher">
+        <div class="section-title"><h2 data-t="h_matcher">Roommate &amp; mess matches · FR-C3</h2><span class="count" data-t="h_matcher_sub">Matched by budget, gender, diet and schedule</span></div>
+        <div style="display:flex;flex-direction:column;gap:12px" id="matchList"></div>
+      </section>
+
+      <!-- ===== AGREEMENT ===== -->
+      <section class="view-section" id="view-agreement">
+        <div class="two-col">
+          <div class="agreement-doc">
+            <div class="ag-title" data-t="ag_title">Digital Rental Agreement (বাড়ি ভাড়ার চুক্তি)</div>
+            <div class="ag-sub" data-t="ag_sub">Prefilled from booking data · stamp-paper requirement supported · FR-C4</div>
+            <div class="ag-field"><span data-t="ag_owner">Owner / Lessor</span><span>Md. Kamal Hossain</span></div>
+            <div class="ag-field"><span data-t="ag_tenant">Tenant / Lessee</span><span>Farzana Yasmin</span></div>
+            <div class="ag-field"><span data-t="ag_addr">Property</span><span>Flat 3B, Rd 27, Dhanmondi</span></div>
+            <div class="ag-field"><span data-t="ag_term">Term</span><span>12 months, from Dec 1, 2026</span></div>
+            <div class="ag-field"><span data-t="ag_rent">Monthly rent</span><span>৳ 22,000</span></div>
+            <div class="ag-field"><span data-t="ag_deposit">Security deposit</span><span>৳ 44,000 (2 months)</span></div>
+            <div class="sign-box" id="ownerSign" data-t="ag_owner_wait">Awaiting owner e-signature</div>
+            <div class="sign-box" id="tenantSign" data-t="ag_tenant_wait">Awaiting tenant e-signature</div>
+          </div>
+          <div>
+            <div class="card">
+              <div style="font-weight:700;font-size:14px;margin-bottom:10px" data-t="ag_panel_title">E-signature</div>
+              <div class="muted" style="font-size:12.5px;margin-bottom:16px" data-t="ag_panel_sub">For tenancies over 30 days, both parties sign digitally. CBS stores the signed copy and supports the stamp-paper requirement. Legal review required before launch (OQ-4).</div>
+              <button class="btn btn-outline btn-block" style="margin-bottom:9px" id="ownerSignBtn" data-t="ag_sign_owner">Sign as owner (demo)</button>
+              <button class="btn btn-primary btn-block" id="tenantSignBtn" data-t="ag_sign_tenant">Sign as tenant (demo)</button>
+            </div>
+            <div class="card" style="margin-top:16px">
+              <div style="font-weight:700;font-size:14px;margin-bottom:8px" data-t="ag_police_title">Tenant police registration · FR-C5</div>
+              <div class="muted" style="font-size:12.5px" data-t="ag_police_body">Where local rules require it (e.g. the Dhaka tenant information form), the same booking data generates an exportable copy for the owner. Applicability to be confirmed with counsel (OQ-4).</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/common.js"></script>
+<script>
+window.PAGE_CRUMB = 'Phase 3 · Differentiators';
+window.I18N = {
+  bn:{
+    nav_group:'ডিফারেনশিয়েটর', nav_pap:'পে অ্যাট প্রপার্টি', nav_reviews:'ভেরিফাইড রিভিউ', nav_loyalty:'CBS ক্লাব লয়্যালটি',
+    nav_matcher:'রুমমেট ম্যাচার', nav_agreement:'রেন্টাল এগ্রিমেন্ট', other_phases:'অন্য ফেজ', role_tenant:'CBS ক্লাব · লেভেল ২ প্লাস',
+    pap_title:'টোকেন ডিপোজিট যোগ্যতা · FR-B4', pap_sub:'অ্যাডমিন-কনফিগারযোগ্য নিয়ম ঠিক করে কে সম্পূর্ণ অনলাইন পেমেন্টের বদলে পে অ্যাট প্রপার্টি ব্যবহার করতে পারবে।',
+    pap_c1:'NID ও ফোন ভেরিফায়েড', pap_c2:'মালিক পে অ্যাট প্রপার্টি অনুমতি দিয়েছেন', pap_c3:'নো-শো হিস্টরি', pap_c4:'টোকেন পরিমাণ (প্রথম মাসের ১৫%)', pap_clean:'পরিষ্কার',
+    pap_secure:'টোকেন দিয়ে বুকিং নিশ্চিত করুন',
+    pap_status_title:'গ্যারান্টি স্ট্যাটাস — মালিকের ভিউ', pap_status_empty:'এখনো কোনো টোকেন নেওয়া হয়নি। টেন্যান্ট পেমেন্ট করার সাথে সাথে মালিক এই প্যানেলে রিয়েল টাইমে আপডেট দেখবেন।',
+    pap_noshow_title:'নো-শো হ্যান্ডলিং · FR-B5', pap_noshow_body:'টেন্যান্ট না এলে টোকেন ডিপোজিট (প্ল্যাটফর্ম ফি বাদে) মালিকের কাছে বাজেয়াপ্ত হবে। ৬ মাসের মধ্যে দুটি নো-শো হলে টেন্যান্টের পে-অ্যাট-প্রপার্টি সুবিধা স্বয়ংক্রিয়ভাবে স্থগিত হবে — পূর্ণ অনলাইন পেমেন্ট তখনও চালু থাকবে।',
+    rv_avg:'গড় রেটিং', rv_avg_sub:'৩২টি ভেরিফাইড রিভিউ', rv_verified:'শুধু ভেরিফাইড-স্টে', rv_enforced:'কার্যকর', rv_verified_sub:'সম্পূর্ণ স্টে ছাড়া কোনো রিভিউ নয়',
+    rv_super:'সুপারহোস্ট স্ট্যাটাস', rv_yes:'হ্যাঁ', rv_super_sub:'রেটিং, রেসপন্স রেট, কম ক্যান্সেলেশন',
+    h_reviews:'সাম্প্রতিক রিভিউ',
+    h_loyalty:'CBS ক্লাব টিয়ার · FR-T9', h_loyalty_sub:'চেকআউটে ডিসকাউন্ট স্বয়ংক্রিয়ভাবে প্রযোজ্য হয়, অ্যাডমিন নিয়মে ক্যাপড',
+    t1_label:'লেভেল ১ · মেম্বার', t1_name:'প্রথম সম্পূর্ণ স্টে', t1_b1:'পার্টনার সার্ভিসে প্ল্যাটফর্ম ফি-তে ৫% ছাড়', t1_b2:'মুভার্স, ক্লিনিং, ফার্নিচার রেন্টাল', t1_req:'১টি সম্পূর্ণ স্টে-এর পর আনলক',
+    current_tier:'আপনার টিয়ার', t2_label:'লেভেল ২ · প্লাস', t2_name:'২টি সম্পূর্ণ স্টে', t2_b1:'সার্ভিস ফি-তে ১০% ছাড়', t2_b2:'উপলব্ধতা সাপেক্ষে ফ্রি আর্লি চেক-ইন', t2_req:'আপনি এখানে আছেন — ২টি স্টে সম্পন্ন',
+    t3_label:'লেভেল ৩ · VIP', t3_name:'৫টি স্টে বা ৬-মাসের টেন্যান্সি', t3_b1:'সার্ভিস ফি-তে ১৫% ছাড়', t3_b2:'প্রায়োরিটি সাপোর্ট', t3_req:'আনলক করতে আরও ৩টি স্টে প্রয়োজন',
+    h_matcher:'রুমমেট ও মেস ম্যাচ · FR-C3', h_matcher_sub:'বাজেট, জেন্ডার, ডায়েট ও সময়সূচি অনুযায়ী ম্যাচ করা',
+    ag_title:'ডিজিটাল রেন্টাল এগ্রিমেন্ট (বাড়ি ভাড়ার চুক্তি)', ag_sub:'বুকিং ডেটা থেকে প্রিফিলড · স্ট্যাম্প-পেপার সাপোর্টেড · FR-C4',
+    ag_owner:'মালিক / লেসর', ag_tenant:'টেন্যান্ট / লেসি', ag_addr:'প্রপার্টি', ag_term:'মেয়াদ', ag_rent:'মাসিক ভাড়া', ag_deposit:'সিকিউরিটি ডিপোজিট',
+    ag_owner_wait:'মালিকের ই-স্বাক্ষরের অপেক্ষায়', ag_tenant_wait:'টেন্যান্টের ই-স্বাক্ষরের অপেক্ষায়',
+    ag_panel_title:'ই-স্বাক্ষর', ag_panel_sub:'৩০ দিনের বেশি মেয়াদের টেন্যান্সির জন্য উভয় পক্ষ ডিজিটালি স্বাক্ষর করেন। CBS স্বাক্ষরিত কপি সংরক্ষণ করে এবং স্ট্যাম্প-পেপার প্রয়োজনীয়তা সাপোর্ট করে। লঞ্চের আগে আইনি পর্যালোচনা প্রয়োজন (OQ-4)।',
+    ag_sign_owner:'মালিক হিসেবে স্বাক্ষর করুন (ডেমো)', ag_sign_tenant:'টেন্যান্ট হিসেবে স্বাক্ষর করুন (ডেমো)',
+    ag_police_title:'টেন্যান্ট পুলিশ নিবন্ধন · FR-C5', ag_police_body:'স্থানীয় নিয়মে প্রয়োজন হলে (যেমন ঢাকা টেন্যান্ট ইনফরমেশন ফর্ম), একই বুকিং ডেটা থেকে মালিকের জন্য এক্সপোর্টযোগ্য কপি তৈরি হয়। প্রযোজ্যতা আইনজীবীর সাথে নিশ্চিত করা হবে (OQ-4)।',
+  },
+  en:{
+    nav_group:'Differentiators', nav_pap:'Pay at Property', nav_reviews:'Verified Reviews', nav_loyalty:'CBS Club Loyalty',
+    nav_matcher:'Roommate Matcher', nav_agreement:'Rental Agreement', other_phases:'Other phases', role_tenant:'CBS Club · Level 2 Plus',
+    pap_title:'Token deposit eligibility · FR-B4', pap_sub:'Admin-configurable rules decide who can use Pay at Property instead of full online payment.',
+    pap_c1:'NID & phone verified', pap_c2:'Owner allows Pay at Property', pap_c3:'No-show history', pap_c4:'Token amount (15% of first month)', pap_clean:'Clean',
+    pap_secure:'Secure booking with token',
+    pap_status_title:'Guarantee status — owner view', pap_status_empty:'No token secured yet. The owner sees this panel update in real time once the tenant pays.',
+    pap_noshow_title:'No-show handling · FR-B5', pap_noshow_body:"If the tenant does not arrive, the token deposit is forfeited to the owner (minus the platform fee). Two no-shows in a rolling 6 months automatically suspends the tenant's Pay-at-Property privilege — full online payment is still available.",
+    rv_avg:'Average rating', rv_avg_sub:'32 verified reviews', rv_verified:'Verified-stay only', rv_enforced:'Enforced', rv_verified_sub:'No review without a completed stay',
+    rv_super:'Superhost status', rv_yes:'Yes', rv_super_sub:'Rating, response rate, low cancellations',
+    h_reviews:'Recent reviews',
+    h_loyalty:'CBS Club tiers · FR-T9', h_loyalty_sub:'Discounts apply automatically at checkout, capped by admin rules',
+    t1_label:'Level 1 · Member', t1_name:'First completed stay', t1_b1:'5% off platform fee on partner services', t1_b2:'Movers, cleaning, furniture rental', t1_req:'Unlocked after 1 completed stay',
+    current_tier:'Your tier', t2_label:'Level 2 · Plus', t2_name:'2 completed stays', t2_b1:'10% off service fees', t2_b2:'Free early check-in, subject to availability', t2_req:'You are here — 2 stays completed',
+    t3_label:'Level 3 · VIP', t3_name:'5 stays or 6-month tenancy', t3_b1:'15% off service fees', t3_b2:'Priority support', t3_req:'3 more stays to unlock',
+    h_matcher:'Roommate & mess matches · FR-C3', h_matcher_sub:'Matched by budget, gender, diet and schedule',
+    ag_title:'Digital Rental Agreement (বাড়ি ভাড়ার চুক্তি)', ag_sub:'Prefilled from booking data · stamp-paper requirement supported · FR-C4',
+    ag_owner:'Owner / Lessor', ag_tenant:'Tenant / Lessee', ag_addr:'Property', ag_term:'Term', ag_rent:'Monthly rent', ag_deposit:'Security deposit',
+    ag_owner_wait:'Awaiting owner e-signature', ag_tenant_wait:'Awaiting tenant e-signature',
+    ag_panel_title:'E-signature', ag_panel_sub:'For tenancies over 30 days, both parties sign digitally. CBS stores the signed copy and supports the stamp-paper requirement. Legal review required before launch (OQ-4).',
+    ag_sign_owner:'Sign as owner (demo)', ag_sign_tenant:'Sign as tenant (demo)',
+    ag_police_title:'Tenant police registration · FR-C5', ag_police_body:'Where local rules require it (e.g. the Dhaka tenant information form), the same booking data generates an exportable copy for the owner. Applicability to be confirmed with counsel (OQ-4).',
+  }
+};
+
+/* ---- pay at property ---- */
+function secureToken(){
+  document.getElementById('guaranteePanel').innerHTML = `
+    <div style="font-weight:700;font-size:14px;margin-bottom:10px" data-t="pap_status_title">${window.I18N[LANG].pap_status_title}</div>
+    <div class="card" style="background:var(--ok-soft);border:none">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span class="badge badge-ok">${icon('check','icon-sm')}${LANG==='bn'?'টোকেন প্রাপ্ত':'Token received'}</span></div>
+      <div style="font-size:13px;line-height:1.7">
+        <b>Farzana Yasmin</b> — ৳ 3,300 ${LANG==='bn'?'টোকেন বিকাশে প্রাপ্ত হয়েছে। বাকি ৳ 18,700 চেক-ইনে নগদ বা ওয়ালেটে।':'token received via bKash. Remaining ৳ 18,700 due in cash or wallet at check-in.'}
+      </div>
+    </div>`;
+  toastMsg(LANG==='bn'?'টোকেন সফলভাবে গ্রহণ করা হয়েছে':'Token received successfully','key');
+}
+
+/* ---- reviews ---- */
+const reviews=[
+  {name:'Farzana Yasmin',init:'FY',stars:5,date:'Nov 10, 2026',text:'Exactly as described — owner was responsive and the flat was spotless on arrival. Verified before I booked, which made the whole process feel safe.',reply:'Thank you, Farzana! Always happy to host verified tenants.'},
+  {name:'Abu Rayhan Chowdhury',init:'AC',stars:4,date:'Oct 29, 2026',text:'Good location near the metro station. Gas supply was a bit irregular in the evenings, otherwise a comfortable stay.',reply:null},
+  {name:'Jannatul Ferdous',init:'JF',stars:5,date:'Oct 12, 2026',text:'Booked as a mess seat for 3 months. Meals were on time and the owner handled a maintenance issue within a day.',reply:'Glad the maintenance team was quick — thanks for staying with us!'},
+];
+function renderReviews(){
+  document.getElementById('reviewList').innerHTML = reviews.map(r=>`
+    <div class="card review-card">
+      <div class="avatar" style="width:38px;height:38px;font-size:13px">${r.init}</div>
+      <div class="review-body">
+        <div class="review-top">
+          <div><b style="font-size:13.5px">${r.name}</b><div class="review-stars">${Array.from({length:5}).map((_,i)=>icon('star')).join('')}</div></div>
+          <span class="muted mono" style="font-size:11px">${r.date}</span>
+        </div>
+        <div style="font-size:13px;margin-top:7px;line-height:1.6">${r.text}</div>
+        ${r.reply ? `<div class="owner-reply"><b>${LANG==='bn'?'মালিকের রিপ্লাই:':'Owner reply:'}</b> ${r.reply}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+/* ---- matcher ---- */
+const matches=[
+  {name:'Sadia Islam',score:92,init:'SI',meta:['৳ 6,000 budget','Female','No dietary restriction','Dhaka University area']},
+  {name:'Tanzim Ahmed',score:85,init:'TA',meta:['৳ 7,500 budget','Male','Halal only','BUET area']},
+  {name:'Rumana Akter',score:78,init:'RA',meta:['৳ 5,500 budget','Female','Vegetarian','Dhanmondi office zone']},
+];
+function renderMatches(){
+  document.getElementById('matchList').innerHTML = matches.map(m=>`
+    <div class="card match-card">
+      <div class="match-score">${m.score}%</div>
+      <div class="avatar" style="width:38px;height:38px;font-size:13px">${m.init}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:13.5px">${m.name}</div>
+        <div class="match-meta">${m.meta.map(x=>`<span>${icon('check','icon-sm')}${x}</span>`).join('')}</div>
+      </div>
+      <button class="btn btn-outline btn-sm" data-action="matcher-msg">${LANG==='bn'?'বার্তা পাঠান':'Message'}</button>
+    </div>`).join('');
+}
+
+/* ---- wiring ---- */
+function wirePage(){
+  document.getElementById('secureTokenBtn').addEventListener('click', secureToken);
+  document.getElementById('ownerSignBtn').addEventListener('click',()=>{
+    const el=document.getElementById('ownerSign');
+    el.classList.add('signed'); el.removeAttribute('data-t');
+    el.textContent = LANG==='bn' ? '✓ মালিক কর্তৃক স্বাক্ষরিত — Md. Kamal Hossain' : '✓ Signed by owner — Md. Kamal Hossain';
+    toastMsg(LANG==='bn'?'মালিকের স্বাক্ষর সংরক্ষিত হয়েছে':'Owner signature recorded','check');
+  });
+  document.getElementById('tenantSignBtn').addEventListener('click',()=>{
+    const el=document.getElementById('tenantSign');
+    el.classList.add('signed'); el.removeAttribute('data-t');
+    el.textContent = LANG==='bn' ? '✓ টেন্যান্ট কর্তৃক স্বাক্ষরিত — Farzana Yasmin' : '✓ Signed by tenant — Farzana Yasmin';
+    toastMsg(LANG==='bn'?'টেন্যান্টের স্বাক্ষর সংরক্ষিত হয়েছে':'Tenant signature recorded','check');
+  });
+  document.addEventListener('click',e=>{
+    if(e.target.closest('[data-action="matcher-msg"]')) toastMsg(LANG==='bn'?'ম্যাসেজিং (প্রোটোটাইপ)':'Messaging (prototype)','users');
+  });
+  window.onLangChange = ()=>{ renderReviews(); renderMatches(); };
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  hydrateIcons(document);
+  renderReviews(); renderMatches();
+  wirePage();
+  initNav('pap');
+  initLang();
+});
+</script>
+</body>
+</html>
