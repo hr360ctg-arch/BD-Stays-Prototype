@@ -269,20 +269,25 @@ tbody tr:hover{background:var(--surface-2)}
 
 .app-main{display:flex;flex-direction:column;min-width:0}
 .app-topbar{
-  display:flex;align-items:center;gap:14px;padding:15px 28px;
+  display:flex;align-items:center;gap:12px;padding:15px 20px;flex-wrap:wrap;row-gap:8px;
   border-bottom:1px solid var(--border);background:color-mix(in srgb, var(--bg-elevated) 92%, transparent);
   backdrop-filter:blur(8px);
   position:sticky;top:0;z-index:20;
 }
-.app-topbar h1{font-size:18px}
-.app-topbar .crumbs{font-size:11.5px;color:var(--fg-muted);margin-top:1px}
+.app-topbar-title{flex:1 1 auto;min-width:0}
+.app-topbar h1{font-size:18px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.app-topbar .crumbs{font-size:11.5px;color:var(--fg-muted);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .env-pill{
-  font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;flex:none;
   background:var(--warn-soft);color:var(--warn);padding:4px 10px;border-radius:999px;margin-left:auto;
 }
 .phase-pill{
-  font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+  font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;flex:none;
   background:var(--brand-soft);color:var(--brand-soft-ink);padding:4px 10px;border-radius:999px;
+}
+@media (max-width:420px){
+  .app-topbar h1{font-size:16px}
+  .app-topbar .lang-toggle{order:1;margin-left:0}
 }
 .app-view{padding:26px 28px 52px;max-width:1220px}
 .view-section{display:none}
@@ -302,7 +307,7 @@ tbody tr:hover{background:var(--surface-2)}
   .app-sidebar.open{left:0}
   .menu-btn{display:inline-flex!important}
 }
-.menu-btn{display:none;background:none;border:1px solid var(--border-strong);border-radius:8px;width:32px;height:32px;align-items:center;justify-content:center;cursor:pointer;color:var(--fg)}
+.menu-btn{display:none;flex:none;background:none;border:1px solid var(--border-strong);border-radius:8px;width:32px;height:32px;align-items:center;justify-content:center;cursor:pointer;color:var(--fg)}
 
 .stat-label{font-size:11.5px;color:var(--fg-muted);font-weight:600;display:flex;align-items:center;gap:6px}
 .stat-value{font-family:var(--font-display);font-size:26px;font-weight:700;margin-top:7px}
