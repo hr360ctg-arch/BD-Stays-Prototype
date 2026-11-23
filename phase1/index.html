@@ -100,9 +100,19 @@
           <input type="text" id="phoneInput" placeholder="1XXXXXXXXX" maxlength="11" inputmode="numeric">
         </div>
       </div>
+      <div class="field" style="margin-bottom:15px">
+        <label data-t="login_role_label">View as role</label>
+        <select id="loginRoleSelect">
+          <option value="Super Admin">Super Admin</option>
+          <option value="Moderator">Moderator</option>
+          <option value="Field Agent">Field Agent</option>
+          <option value="Support">Support</option>
+          <option value="Finance">Finance</option>
+        </select>
+      </div>
       <div class="err-text" id="phoneErr"></div>
       <button class="btn btn-primary btn-block" id="sendOtpBtn" data-t="phone_cta">Send code</button>
-      <div class="demo-note"><i data-icon="sparkle" data-icon-cls="icon-sm"></i><span><b data-t="demo_label">Prototype:</b> <span data-t="demo_phone">any number works — code is always 1234.</span></span></div>
+      <div class="demo-note"><i data-icon="sparkle" data-icon-cls="icon-sm"></i><span><b data-t="demo_label">Prototype:</b> <span data-t="demo_phone">no verification needed — every step accepts any input, or none at all.</span></span></div>
     </div>
 
     <div id="stepOtp" hidden>
@@ -132,6 +142,7 @@
       <div class="err-text" id="tfaErr"></div>
       <button class="btn btn-primary btn-block" id="verify2faBtn" data-t="tfa_cta">Verify &amp; continue</button>
       <div class="demo-note"><i data-icon="sparkle" data-icon-cls="icon-sm"></i><span><b data-t="demo_label">Prototype:</b> <span data-t="demo_tfa">any 6 digits work.</span></span></div>
+      <button class="sb-link" style="width:auto;padding:6px 0;margin-top:4px;color:var(--brand)" id="firstTimeEnrollBtn" data-t="first_time_2fa">First time? Set up 2FA →</button>
     </div>
 
     <div class="auth-foot"><i data-icon="shield" data-icon-cls="icon-sm"></i><span data-t="auth_foot">Mandatory 2FA for all admin roles · CBS Stays Bangladesh</span></div>
@@ -154,14 +165,14 @@
     <button class="sb-link active" data-view="dashboard"><i data-icon="grid"></i><span data-t="nav_dashboard">Dashboard</span></button>
 
     <div class="sb-group" data-t="nav_trust">Trust &amp; Access</div>
-    <button class="sb-link" data-view="users"><i data-icon="users"></i><span data-t="nav_users">Admin Users &amp; Roles</span></button>
-    <button class="sb-link" data-view="verification"><i data-icon="check"></i><span data-t="nav_verification">Verification Queue</span></button>
+    <button class="sb-link" data-view="users" data-roles="Super Admin"><i data-icon="users"></i><span data-t="nav_users">Admin Users &amp; Roles</span></button>
+    <button class="sb-link" data-view="verification" data-roles="Super Admin,Moderator,Field Agent,Support"><i data-icon="check"></i><span data-t="nav_verification">Verification Queue</span></button>
 
     <div class="sb-group" data-t="nav_platform">Platform</div>
-    <button class="sb-link" data-view="audit"><i data-icon="log"></i><span data-t="nav_audit">Audit Log</span></button>
-    <button class="sb-link" data-view="trash"><i data-icon="trash"></i><span data-t="nav_trash">Trash / Soft Delete</span></button>
-    <button class="sb-link" data-view="backups"><i data-icon="database"></i><span data-t="nav_backups">Backups</span></button>
-    <button class="sb-link" data-view="cms"><i data-icon="file"></i><span data-t="nav_cms">CMS &amp; Legal Pages</span></button>
+    <button class="sb-link" data-view="audit" data-roles="Super Admin,Moderator,Finance"><i data-icon="log"></i><span data-t="nav_audit">Audit Log</span></button>
+    <button class="sb-link" data-view="trash" data-roles="Super Admin,Moderator"><i data-icon="trash"></i><span data-t="nav_trash">Trash / Soft Delete</span></button>
+    <button class="sb-link" data-view="backups" data-roles="Super Admin,Finance"><i data-icon="database"></i><span data-t="nav_backups">Backups</span></button>
+    <button class="sb-link" data-view="cms" data-roles="Super Admin,Moderator"><i data-icon="file"></i><span data-t="nav_cms">CMS &amp; Legal Pages</span></button>
 
     <div class="phase-switch">
       <div class="phase-switch-label" data-t="other_phases">Other phases</div>
@@ -172,10 +183,10 @@
 
     <div class="sb-foot">
       <div class="sb-acct">
-        <div class="avatar">AR</div>
+        <div class="avatar" id="acctAvatar">AR</div>
         <div>
-          <div class="sb-acct-name">Ariyan Rahman</div>
-          <div class="sb-acct-role">Super Admin</div>
+          <div class="sb-acct-name" id="acctName">Ariyan Rahman</div>
+          <div class="sb-acct-role" id="acctRole">Super Admin</div>
         </div>
         <button class="sb-logout" id="logoutBtn" title="Log out"><i data-icon="power" data-icon-cls="icon-sm"></i></button>
       </div>
@@ -235,7 +246,7 @@
 
       <!-- USERS -->
       <section class="view-section" id="view-users">
-        <div class="section-title"><h2 data-t="h_roles">Role-based access · FR-A1</h2><span class="count" id="usersCount"></span></div>
+        <div class="section-title"><h2 data-t="h_roles">Role-based access · FR-A1</h2><span class="count" id="usersCount"></span><span class="spacer"></span><button class="btn btn-primary btn-sm" id="inviteAdminBtn"><i data-icon="users" data-icon-cls="icon-sm"></i><span data-t="invite_admin">Invite admin</span></button></div>
         <div class="table-wrap">
           <table>
             <thead><tr><th data-t="col_name">Name</th><th data-t="col_role">Role</th><th data-t="col_2fa">2FA</th><th data-t="col_status">Status</th><th data-t="col_lastlogin">Last login</th><th></th></tr></thead>
@@ -333,16 +344,189 @@
   </div>
 </div>
 
+<!-- P1-05a — Invite Admin -->
+<div class="modal-backdrop" id="inviteModal">
+  <div class="modal">
+    <h3 data-t="inv_title">Invite admin</h3>
+    <p data-t="inv_sub">They'll sign in with phone OTP and must complete 2FA enrollment on first login.</p>
+    <div style="display:flex;flex-direction:column;gap:13px">
+      <div class="field"><label data-t="inv_name">Full name</label><input type="text" id="invName" placeholder="e.g. Nusrat Jahan"></div>
+      <div class="field"><label data-t="inv_phone">Phone number</label><div class="phone-input"><span class="cc">+880</span><input type="text" id="invPhone" placeholder="1XXXXXXXXX" maxlength="11"></div></div>
+      <div class="field"><label data-t="inv_email">Email (optional)</label><input type="text" id="invEmail" placeholder="name@cbsstays.com"></div>
+      <div class="field"><label data-t="inv_role">Role</label>
+        <select id="invRole">
+          <option value="Super Admin">Super Admin</option>
+          <option value="Moderator" selected>Moderator</option>
+          <option value="Field Agent">Field Agent</option>
+          <option value="Support">Support</option>
+          <option value="Finance">Finance</option>
+        </select>
+      </div>
+      <div class="field" id="invScopeField"><label data-t="inv_scope">Scope (areas/cities)</label><input type="text" id="invScope" placeholder="e.g. Dhanmondi, Mirpur"><div class="field-hint" data-t="inv_scope_hint">Only applies to Field Agent / Moderator roles</div></div>
+    </div>
+    <div class="modal-actions" style="margin-top:18px">
+      <button class="btn btn-ghost btn-sm" id="inviteCancelBtn" data-t="cancel">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="inviteSendBtn"><i data-icon="users" data-icon-cls="icon-sm"></i><span data-t="inv_send">Send invite</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- P1-05b — Edit Admin User -->
+<div class="modal-backdrop" id="editAdminModal">
+  <div class="modal">
+    <h3 id="editAdminTitle">Edit admin</h3>
+    <p class="muted" style="font-size:12px;margin-bottom:16px" id="editAdminSince"></p>
+    <div style="display:flex;flex-direction:column;gap:13px">
+      <div class="field"><label data-t="inv_name">Full name</label><input type="text" id="editName"></div>
+      <div class="field"><label data-t="inv_role">Role</label>
+        <select id="editRole">
+          <option>Super Admin</option><option>Moderator</option><option>Field Agent</option><option>Support</option><option>Finance</option>
+        </select>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--surface-2);border-radius:9px">
+        <span style="font-size:13px;font-weight:600" data-t="edit_suspend">Account suspended</span>
+        <div class="toggle" id="editSuspendToggle"></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-outline btn-sm" id="editForce2faBtn"><i data-icon="shield" data-icon-cls="icon-sm"></i><span data-t="edit_force2fa">Force 2FA re-enrollment</span></button>
+        <button class="btn btn-outline btn-sm" id="editRevokeBtn"><i data-icon="power" data-icon-cls="icon-sm"></i><span data-t="edit_revoke">Revoke active sessions</span></button>
+      </div>
+      <button class="sb-link" style="width:auto;padding:4px 0;color:var(--brand)" id="editAuditLinkBtn" data-t="edit_audit_link">View audit history for this user →</button>
+    </div>
+    <div class="modal-actions" style="margin-top:18px">
+      <button class="btn btn-ghost btn-sm" id="editAdminCancelBtn" data-t="cancel">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="editAdminSaveBtn" data-t="save">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- P1-06a — Verification Detail -->
+<div class="modal-backdrop" id="verifModal">
+  <div class="modal modal-lg">
+    <h3 id="verifModalName">Applicant</h3>
+    <p class="muted" style="font-size:12px;margin-bottom:0" id="verifModalMeta"></p>
+
+    <div class="modal-section-title" data-t="v_doc_section">Submitted document</div>
+    <div class="doc-viewer"><i data-icon="file" data-icon-cls="icon-lg"></i><span id="verifDocType" data-t="v_doc_hint">Document preview (front + back)</span></div>
+
+    <div class="modal-section-title" data-t="v_details_section">Verification details</div>
+    <div class="form-grid">
+      <div class="field"><label data-t="v_idnum">NID / passport number</label><input type="text" id="verifIdNum" value="1234 5678 9012"></div>
+      <div class="field"><label data-t="v_authtype">Proof-of-authority type</label>
+        <select id="verifAuthType">
+          <option data-t="v_auth_1">Holding number / utility bill</option>
+          <option data-t="v_auth_2">Deed copy</option>
+          <option data-t="v_auth_3">Manager authorization letter</option>
+          <option data-t="v_auth_na">N/A (tenant/guest)</option>
+        </select>
+      </div>
+      <div class="field field-full">
+        <label style="display:flex;align-items:center;gap:8px;font-weight:600;cursor:pointer"><input type="checkbox" id="verifAgentVisit"> <span data-t="v_agent_visit">Request a field-agent visit (FR-A5)</span></label>
+        <select id="verifAgentSelect" style="margin-top:8px" disabled>
+          <option data-t="v_agent_pick">— choose a field agent —</option>
+          <option>Kamal Hossain</option>
+          <option>Rafiq Islam</option>
+        </select>
+      </div>
+      <div class="field field-full"><label data-t="v_note">Internal note (admin-only)</label><textarea id="verifNote" rows="2" placeholder="Not visible to the applicant"></textarea></div>
+    </div>
+
+    <div class="modal-section-title" data-t="v_decision_section">Decision</div>
+    <div class="radio-row" style="margin-bottom:10px">
+      <label><input type="radio" name="verifDecision" value="approved" checked> <span data-t="v_approve">Approve</span></label>
+      <label><input type="radio" name="verifDecision" value="rejected"> <span data-t="v_reject">Reject</span></label>
+    </div>
+    <div class="field" id="verifRejectReasonField" style="display:none">
+      <label data-t="v_reject_reason">Rejection reason</label>
+      <select id="verifRejectReason">
+        <option data-t="v_r1">Blurry document</option>
+        <option data-t="v_r2">Mismatched name</option>
+        <option data-t="v_r3">Expired ID</option>
+        <option data-t="v_r4">Suspected fraud</option>
+        <option data-t="v_r5">Other</option>
+      </select>
+    </div>
+
+    <div class="modal-actions" style="margin-top:18px">
+      <button class="btn btn-ghost btn-sm" id="verifModalCancelBtn" data-t="cancel">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="verifModalSaveBtn" data-t="v_submit_decision">Submit decision</button>
+    </div>
+  </div>
+</div>
+
+<!-- P1-10a — CMS Page Editor -->
+<div class="modal-backdrop" id="cmsModal">
+  <div class="modal modal-lg">
+    <h3 id="cmsModalTitle" data-t="cms_edit_title">Edit page</h3>
+    <div class="form-grid">
+      <div class="field"><label data-t="cms_f_title">Title</label><input type="text" id="cmsTitle"></div>
+      <div class="field"><label data-t="cms_f_slug">Slug</label><input type="text" id="cmsSlug"></div>
+      <div class="field"><label data-t="cms_f_locale">Locale</label>
+        <select id="cmsLocale"><option value="bn">বাংলা</option><option value="en">English</option></select>
+      </div>
+      <div class="field"><label data-t="cms_f_status">Status</label>
+        <select id="cmsStatus"><option value="published" data-t="cms_published">Published</option><option value="draft" data-t="cms_draft">Draft</option></select>
+      </div>
+      <div class="field field-full"><label data-t="cms_f_body">Body</label><textarea id="cmsBody" rows="6" placeholder="Page content…"></textarea></div>
+      <div class="field field-full">
+        <label data-t="cms_f_meta">SEO meta description</label>
+        <textarea id="cmsMeta" rows="2" maxlength="160" oninput="document.getElementById('cmsMetaCount').textContent=this.value.length"></textarea>
+        <div class="char-counter"><span id="cmsMetaCount">0</span>/160</div>
+      </div>
+    </div>
+    <button class="sb-link" style="width:auto;padding:4px 0;margin-top:4px;color:var(--brand)" id="cmsHistoryBtn" data-t="cms_history">View revision history →</button>
+    <div class="modal-actions" style="margin-top:14px">
+      <button class="btn btn-ghost btn-sm" id="cmsCancelBtn" data-t="cancel">Cancel</button>
+      <button class="btn btn-outline btn-sm" id="cmsDraftBtn" data-t="cms_save_draft">Save draft</button>
+      <button class="btn btn-primary btn-sm" id="cmsPublishBtn" data-t="cms_publish">Publish</button>
+    </div>
+  </div>
+</div>
+
+<!-- First-time 2FA enrollment -->
+<div class="modal-backdrop" id="enrollModal">
+  <div class="modal">
+    <h3 data-t="enr_title">Set up two-factor authentication</h3>
+    <p data-t="enr_sub">Scan this QR code with Google Authenticator or Authy.</p>
+    <div class="doc-viewer" style="aspect-ratio:1/1;max-width:180px;margin:0 auto 14px">
+      <i data-icon="shield" data-icon-cls="icon-lg"></i><span data-t="enr_qr">QR code</span>
+    </div>
+    <div class="field"><label data-t="enr_key">Manual setup key</label><div class="phone-input"><input type="text" value="JBSW Y3DP EHPK 3PXP" readonly id="enrKey" style="font-family:var(--font-mono)"><button class="btn btn-ghost btn-sm" id="enrCopyBtn" style="width:auto;margin:3px">Copy</button></div></div>
+    <div class="field" style="margin-top:12px"><label data-t="enr_confirm">Confirm code from your app</label><input type="text" id="enrConfirmCode" maxlength="6" placeholder="000000"></div>
+    <div id="enrBackupSection" style="display:none;margin-top:14px">
+      <div class="modal-section-title" data-t="enr_backup_title">Backup codes — save these now</div>
+      <div class="code-block" style="font-size:11px" id="enrBackupCodes"></div>
+      <label style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12.5px;cursor:pointer"><input type="checkbox" id="enrAckCheckbox"> <span data-t="enr_ack">I've saved these backup codes</span></label>
+    </div>
+    <div class="modal-actions" style="margin-top:16px">
+      <button class="btn btn-ghost btn-sm" id="enrCancelBtn" data-t="cancel">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="enrConfirmBtn" data-t="enr_cta">Confirm &amp; show backup codes</button>
+    </div>
+  </div>
+</div>
+
 <script src="../assets/js/common.js"></script>
 <script>
 window.PAGE_CRUMB = 'Phase 1 · Foundation';
 window.I18N = {
   bn:{
     phone_title:'অ্যাডমিন কনসোলে সাইন ইন করুন', phone_hint:'আপনার নিবন্ধিত ফোন নম্বর দিন। আমরা একটি ওয়ান-টাইম কোড পাঠাব।',
-    phone_label:'ফোন নম্বর', phone_cta:'কোড পাঠান', demo_label:'প্রোটোটাইপ:', demo_phone:'যেকোনো নম্বর কাজ করবে — কোড সবসময় ১২৩৪।',
+    phone_label:'ফোন নম্বর', login_role_label:'যে রোলে দেখতে চান', phone_cta:'কোড পাঠান', demo_label:'প্রোটোটাইপ:', demo_phone:'কোনো ভেরিফিকেশন নেই — যেকোনো ইনপুট, এমনকি খালি রেখেও, কাজ করবে।',
     otp_title:'কোড লিখুন', otp_hint:'৪-সংখ্যার কোড এসএমএস করা হয়েছে', otp_cta:'ভেরিফাই করুন', otp_resend_pre:'কোড পাননি?', otp_resend:'আবার পাঠান',
     tfa_title:'অ্যাডমিন ভেরিফিকেশন', tfa_hint:'এই অ্যাকাউন্টে অ্যাডমিন রোল আছে — আপনার ৬-সংখ্যার অথেন্টিকেটর কোড দিন (FR-A1)।',
-    tfa_label:'অথেন্টিকেটর কোড', tfa_cta:'ভেরিফাই করে চালিয়ে যান', demo_tfa:'যেকোনো ৬ সংখ্যা কাজ করবে।',
+    tfa_label:'অথেন্টিকেটর কোড', tfa_cta:'ভেরিফাই করে চালিয়ে যান', demo_tfa:'কোনো ভেরিফিকেশন নেই — খালি রেখেও এগিয়ে যেতে পারবেন।', first_time_2fa:'প্রথমবার? 2FA সেটআপ করুন →',
+    invite_admin:'অ্যাডমিন আমন্ত্রণ', inv_title:'অ্যাডমিন আমন্ত্রণ করুন', inv_sub:'তারা ফোন OTP দিয়ে সাইন ইন করবেন এবং প্রথম লগইনে 2FA এনরোলমেন্ট সম্পন্ন করতে হবে।',
+    inv_name:'পূর্ণ নাম', inv_phone:'ফোন নম্বর', inv_email:'ইমেইল (ঐচ্ছিক)', inv_role:'রোল', inv_scope:'স্কোপ (এলাকা/শহর)', inv_scope_hint:'শুধু Field Agent / Moderator রোলে প্রযোজ্য', inv_send:'আমন্ত্রণ পাঠান',
+    save:'সংরক্ষণ করুন', edit_suspend:'অ্যাকাউন্ট স্থগিত', edit_force2fa:'2FA পুনরায় সেটআপ বাধ্যতামূলক করুন', edit_revoke:'সব সেশন বাতিল করুন', edit_audit_link:'এই ইউজারের অডিট হিস্টরি দেখুন →',
+    v_doc_section:'জমাকৃত ডকুমেন্ট', v_doc_hint:'ডকুমেন্ট প্রিভিউ (সামনে + পেছনে)', v_details_section:'ভেরিফিকেশন বিবরণ',
+    v_idnum:'NID / পাসপোর্ট নম্বর', v_authtype:'প্রুফ-অফ-অথরিটি টাইপ', v_auth_1:'হোল্ডিং নম্বর / ইউটিলিটি বিল', v_auth_2:'দলিলের কপি', v_auth_3:'ম্যানেজার অথরাইজেশন লেটার', v_auth_na:'N/A (টেন্যান্ট/গেস্ট)',
+    v_agent_visit:'ফিল্ড-এজেন্ট ভিজিট অনুরোধ করুন (FR-A5)', v_agent_pick:'— একজন ফিল্ড এজেন্ট বাছাই করুন —', v_note:'ইন্টারনাল নোট (শুধু অ্যাডমিনের জন্য)',
+    v_decision_section:'সিদ্ধান্ত', v_approve:'অনুমোদন করুন', v_reject:'প্রত্যাখ্যান করুন', v_reject_reason:'প্রত্যাখ্যানের কারণ',
+    v_r1:'অস্পষ্ট ডকুমেন্ট', v_r2:'নাম মিলছে না', v_r3:'মেয়াদোত্তীর্ণ ID', v_r4:'জালিয়াতির সন্দেহ', v_r5:'অন্যান্য', v_submit_decision:'সিদ্ধান্ত জমা দিন',
+    cms_edit_title:'পেজ এডিট করুন', cms_f_title:'টাইটেল', cms_f_slug:'স্লাগ', cms_f_locale:'ভাষা', cms_f_status:'স্ট্যাটাস', cms_published:'প্রকাশিত', cms_draft:'ড্রাফট',
+    cms_f_body:'বডি', cms_f_meta:'SEO মেটা বর্ণনা', cms_save_draft:'ড্রাফট সংরক্ষণ করুন', cms_publish:'প্রকাশ করুন', cms_history:'রিভিশন হিস্টরি দেখুন →',
+    enr_title:'টু-ফ্যাক্টর অথেন্টিকেশন সেটআপ করুন', enr_sub:'Google Authenticator বা Authy দিয়ে এই QR কোড স্ক্যান করুন।', enr_qr:'QR কোড', enr_key:'ম্যানুয়াল সেটআপ কী',
+    enr_confirm:'আপনার অ্যাপ থেকে কোড নিশ্চিত করুন', enr_backup_title:'ব্যাকআপ কোড — এখনই সংরক্ষণ করুন', enr_ack:'আমি এই ব্যাকআপ কোডগুলো সংরক্ষণ করেছি', enr_cta:'নিশ্চিত করুন ও ব্যাকআপ কোড দেখান',
     auth_foot:'সব অ্যাডমিন রোলের জন্য বাধ্যতামূলক 2FA · CBS Stays Bangladesh',
     nav_overview:'ওভারভিউ', nav_dashboard:'ড্যাশবোর্ড', nav_trust:'ট্রাস্ট ও অ্যাক্সেস', nav_users:'অ্যাডমিন ইউজার ও রোল',
     nav_verification:'ভেরিফিকেশন কিউ', nav_platform:'প্ল্যাটফর্ম', nav_audit:'অডিট লগ', nav_trash:'ট্র্যাশ / সফট ডিলিট',
@@ -369,10 +553,22 @@ window.I18N = {
   },
   en:{
     phone_title:'Sign in to admin', phone_hint:"Enter your registered phone number. We'll send a one-time code.",
-    phone_label:'Phone number', phone_cta:'Send code', demo_label:'Prototype:', demo_phone:'any number works — code is always 1234.',
+    phone_label:'Phone number', login_role_label:'View as role', phone_cta:'Send code', demo_label:'Prototype:', demo_phone:'No verification — any input, or none at all, works.',
     otp_title:'Enter the code', otp_hint:'We sent a 4-digit code by SMS to', otp_cta:'Verify', otp_resend_pre:"Didn't get it?", otp_resend:'Resend code',
     tfa_title:'Admin verification', tfa_hint:'This account has an admin role — enter your 6-digit authenticator code (FR-A1).',
-    tfa_label:'Authenticator code', tfa_cta:'Verify & continue', demo_tfa:'any 6 digits work.',
+    tfa_label:'Authenticator code', tfa_cta:'Verify & continue', demo_tfa:'No verification — you can leave this blank.', first_time_2fa:'First time? Set up 2FA →',
+    invite_admin:'Invite admin', inv_title:'Invite admin', inv_sub:"They'll sign in with phone OTP and must complete 2FA enrollment on first login.",
+    inv_name:'Full name', inv_phone:'Phone number', inv_email:'Email (optional)', inv_role:'Role', inv_scope:'Scope (areas/cities)', inv_scope_hint:'Only applies to Field Agent / Moderator roles', inv_send:'Send invite',
+    save:'Save changes', edit_suspend:'Account suspended', edit_force2fa:'Force 2FA re-enrollment', edit_revoke:'Revoke active sessions', edit_audit_link:'View audit history for this user →',
+    v_doc_section:'Submitted document', v_doc_hint:'Document preview (front + back)', v_details_section:'Verification details',
+    v_idnum:'NID / passport number', v_authtype:'Proof-of-authority type', v_auth_1:'Holding number / utility bill', v_auth_2:'Deed copy', v_auth_3:'Manager authorization letter', v_auth_na:'N/A (tenant/guest)',
+    v_agent_visit:'Request a field-agent visit (FR-A5)', v_agent_pick:'— choose a field agent —', v_note:'Internal note (admin-only)',
+    v_decision_section:'Decision', v_approve:'Approve', v_reject:'Reject', v_reject_reason:'Rejection reason',
+    v_r1:'Blurry document', v_r2:'Mismatched name', v_r3:'Expired ID', v_r4:'Suspected fraud', v_r5:'Other', v_submit_decision:'Submit decision',
+    cms_edit_title:'Edit page', cms_f_title:'Title', cms_f_slug:'Slug', cms_f_locale:'Locale', cms_f_status:'Status', cms_published:'Published', cms_draft:'Draft',
+    cms_f_body:'Body', cms_f_meta:'SEO meta description', cms_save_draft:'Save draft', cms_publish:'Publish', cms_history:'View revision history →',
+    enr_title:'Set up two-factor authentication', enr_sub:'Scan this QR code with Google Authenticator or Authy.', enr_qr:'QR code', enr_key:'Manual setup key',
+    enr_confirm:'Confirm code from your app', enr_backup_title:'Backup codes — save these now', enr_ack:"I've saved these backup codes", enr_cta:'Confirm & show backup codes',
     auth_foot:'Mandatory 2FA for all admin roles · CBS Stays Bangladesh',
     nav_overview:'Overview', nav_dashboard:'Dashboard', nav_trust:'Trust & Access', nav_users:'Admin Users & Roles',
     nav_verification:'Verification Queue', nav_platform:'Platform', nav_audit:'Audit Log', nav_trash:'Trash / Soft Delete',
@@ -408,16 +604,14 @@ function setStep(n){
 }
 function sendOtp(){
   const v=document.getElementById('phoneInput').value.trim();
-  const err=document.getElementById('phoneErr');
-  if(!/^1[0-9]{9}$/.test(v)){ err.textContent = LANG==='bn' ? 'একটি সঠিক ১০-সংখ্যার নম্বর দিন (১ দিয়ে শুরু)।' : 'Enter a valid 10-digit number starting with 1.'; return; }
-  err.textContent='';
-  pendingPhone='+880 '+v;
+  document.getElementById('phoneErr').textContent='';
+  pendingPhone = v ? ('+880 '+v) : '+880 1XXXXXXXXX';
   document.getElementById('otpPhoneShown').textContent=pendingPhone;
   document.getElementById('stepPhone').hidden=true;
   document.getElementById('stepOtp').hidden=false;
   setStep(2);
   setTimeout(()=>document.getElementById('otp0').focus(),50);
-  toastMsg(LANG==='bn' ? 'SMS কোড পাঠানো হয়েছে (ডেমো: 1234)' : 'SMS code sent (demo: 1234)');
+  toastMsg(LANG==='bn' ? 'SMS কোড পাঠানো হয়েছে (ডেমো — যেকোনো কোডে কাজ করবে)' : 'SMS code sent (demo — any code works)');
 }
 function otpMove(el){
   el.value=el.value.replace(/[^0-9]/g,'');
@@ -425,23 +619,17 @@ function otpMove(el){
   if(el.value && idx<3) document.getElementById('otp'+(idx+1)).focus();
 }
 function verifyOtp(){
-  const code=['otp0','otp1','otp2','otp3'].map(id=>document.getElementById(id).value).join('');
-  const err=document.getElementById('otpErr');
-  if(code.length<4){ err.textContent = LANG==='bn' ? 'পুরো কোড লিখুন।' : 'Enter the full code.'; return; }
-  if(code!=='1234'){ err.textContent = LANG==='bn' ? 'কোড সঠিক নয়। (ডেমো: 1234)' : 'Incorrect code. (demo: 1234)'; return; }
-  err.textContent='';
+  document.getElementById('otpErr').textContent='';
   document.getElementById('stepOtp').hidden=true;
   document.getElementById('step2fa').hidden=false;
   setStep(3);
   setTimeout(()=>document.getElementById('tfaInput').focus(),50);
 }
 function verify2fa(){
-  const v=document.getElementById('tfaInput').value.trim();
-  const err=document.getElementById('tfaErr');
-  if(!/^[0-9]{6}$/.test(v)){ err.textContent = LANG==='bn' ? '৬-সংখ্যার কোড দিন।' : 'Enter a 6-digit code.'; return; }
-  err.textContent='';
+  document.getElementById('tfaErr').textContent='';
   document.getElementById('auth').hidden=true;
   document.getElementById('console').hidden=false;
+  applyRole(document.getElementById('loginRoleSelect').value);
   logAction(LANG==='bn'?'লগইন সফল হয়েছে (OTP + 2FA)':'Logged in successfully (OTP + 2FA)','key');
   renderAll();
 }
@@ -469,12 +657,12 @@ function runRestoreTest(){
 
 /* ---------------- mock data ---------------- */
 const users=[
-  {name:'Ariyan Rahman',role:'Super Admin',tfa:true,status:'active',last:'2 min ago',init:'AR'},
-  {name:'Sumaiya Haque',role:'Moderator',tfa:true,status:'active',last:'18 min ago',init:'SH'},
-  {name:'Kamal Hossain',role:'Field Agent',tfa:true,status:'active',last:'1h ago',init:'KH'},
-  {name:'Nusrat Jahan',role:'Support',tfa:false,status:'pending',last:'—',init:'NJ'},
-  {name:'Tanvir Alam',role:'Finance',tfa:true,status:'active',last:'3h ago',init:'TA'},
-  {name:'Rafiq Islam',role:'Moderator',tfa:true,status:'suspended',last:'6d ago',init:'RI'},
+  {name:'Ariyan Rahman',role:'Super Admin',tfa:true,status:'active',last:'2 min ago',init:'AR',since:'Jan 2026'},
+  {name:'Sumaiya Haque',role:'Moderator',tfa:true,status:'active',last:'18 min ago',init:'SH',since:'Mar 2026'},
+  {name:'Kamal Hossain',role:'Field Agent',tfa:true,status:'active',last:'1h ago',init:'KH',since:'Jun 2026'},
+  {name:'Nusrat Jahan',role:'Support',tfa:false,status:'pending',last:'—',init:'NJ',since:'Nov 2026'},
+  {name:'Tanvir Alam',role:'Finance',tfa:true,status:'active',last:'3h ago',init:'TA',since:'Feb 2026'},
+  {name:'Rafiq Islam',role:'Moderator',tfa:true,status:'suspended',last:'6d ago',init:'RI',since:'Apr 2026'},
 ];
 const verifs=[
   {name:'Mahbub Properties Ltd.',type:'Owner · authority doc',doc:'Trade licence + NID',sub:'Nov 17, 11:02',status:'pending'},
@@ -522,15 +710,37 @@ function badgeFor(status){ return statusBadge(status, STATUS_LABEL[LANG][status]
 
 function renderUsers(){
   document.getElementById('usersCount').textContent=users.length+' users';
-  document.getElementById('usersTbody').innerHTML=users.map(u=>`
+  document.getElementById('usersTbody').innerHTML=users.map((u,i)=>`
     <tr>
       <td><div style="display:flex;align-items:center;gap:10px"><div class="avatar" style="width:28px;height:28px;font-size:10.5px">${u.init}</div><span style="font-weight:600">${u.name}</span></div></td>
       <td>${u.role}</td>
       <td>${u.tfa? '<span class="badge badge-ok">'+icon('check','icon-sm')+'On</span>' : '<span class="badge badge-warn">Off</span>'}</td>
       <td>${badgeFor(u.status)}</td>
       <td class="mono muted">${u.last}</td>
-      <td class="row-actions"><button class="btn btn-sm btn-outline" data-action="edit-role">Edit</button></td>
+      <td class="row-actions"><button class="btn btn-sm btn-outline" data-action="edit-role" data-index="${i}">Edit</button></td>
     </tr>`).join('');
+}
+let editingUserIndex=null;
+function openEditAdmin(i){
+  editingUserIndex=i;
+  const u=users[i];
+  document.getElementById('editAdminTitle').textContent=(LANG==='bn'?'এডিট করুন: ':'Edit: ')+u.name;
+  document.getElementById('editAdminSince').textContent=(LANG==='bn'?'যোগদান: ':'Member since: ')+u.since;
+  document.getElementById('editName').value=u.name;
+  document.getElementById('editRole').value=u.role;
+  document.getElementById('editSuspendToggle').classList.toggle('on', u.status==='suspended');
+  openModal('editAdminModal');
+}
+function saveEditAdmin(){
+  const u=users[editingUserIndex];
+  const oldRole=u.role;
+  u.name=document.getElementById('editName').value;
+  u.role=document.getElementById('editRole').value;
+  u.status=document.getElementById('editSuspendToggle').classList.contains('on') ? 'suspended' : 'active';
+  renderUsers();
+  closeModal('editAdminModal');
+  if(oldRole!==u.role) logAction('changed role for '+u.name,'settings','role: '+oldRole,'role: '+u.role);
+  toastMsg((LANG==='bn'?'সংরক্ষিত: ':'Saved: ')+u.name,'check');
 }
 function renderVerifs(){
   document.getElementById('verifCount').textContent=verifs.filter(v=>v.status==='pending'||v.status==='review').length+' open';
@@ -542,7 +752,8 @@ function renderVerifs(){
       <td class="mono muted">${v.sub}</td>
       <td>${badgeFor(v.status)}</td>
       <td class="row-actions">
-        ${v.status==='pending'||v.status==='review' ? `<button class="btn btn-sm btn-ok" data-action="decide-verif" data-index="${i}" data-status="approved">Approve</button><button class="btn btn-sm btn-danger-outline" data-action="decide-verif" data-index="${i}" data-status="rejected">Reject</button>` : '<span class="faint" style="font-size:12px">—</span>'}
+        <button class="btn btn-sm btn-outline" data-action="view-verif" data-index="${i}">${LANG==='bn'?'দেখুন':'View'}</button>
+        ${v.status==='pending'||v.status==='review' ? `<button class="btn btn-sm btn-ok" data-action="decide-verif" data-index="${i}" data-status="approved">Approve</button><button class="btn btn-sm btn-danger-outline" data-action="decide-verif" data-index="${i}" data-status="rejected">Reject</button>` : ''}
       </td>
     </tr>`).join('');
 }
@@ -612,12 +823,114 @@ function logAction(action,ic,before,after){
 }
 function renderAll(){ renderUsers(); renderVerifs(); renderTrash(); renderBackupTbl(); renderCms(); renderAudit(); }
 
+/* ---------------- verification detail modal (P1-06a) ---------------- */
+let viewingVerifIndex=null;
+function openVerifModal(i){
+  viewingVerifIndex=i;
+  const v=verifs[i];
+  document.getElementById('verifModalName').textContent=v.name;
+  document.getElementById('verifModalMeta').textContent=v.type+' · '+(LANG==='bn'?'জমা দেওয়া হয়েছে ':'Submitted ')+v.sub;
+  document.getElementById('verifDocType').textContent=v.doc;
+  document.getElementById('verifAuthType').selectedIndex = v.type.includes('Owner') ? 0 : 3;
+  document.getElementById('verifAgentVisit').checked=false;
+  document.getElementById('verifAgentSelect').disabled=true;
+  document.getElementById('verifNote').value='';
+  document.querySelector('input[name="verifDecision"][value="approved"]').checked=true;
+  document.getElementById('verifRejectReasonField').style.display='none';
+  const canDecide = v.status==='pending'||v.status==='review';
+  document.getElementById('verifModalSaveBtn').style.display = canDecide ? '' : 'none';
+  openModal('verifModal');
+}
+function submitVerifDecision(){
+  const status=document.querySelector('input[name="verifDecision"]:checked').value;
+  decideVerif(viewingVerifIndex, status);
+  closeModal('verifModal');
+}
+
+/* ---------------- CMS editor modal (P1-10a) ---------------- */
+let editingCmsIndex=null;
+function openCmsModal(i){
+  editingCmsIndex=i;
+  const p=cmsPages[i];
+  document.getElementById('cmsModalTitle').textContent=(LANG==='bn'?'এডিট: ':'Edit: ')+p.title;
+  document.getElementById('cmsTitle').value=p.title;
+  document.getElementById('cmsSlug').value='/'+p.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+  document.getElementById('cmsLocale').value=LANG;
+  document.getElementById('cmsStatus').value='published';
+  document.getElementById('cmsBody').value=p.title+' — '+p.sub;
+  document.getElementById('cmsMeta').value='';
+  document.getElementById('cmsMetaCount').textContent='0';
+  openModal('cmsModal');
+}
+function saveCms(publish){
+  const p=cmsPages[editingCmsIndex];
+  p.title=document.getElementById('cmsTitle').value;
+  p.sub=(LANG==='bn'?'সর্বশেষ আপডেট এখন':'Last updated now')+' · বাংলা + English';
+  renderCms();
+  closeModal('cmsModal');
+  logAction((publish?'published':'saved a draft of')+' CMS page "'+p.title+'"','file','—','status: '+(publish?'published':'draft'));
+  toastMsg(publish ? (LANG==='bn'?'প্রকাশিত হয়েছে':'Published') : (LANG==='bn'?'ড্রাফট সংরক্ষিত':'Draft saved'),'check');
+}
+
+/* ---------------- invite admin (P1-05a) ---------------- */
+function sendInvite(){
+  const name=document.getElementById('invName').value.trim();
+  const phone=document.getElementById('invPhone').value.trim();
+  if(!name || !/^1[0-9]{9}$/.test(phone)){ toastMsg(LANG==='bn'?'নাম ও সঠিক ফোন নম্বর দিন':'Enter a name and a valid phone number','shield'); return; }
+  const role=document.getElementById('invRole').value;
+  const init=name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  users.push({name,role,tfa:false,status:'pending',last:'—',init,since:(LANG==='bn'?'এখন':'Now')});
+  renderUsers();
+  closeModal('inviteModal');
+  logAction('invited '+name+' as '+role,'users','—','status: pending');
+  toastMsg((LANG==='bn'?'আমন্ত্রণ পাঠানো হয়েছে: ':'Invite sent: ')+name,'check');
+  ['invName','invPhone','invEmail','invScope'].forEach(id=>document.getElementById(id).value='');
+}
+
+/* ---------------- 2FA enrollment (first-time admin) ---------------- */
+function confirmEnrollment(){
+  const section=document.getElementById('enrBackupSection');
+  if(section.style.display==='none'){
+    const codes=Array.from({length:10},()=>Math.random().toString(36).slice(2,8).toUpperCase());
+    document.getElementById('enrBackupCodes').innerHTML=codes.join('<br>');
+    section.style.display='block';
+    document.getElementById('enrConfirmBtn').textContent = LANG==='bn' ? 'এনেবল করুন' : 'Enable 2FA';
+  } else {
+    closeModal('enrollModal');
+    toastMsg(LANG==='bn'?'2FA চালু হয়েছে':'2FA enabled','check');
+  }
+}
+
 /* ---------------- wiring ---------------- */
+/* ---------------- role switcher (view-as) ---------------- */
+const ROLE_PEOPLE = {
+  'Super Admin':{name:'Ariyan Rahman',init:'AR'},
+  'Moderator':{name:'Sumaiya Haque',init:'SH'},
+  'Field Agent':{name:'Kamal Hossain',init:'KH'},
+  'Support':{name:'Nusrat Jahan',init:'NJ'},
+  'Finance':{name:'Tanvir Alam',init:'TA'},
+};
+let currentRole='Super Admin';
+function applyRole(role){
+  currentRole=role;
+  const p=ROLE_PEOPLE[role];
+  document.getElementById('acctName').textContent=p.name;
+  document.getElementById('acctRole').textContent=role;
+  document.getElementById('acctAvatar').textContent=p.init;
+  let anyHiddenActive=false;
+  document.querySelectorAll('.sb-link[data-view]').forEach(btn=>{
+    const allowed = !btn.dataset.roles || btn.dataset.roles.split(',').includes(role);
+    btn.style.display = allowed ? '' : 'none';
+    if(!allowed && btn.classList.contains('active')) anyHiddenActive=true;
+  });
+  if(anyHiddenActive) showView('dashboard');
+}
+
 function wirePage(){
   document.getElementById('sendOtpBtn').addEventListener('click',sendOtp);
   document.getElementById('verifyOtpBtn').addEventListener('click',verifyOtp);
   document.getElementById('resendOtpBtn').addEventListener('click',()=>{
-    toastMsg(LANG==='bn' ? 'নতুন কোড পাঠানো হয়েছে (ডেমো: 1234)' : 'New code sent (demo: 1234)');
+    toastMsg(LANG==='bn' ? 'নতুন কোড পাঠানো হয়েছে (ডেমো — ভেরিফিকেশন নেই)' : 'New code sent (demo — no verification)');
   });
   document.getElementById('verify2faBtn').addEventListener('click',verify2fa);
   document.querySelectorAll('.otp-digit').forEach(inp=>inp.addEventListener('input',()=>otpMove(inp)));
@@ -633,10 +946,56 @@ function wirePage(){
     const btn=e.target.closest('[data-action]');
     if(!btn) return;
     const action=btn.dataset.action;
-    if(action==='edit-role') toastMsg(LANG==='bn' ? 'রোল এডিটর (প্রোটোটাইপ)' : 'Role editor (prototype)');
-    else if(action==='edit-cms') toastMsg(LANG==='bn' ? 'পেজ এডিটর (প্রোটোটাইপ)' : 'Page editor (prototype)');
+    if(action==='edit-role') openEditAdmin(parseInt(btn.dataset.index,10));
+    else if(action==='edit-cms') openCmsModal(parseInt(btn.dataset.index,10));
+    else if(action==='view-verif') openVerifModal(parseInt(btn.dataset.index,10));
     else if(action==='decide-verif') decideVerif(parseInt(btn.dataset.index,10), btn.dataset.status);
     else if(action==='restore-trash') restoreTrash(parseInt(btn.dataset.index,10));
+  });
+
+  // Invite admin
+  document.getElementById('inviteAdminBtn').addEventListener('click',()=>openModal('inviteModal'));
+  document.getElementById('inviteCancelBtn').addEventListener('click',()=>closeModal('inviteModal'));
+  document.getElementById('inviteSendBtn').addEventListener('click',sendInvite);
+  document.getElementById('invRole').addEventListener('change',e=>{
+    const scoped=['Field Agent','Moderator'].includes(e.target.value);
+    document.getElementById('invScopeField').style.opacity = scoped ? '1' : '.4';
+  });
+
+  // Edit admin
+  document.getElementById('editAdminCancelBtn').addEventListener('click',()=>closeModal('editAdminModal'));
+  document.getElementById('editAdminSaveBtn').addEventListener('click',saveEditAdmin);
+  document.getElementById('editSuspendToggle').addEventListener('click',e=>e.currentTarget.classList.toggle('on'));
+  document.getElementById('editForce2faBtn').addEventListener('click',()=>toastMsg(LANG==='bn'?'পরবর্তী লগইনে 2FA পুনরায় সেটআপ করতে হবে':'2FA re-enrollment required on next login','shield'));
+  document.getElementById('editRevokeBtn').addEventListener('click',()=>toastMsg(LANG==='bn'?'সব সেশন বাতিল করা হয়েছে':'All sessions revoked','power'));
+  document.getElementById('editAuditLinkBtn').addEventListener('click',()=>{ closeModal('editAdminModal'); showView('audit'); });
+
+  // Verification detail
+  document.getElementById('verifModalCancelBtn').addEventListener('click',()=>closeModal('verifModal'));
+  document.getElementById('verifModalSaveBtn').addEventListener('click',submitVerifDecision);
+  document.getElementById('verifAgentVisit').addEventListener('change',e=>{ document.getElementById('verifAgentSelect').disabled=!e.target.checked; });
+  document.querySelectorAll('input[name="verifDecision"]').forEach(r=>r.addEventListener('change',e=>{
+    document.getElementById('verifRejectReasonField').style.display = e.target.value==='rejected' ? 'block' : 'none';
+  }));
+
+  // CMS editor
+  document.getElementById('cmsCancelBtn').addEventListener('click',()=>closeModal('cmsModal'));
+  document.getElementById('cmsDraftBtn').addEventListener('click',()=>saveCms(false));
+  document.getElementById('cmsPublishBtn').addEventListener('click',()=>saveCms(true));
+  document.getElementById('cmsHistoryBtn').addEventListener('click',()=>toastMsg(LANG==='bn'?'রিভিশন হিস্টরি (প্রোটোটাইপ)':'Revision history (prototype)','file'));
+
+  // 2FA enrollment
+  document.getElementById('firstTimeEnrollBtn').addEventListener('click',()=>{
+    document.getElementById('enrBackupSection').style.display='none';
+    document.getElementById('enrConfirmCode').value='';
+    document.getElementById('enrConfirmBtn').textContent=window.I18N[LANG].enr_cta;
+    openModal('enrollModal');
+  });
+  document.getElementById('enrCancelBtn').addEventListener('click',()=>closeModal('enrollModal'));
+  document.getElementById('enrConfirmBtn').addEventListener('click',confirmEnrollment);
+  document.getElementById('enrCopyBtn').addEventListener('click',()=>{
+    navigator.clipboard?.writeText(document.getElementById('enrKey').value).catch(()=>{});
+    toastMsg(LANG==='bn'?'কপি হয়েছে':'Copied','check');
   });
 
   window.onLangChange = ()=>{ renderAll(); };

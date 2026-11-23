@@ -135,10 +135,150 @@
 /* ---- disputes ---- */
 .dispute-card{display:flex;gap:14px;align-items:flex-start}
 .dispute-ic{width:38px;height:38px;border-radius:10px;background:var(--danger-soft);color:var(--danger);display:flex;align-items:center;justify-content:center;flex:none}
+
+/* ================= PUBLIC SITE (anonymous visitor) ================= */
+#publicSite{min-height:100vh;display:flex;flex-direction:column}
+.pub-header{
+  position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:16px;padding:14px 24px;
+  background:color-mix(in srgb, var(--bg-elevated) 94%, transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);
+}
+.pub-nav{display:flex;gap:4px;margin-left:12px}
+.pub-nav button{background:none;border:none;padding:8px 12px;border-radius:999px;font-size:13px;font-weight:600;color:var(--fg-muted);cursor:pointer}
+.pub-nav button:hover,.pub-nav button.active{background:var(--surface-2);color:var(--fg)}
+@media (max-width:760px){.pub-nav{display:none}}
+.pub-hero{
+  padding:56px 24px 64px;text-align:center;background:
+    radial-gradient(900px 480px at 20% -10%, var(--brand-soft), transparent 60%),
+    radial-gradient(700px 400px at 100% 0%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 55%),
+    var(--bg);
+}
+.pub-hero h1{font-size:clamp(26px,4.2vw,40px);max-width:18ch;margin:0 auto 14px;line-height:1.1}
+.pub-hero p{color:var(--fg-muted);max-width:52ch;margin:0 auto 28px;font-size:14.5px}
+.pub-search{
+  max-width:760px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:999px;
+  box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:6px;padding:7px;flex-wrap:wrap;
+}
+.pub-search input{border:none;background:transparent;flex:1;min-width:140px;padding:9px 14px;font-size:14px}
+.pub-search input:focus-visible{outline:none;box-shadow:none}
+.pub-search .btn{border-radius:999px;flex:none}
+@media (max-width:560px){.pub-search{border-radius:18px}}
+.pub-section{padding:40px 24px;max-width:1180px;margin:0 auto;width:100%}
+.pub-section h2{font-size:19px;margin-bottom:4px}
+.pub-section .sub{color:var(--fg-muted);font-size:13px;margin-bottom:20px}
+.pub-cats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+@media (max-width:860px){.pub-cats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.pub-cat-card{border-radius:var(--radius-lg);padding:20px;color:#fff;display:flex;flex-direction:column;gap:30px;cursor:pointer;transition:transform .15s ease}
+.pub-cat-card:hover{transform:translateY(-2px)}
+.pub-cat-card .ic{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center}
+.pub-cat-card .ttl{font-weight:700;font-size:14.5px}
+.pub-cat-card .ct{font-size:11.5px;opacity:.85}
+.pub-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:900px){.pub-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){.pub-grid{grid-template-columns:minmax(0,1fr)}}
+.pub-trust{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;text-align:center}
+@media (max-width:760px){.pub-trust{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.pub-trust .n{font-family:var(--font-display);font-weight:800;font-size:24px}
+.pub-trust .l{font-size:11.5px;color:var(--fg-muted);margin-top:4px}
+.pub-footer{border-top:1px solid var(--border);padding:32px 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;color:var(--fg-faint);font-size:12px;margin-top:auto}
+.pub-footer a{color:var(--fg-muted);text-decoration:none;font-weight:600}
+.pub-login-card{position:fixed;inset:0;background:rgba(10,14,10,.5);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+.pub-login-card.open{display:flex}
 </style>
 </head>
 <body>
 
+<!-- ============ PUBLIC SITE (anonymous visitor — no login) ============ -->
+<div id="publicSite">
+  <header class="pub-header">
+    <a href="../index.html" style="display:flex;align-items:center;gap:9px;text-decoration:none;color:inherit">
+      <div class="sb-brand-mark" style="width:30px;height:30px;font-size:12px">CS</div>
+      <span style="font-family:var(--font-display);font-weight:700;font-size:14.5px">CBS Stays</span>
+    </a>
+    <nav class="pub-nav">
+      <button class="active" data-pub-nav="stays"><span data-t="pub_nav_stays">Rooms &amp; Flats</span></button>
+      <button data-pub-nav="food"><span data-t="pub_nav_food">Food Delivery</span></button>
+      <button data-pub-nav="partner"><span data-t="pub_nav_partner">Become a Host</span></button>
+    </nav>
+    <span style="flex:1"></span>
+    <div class="lang-toggle"><button class="active" data-lang="bn">বাং</button><button data-lang="en">EN</button></div>
+    <button class="btn btn-outline btn-sm" id="pubLoginBtn"><i data-icon="key" data-icon-cls="icon-sm"></i><span data-t="pub_login">Log in / Sign up</span></button>
+  </header>
+
+  <section class="pub-hero">
+    <h1 data-t="pub_hero_title">Find a room, flat or seat you can trust — anywhere in Dhaka</h1>
+    <p data-t="pub_hero_sub">Verified owners, real photos, bKash/Nagad token booking. No broker fees, no Facebook-group guesswork.</p>
+    <div class="pub-search">
+      <input type="text" id="pubSearchInput" placeholder="Area, e.g. Mirpur-10, Dhanmondi 27…" data-t-ph="pub_search_ph">
+      <button class="btn btn-primary" id="pubSearchBtn"><i data-icon="search" data-icon-cls="icon-sm"></i><span data-t="pub_search_btn">Search</span></button>
+    </div>
+  </section>
+
+  <section class="pub-section">
+    <h2 data-t="pub_cats_title">Browse by type</h2>
+    <div class="sub" data-t="pub_cats_sub">Every listing shows tenant-type, utilities and cancellation terms up front</div>
+    <div class="pub-cats">
+      <div class="pub-cat-card" style="background:linear-gradient(140deg,#2a6b58,#0e3b30)" data-pub-cat="bachelor">
+        <div class="ic"><i data-icon="users"></i></div>
+        <div><div class="ttl" data-t="pub_cat_bachelor">Bachelor Flats</div><div class="ct" data-t="pub_cat_bachelor_ct">640+ listings</div></div>
+      </div>
+      <div class="pub-cat-card" style="background:linear-gradient(140deg,#6b4a2a,#3b260e)" data-pub-cat="family">
+        <div class="ic"><i data-icon="home"></i></div>
+        <div><div class="ttl" data-t="pub_cat_family">Family Flats</div><div class="ct" data-t="pub_cat_family_ct">920+ listings</div></div>
+      </div>
+      <div class="pub-cat-card" style="background:linear-gradient(140deg,#2a4a6b,#0e233b)" data-pub-cat="mess">
+        <div class="ic"><i data-icon="building"></i></div>
+        <div><div class="ttl" data-t="pub_cat_mess">Mess Seats</div><div class="ct" data-t="pub_cat_mess_ct">510+ seats</div></div>
+      </div>
+      <div class="pub-cat-card" style="background:linear-gradient(140deg,#6b2a55,#3b0e2c)" data-pub-cat="short">
+        <div class="ic"><i data-icon="rocket"></i></div>
+        <div><div class="ttl" data-t="pub_cat_short">Short Stays</div><div class="ct" data-t="pub_cat_short_ct">Instant booking</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pub-section">
+    <h2 data-t="pub_feat_title">Featured listings in Dhaka</h2>
+    <div class="sub" data-t="pub_feat_sub">Verified owners, real photos, 5+ photos minimum</div>
+    <div class="pub-grid" id="pubFeaturedGrid"></div>
+  </section>
+
+  <section class="pub-section">
+    <div class="pub-trust">
+      <div><div class="n tabular">5,240</div><div class="l" data-t="pub_trust_1">verified listings</div></div>
+      <div><div class="n tabular">90%</div><div class="l" data-t="pub_trust_2">owners NID-verified</div></div>
+      <div><div class="n tabular">70%</div><div class="l" data-t="pub_trust_3">bookings via wallet/token</div></div>
+      <div><div class="n tabular">৳0</div><div class="l" data-t="pub_trust_4">broker fees, ever</div></div>
+    </div>
+  </section>
+
+  <footer class="pub-footer">
+    <span data-t="pub_footer_note">CBS Stays Bangladesh · a trusted alternative to Facebook groups and brokers</span>
+    <span style="display:flex;gap:16px">
+      <a href="#" data-t="pub_footer_about">About</a>
+      <a href="#" data-t="pub_footer_help">Help Center</a>
+      <a href="#" id="pubHostLink" data-t="pub_footer_host">List your property</a>
+    </span>
+  </footer>
+</div>
+
+<!-- Log in / choose role sheet -->
+<div class="pub-login-card" id="pubLoginModal">
+  <div class="modal">
+    <h3 data-t="pub_login_title">Log in to CBS Stays</h3>
+    <p data-t="pub_login_sub">Prototype — no OTP or password needed. Choose a role to enter.</p>
+    <div style="display:flex;flex-direction:column;gap:9px">
+      <button class="pay-method" data-enter-role="tenant"><div class="pm-mark" style="background:var(--brand)"><i data-icon="users" data-icon-cls="icon-sm"></i></div><div style="font-weight:700;font-size:13px" data-t="role_opt_tenant">👤 Tenant / Guest</div></button>
+      <button class="pay-method" data-enter-role="owner"><div class="pm-mark" style="background:var(--accent)"><i data-icon="building" data-icon-cls="icon-sm"></i></div><div style="font-weight:700;font-size:13px" data-t="role_opt_owner">🏠 Owner</div></button>
+      <button class="pay-method" data-enter-role="restaurant"><div class="pm-mark" style="background:#e2136e"><i data-icon="food" data-icon-cls="icon-sm"></i></div><div style="font-weight:700;font-size:13px" data-t="role_opt_restaurant">🍴 Restaurant</div></button>
+      <button class="pay-method" data-enter-role="rider"><div class="pm-mark" style="background:#8a3ffc"><i data-icon="bike" data-icon-cls="icon-sm"></i></div><div style="font-weight:700;font-size:13px" data-t="role_opt_rider">🏍 Rider</div></button>
+      <button class="pay-method" data-enter-role="admin"><div class="pm-mark" style="background:var(--fg)"><i data-icon="shield" data-icon-cls="icon-sm"></i></div><div style="font-weight:700;font-size:13px" data-t="role_opt_admin">🛡 Admin</div></button>
+    </div>
+    <div class="modal-actions" style="margin-top:16px"><button class="btn btn-ghost btn-sm" id="pubLoginCancelBtn" data-t="cancel">Cancel</button></div>
+  </div>
+</div>
+
+<!-- ============ LOGGED-IN APP (role-based) ============ -->
+<div id="appShell" hidden>
 <div class="app-shell">
   <aside class="app-sidebar" id="sidebar">
     <a class="sb-brand" href="../index.html">
@@ -146,21 +286,22 @@
       <div><div class="sb-brand-name">CBS Stays</div><div class="sb-brand-sub">Phase 2 · Core MVP</div></div>
     </a>
 
-    <div class="sb-group" data-t="nav_stays">Stays marketplace</div>
-    <button class="sb-link active" data-view="search"><i data-icon="search"></i><span data-t="nav_search">Search &amp; Map</span></button>
-    <button class="sb-link" data-view="detail"><i data-icon="layers"></i><span data-t="nav_detail">Property Detail</span></button>
-    <button class="sb-link" data-view="booking"><i data-icon="wallet"></i><span data-t="nav_booking">Booking &amp; Payment</span></button>
+    <div class="sb-group" data-t="nav_stays" data-roles-group="tenant">Stays marketplace</div>
+    <button class="sb-link active" data-view="search" data-roles="tenant"><i data-icon="search"></i><span data-t="nav_search">Search &amp; Map</span></button>
+    <button class="sb-link" data-view="detail" data-roles="tenant"><i data-icon="layers"></i><span data-t="nav_detail">Property Detail</span></button>
+    <button class="sb-link" data-view="booking" data-roles="tenant"><i data-icon="wallet"></i><span data-t="nav_booking">Booking &amp; Payment</span></button>
 
-    <div class="sb-group" data-t="nav_food">Food ordering</div>
-    <button class="sb-link" data-view="food"><i data-icon="food"></i><span data-t="nav_food_disc">Discovery</span></button>
-    <button class="sb-link" data-view="restaurant"><i data-icon="building"></i><span data-t="nav_rest_dash">Restaurant Dashboard</span></button>
-    <button class="sb-link" data-view="rider"><i data-icon="bike"></i><span data-t="nav_rider">Rider App</span></button>
+    <div class="sb-group" data-t="nav_food" data-roles-group="tenant,restaurant,rider">Food ordering</div>
+    <button class="sb-link" data-view="food" data-roles="tenant"><i data-icon="food"></i><span data-t="nav_food_disc">Discovery</span></button>
+    <button class="sb-link" data-view="restaurant" data-roles="restaurant"><i data-icon="building"></i><span data-t="nav_rest_dash">Restaurant Dashboard</span></button>
+    <button class="sb-link" data-view="rider" data-roles="rider"><i data-icon="bike"></i><span data-t="nav_rider">Rider App</span></button>
 
-    <div class="sb-group" data-t="nav_ops">Owner &amp; operations</div>
-    <button class="sb-link" data-view="onboarding"><i data-icon="building"></i><span data-t="nav_onboarding">Owner Onboarding</span></button>
-    <button class="sb-link" data-view="calendar"><i data-icon="calendar"></i><span data-t="nav_calendar">Availability &amp; iCal</span></button>
-    <button class="sb-link" data-view="disputes"><i data-icon="shield"></i><span data-t="nav_disputes">Disputes</span></button>
-    <button class="sb-link" data-view="reconcile"><i data-icon="wallet"></i><span data-t="nav_reconcile">Payment Reconciliation</span></button>
+    <div class="sb-group" data-t="nav_ops" data-roles-group="owner,admin">Owner &amp; operations</div>
+    <button class="sb-link" data-view="ownerdash" data-roles="owner"><i data-icon="layout"></i><span data-t="nav_ownerdash">Owner Dashboard</span></button>
+    <button class="sb-link" data-view="onboarding" data-roles="owner"><i data-icon="building"></i><span data-t="nav_onboarding">Owner Onboarding</span></button>
+    <button class="sb-link" data-view="calendar" data-roles="owner"><i data-icon="calendar"></i><span data-t="nav_calendar">Availability &amp; iCal</span></button>
+    <button class="sb-link" data-view="disputes" data-roles="admin"><i data-icon="shield"></i><span data-t="nav_disputes">Disputes</span></button>
+    <button class="sb-link" data-view="reconcile" data-roles="admin"><i data-icon="wallet"></i><span data-t="nav_reconcile">Payment Reconciliation</span></button>
 
     <div class="phase-switch">
       <div class="phase-switch-label" data-t="other_phases">Other phases</div>
@@ -171,9 +312,9 @@
 
     <div class="sb-foot">
       <div class="sb-acct">
-        <div class="avatar">FY</div>
-        <div><div class="sb-acct-name">Farzana Yasmin</div><div class="sb-acct-role" data-t="role_tenant">Tenant · NID verified</div></div>
-        <a class="sb-logout" href="../index.html" title="Exit prototype"><i data-icon="back" data-icon-cls="icon-sm"></i></a>
+        <div class="avatar" id="acctAvatar">FY</div>
+        <div><div class="sb-acct-name" id="acctName">Farzana Yasmin</div><div class="sb-acct-role" id="acctRole">Tenant · NID verified</div></div>
+        <button class="sb-logout" id="exitToSiteBtn" title="Log out"><i data-icon="back" data-icon-cls="icon-sm"></i></button>
       </div>
     </div>
   </aside>
@@ -186,6 +327,15 @@
         <div class="crumbs" id="viewCrumb">Phase 2 · Core Listing MVP</div>
       </div>
       <span class="phase-pill">Phase 2</span>
+      <div class="lang-toggle" style="margin-left:0">
+        <select id="roleSwitch" style="font-size:11.5px;font-weight:700;padding:5px 8px;border-radius:999px;border:1px solid var(--border);background:var(--surface-2);color:var(--fg)">
+          <option value="tenant" data-t="role_opt_tenant">👤 Tenant / Guest</option>
+          <option value="owner" data-t="role_opt_owner">🏠 Owner</option>
+          <option value="restaurant" data-t="role_opt_restaurant">🍴 Restaurant</option>
+          <option value="rider" data-t="role_opt_rider">🏍 Rider</option>
+          <option value="admin" data-t="role_opt_admin">🛡 Admin</option>
+        </select>
+      </div>
       <div class="lang-toggle" style="margin-left:0">
         <button class="active" data-lang="bn">বাং</button>
         <button data-lang="en">EN</button>
@@ -233,10 +383,57 @@
             <div class="dep-note"><i data-icon="shield" data-icon-cls="icon-sm"></i><span data-t="dep_note">Booking the whole flat blocks every room and seat below for those dates — and booking any single room blocks the whole flat. This is enforced live as you select below (FR-H3). Try it.</span></div>
 
             <div id="unitTable"></div>
+
+            <div class="modal-section-title" data-t="pd_amenities">Amenities</div>
+            <div id="pdAmenities" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px"></div>
+
+            <div class="modal-section-title" data-t="pd_rules">House rules</div>
+            <div class="form-grid" style="margin-bottom:4px">
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px"><span class="badge badge-brand"><i data-icon="users" data-icon-cls="icon-sm"></i></span><span data-t="pd_rule_tenant">Family only</span></div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px"><span class="badge badge-ok"><i data-icon="check" data-icon-cls="icon-sm"></i></span><span data-t="pd_rule_smoking">No smoking</span></div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px"><span class="badge badge-ok"><i data-icon="check" data-icon-cls="icon-sm"></i></span><span data-t="pd_rule_pets">No pets</span></div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px"><span class="badge badge-muted"><i data-icon="users" data-icon-cls="icon-sm"></i></span><span data-t="pd_rule_guests">Max 6 guests</span></div>
+            </div>
+
+            <div class="modal-section-title" data-t="pd_utilities">Utilities clarity · FR-C7</div>
+            <div class="form-grid" style="margin-bottom:4px">
+              <div class="price-row"><span data-t="pd_u_elec">Electricity</span><span data-t="pd_u_elec_v">Prepaid meter</span></div>
+              <div class="price-row"><span data-t="pd_u_gas">Gas</span><span data-t="pd_u_gas_v">Piped connection</span></div>
+              <div class="price-row"><span data-t="pd_u_water">Water</span><span data-t="pd_u_water_v">24-hour supply</span></div>
+              <div class="price-row"><span data-t="pd_u_net">Internet</span><span data-t="pd_u_net_v">Owner can arrange</span></div>
+              <div class="price-row"><span data-t="pd_u_service">Service charge</span><span class="tabular">৳ 800/month</span></div>
+            </div>
+
+            <div class="modal-section-title" data-t="pd_map">Location</div>
+            <div class="map-panel" style="aspect-ratio:16/7;margin-bottom:4px">
+              <div class="map-inner"><span class="map-pin active" style="left:48%;top:45%">৳ 7,500</span></div>
+            </div>
+
+            <div class="modal-section-title" data-t="pd_avail">Availability (this month)</div>
+            <div class="cal-legend" style="margin-bottom:8px">
+              <span><i class="cal-dot cal-avail"></i><span data-t="cal_avail">Available</span></span>
+              <span><i class="cal-dot cal-booked"></i><span data-t="cal_booked">Booked</span></span>
+            </div>
+            <div class="cal-grid" id="pdCalGrid" style="margin-bottom:4px"></div>
+
+            <div class="modal-section-title" data-t="pd_cancel">Cancellation terms</div>
+            <div class="card" style="margin-bottom:4px"><div style="font-weight:700;font-size:13px;margin-bottom:4px" data-t="cp_flex_name">Flexible</div><div class="muted" style="font-size:12.5px" data-t="cp_flex_body">100% refund up to 24 hours before check-in.</div></div>
+
+            <div class="modal-section-title" data-t="pd_safety">Safety information · FR-T11</div>
+            <div class="form-grid" style="margin-bottom:4px">
+              <div style="display:flex;gap:8px;align-items:flex-start;font-size:12.5px"><i data-icon="shield" data-icon-cls="icon-sm" style="color:var(--brand);margin-top:1px"></i><span><b data-t="pd_safety_caretaker">Caretaker</b><br><span data-t="pd_safety_masked">Masked until booking confirmed</span></span></div>
+              <div style="display:flex;gap:8px;align-items:flex-start;font-size:12.5px"><i data-icon="building" data-icon-cls="icon-sm" style="color:var(--brand);margin-top:1px"></i><span><b data-t="pd_safety_police">Nearest police</b><br>Dhanmondi Thana — 1.1 km</span></div>
+              <div style="display:flex;gap:8px;align-items:flex-start;font-size:12.5px"><i data-icon="plane" data-icon-cls="icon-sm" style="color:var(--brand);margin-top:1px"></i><span><b data-t="pd_safety_hospital">Nearest hospital</b><br>Square Hospital — 2.3 km</span></div>
+              <div style="display:flex;gap:8px;align-items:flex-start;font-size:12.5px"><i data-icon="bell" data-icon-cls="icon-sm" style="color:var(--danger);margin-top:1px"></i><span><b data-t="pd_safety_emg">Emergency</b><br>999 (national)</span></div>
+            </div>
+            <button class="btn btn-outline btn-sm" style="margin-bottom:18px" id="pdReportBtn"><i data-icon="shield" data-icon-cls="icon-sm"></i><span data-t="pd_report">Report a problem</span></button>
+
+            <div class="section-title"><h2 data-t="pd_reviews_title">Reviews</h2><span class="count" data-t="pd_reviews_sub">4.8 average · 32 verified reviews</span></div>
+            <div id="pdReviews" style="display:flex;flex-direction:column;gap:12px;margin-bottom:10px"></div>
           </div>
 
           <div>
-            <div class="card" style="position:sticky;top:90px">
+            <div class="card" style="position:sticky;top:90px;margin-bottom:16px">
               <div style="font-weight:700;font-size:14px;margin-bottom:4px" data-t="selected_title">Your selection</div>
               <div id="selectedSummary" class="muted" style="font-size:12.5px;margin-bottom:14px" data-t="selected_empty">No unit selected yet — pick one from the table.</div>
               <button class="btn btn-primary btn-block" id="goBookingBtn" data-t="continue_booking">Continue to booking</button>
@@ -245,6 +442,18 @@
                 <div style="display:flex;gap:9px;align-items:center;font-size:12.5px"><i data-icon="star" data-icon-cls="icon-sm" style="color:var(--accent)"></i><span data-t="prop_v2">4.8 rating · 32 verified reviews</span></div>
                 <div style="display:flex;gap:9px;align-items:center;font-size:12.5px"><i data-icon="check" data-icon-cls="icon-sm" style="color:var(--ok)"></i><span data-t="prop_v3">Flexible cancellation up to 24h before check-in</span></div>
               </div>
+            </div>
+            <div class="card" style="position:sticky;top:300px">
+              <div style="font-weight:700;font-size:13.5px;margin-bottom:10px" data-t="pd_owner_title">Hosted by</div>
+              <div style="display:flex;gap:11px;align-items:center;margin-bottom:12px">
+                <div class="avatar" style="width:42px;height:42px;font-size:14px">KH</div>
+                <div><div style="font-weight:700;font-size:13.5px">Md. Kamal Hossain</div><div class="muted" style="font-size:11.5px" data-t="pd_owner_since">Member since Jun 2026</div></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;margin-bottom:12px">
+                <div style="display:flex;justify-content:space-between"><span class="muted" data-t="pd_owner_resp">Response rate</span><span class="tabular" style="font-weight:600">96%</span></div>
+                <div style="display:flex;justify-content:space-between"><span class="muted" data-t="pd_owner_resptime">Response time</span><span style="font-weight:600" data-t="pd_owner_resptime_v">within an hour</span></div>
+              </div>
+              <button class="btn btn-outline btn-block btn-sm" id="pdMessageOwnerBtn"><i data-icon="bell" data-icon-cls="icon-sm"></i><span data-t="pd_message">Message owner</span></button>
             </div>
           </div>
         </div>
@@ -339,6 +548,54 @@
         </div>
       </section>
 
+      <!-- ===== OWNER DASHBOARD (FR-H10, H11, H12, H13) ===== -->
+      <section class="view-section" id="view-ownerdash">
+        <div class="grid cards-4" style="margin-bottom:8px">
+          <div class="card"><div class="stat-label"><i data-icon="building" data-icon-cls="icon-sm"></i><span data-t="od_active">Active listings</span></div><div class="stat-value tabular">4</div></div>
+          <div class="card"><div class="stat-label"><i data-icon="bell" data-icon-cls="icon-sm"></i><span data-t="od_enquiries">New enquiries</span></div><div class="stat-value tabular">3</div></div>
+          <div class="card"><div class="stat-label"><i data-icon="calendar" data-icon-cls="icon-sm"></i><span data-t="od_upcoming">Upcoming bookings</span></div><div class="stat-value tabular">6</div></div>
+          <div class="card"><div class="stat-label"><i data-icon="wallet" data-icon-cls="icon-sm"></i><span data-t="od_earnings">This month's earnings</span></div><div class="stat-value tabular">৳ 58,400</div></div>
+        </div>
+
+        <div class="filter-bar">
+          <span class="chip on" data-od-tab="properties"><i data-icon="building"></i><span data-t="od_tab_props">Properties</span></span>
+          <span class="chip" data-od-tab="enquiries"><i data-icon="bell"></i><span data-t="od_tab_enq">Enquiries</span></span>
+          <span class="chip" data-od-tab="earnings"><i data-icon="wallet"></i><span data-t="od_tab_earn">Earnings &amp; Payouts</span></span>
+          <span class="chip" data-od-tab="reviews"><i data-icon="star"></i><span data-t="od_tab_rev">Reviews</span></span>
+          <span class="chip" data-od-tab="team"><i data-icon="users"></i><span data-t="od_tab_team">Team</span></span>
+        </div>
+
+        <div id="odPanelProperties">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th data-t="od_col_prop">Property</th><th data-t="col_status">Status</th><th data-t="od_col_resp">Response rate</th><th></th></tr></thead>
+              <tbody id="odPropsTbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div id="odPanelEnquiries" hidden>
+          <div style="display:flex;flex-direction:column;gap:10px" id="odEnqList"></div>
+        </div>
+        <div id="odPanelEarnings" hidden>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th data-t="col_booking">Booking</th><th data-t="od_col_tenant">Tenant</th><th data-t="pr_total">Total</th><th data-t="col_status">Status</th></tr></thead>
+              <tbody id="odEarningsTbody"></tbody>
+            </table>
+          </div>
+          <button class="btn btn-outline btn-sm" style="margin-top:12px" id="odPayoutBtn"><i data-icon="wallet" data-icon-cls="icon-sm"></i><span data-t="od_request_payout">Request payout</span></button>
+        </div>
+        <div id="odPanelReviews" hidden>
+          <div class="empty"><i data-icon="star" data-icon-cls="icon-lg"></i><span data-t="od_reviews_empty">Reviews received on your properties will appear here once guests complete their stay.</span></div>
+        </div>
+        <div id="odPanelTeam" hidden>
+          <div class="card" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+            <div><div style="font-weight:700;font-size:13.5px" data-t="od_team_title">Agent &amp; manager accounts · FR-H13</div><div class="muted" style="font-size:12px" data-t="od_team_sub">Invite team members with per-building permissions</div></div>
+            <button class="btn btn-primary btn-sm" id="odInviteTeamBtn"><i data-icon="users" data-icon-cls="icon-sm"></i><span data-t="od_invite_team">Invite team member</span></button>
+          </div>
+        </div>
+      </section>
+
       <!-- ===== OWNER ONBOARDING WIZARD (FR-H1) ===== -->
       <section class="view-section" id="view-onboarding">
         <div class="section-title"><h2 data-t="h_onboard">Owner onboarding wizard · FR-H1</h2><span class="count" data-t="h_onboard_sub">Bangla + English · phone-assisted onboarding supported</span></div>
@@ -399,6 +656,7 @@
     </div>
   </div>
 </div>
+</div>
 
 <script src="../assets/js/common.js"></script>
 <script>
@@ -407,7 +665,18 @@ window.I18N = {
   bn:{
     nav_stays:'স্টে মার্কেটপ্লেস', nav_search:'সার্চ ও ম্যাপ', nav_detail:'প্রপার্টি ডিটেইল', nav_booking:'বুকিং ও পেমেন্ট',
     nav_food:'ফুড অর্ডারিং', nav_food_disc:'ডিসকভারি', nav_rest_dash:'রেস্টুরেন্ট ড্যাশবোর্ড', nav_rider:'রাইডার অ্যাপ',
-    other_phases:'অন্য ফেজ', role_tenant:'টেন্যান্ট · NID ভেরিফায়েড',
+    other_phases:'অন্য ফেজ', role_tenant:'টেন্যান্ট · NID ভেরিফায়েড', role_owner:'প্রপার্টি ওনার', role_restaurant:'রেস্টুরেন্ট', role_rider:'ডেলিভারি রাইডার', role_admin:'অ্যাডমিন অপারেশনস',
+    role_opt_tenant:'👤 টেন্যান্ট / গেস্ট', role_opt_owner:'🏠 ওনার', role_opt_restaurant:'🍴 রেস্টুরেন্ট', role_opt_rider:'🏍 রাইডার', role_opt_admin:'🛡 অ্যাডমিন',
+    pub_nav_stays:'রুম ও ফ্ল্যাট', pub_nav_food:'ফুড ডেলিভারি', pub_nav_partner:'হোস্ট হোন', pub_login:'লগ ইন / সাইন আপ',
+    pub_hero_title:'ঢাকায় বিশ্বাসযোগ্য রুম, ফ্ল্যাট বা সিট খুঁজুন', pub_hero_sub:'ভেরিফাইড মালিক, বাস্তব ছবি, বিকাশ/নগদ টোকেন বুকিং। কোনো দালাল ফি নেই, ফেসবুক গ্রুপের অনিশ্চয়তা নেই।',
+    pub_search_ph:'এলাকা, যেমন: মিরপুর-১০, ধানমন্ডি ২৭…', pub_search_btn:'সার্চ করুন',
+    pub_cats_title:'ধরন অনুযায়ী দেখুন', pub_cats_sub:'প্রতিটি লিস্টিংয়ে টেন্যান্ট-টাইপ, ইউটিলিটি ও ক্যান্সেলেশন শর্ত আগে থেকেই দেখানো হয়',
+    pub_cat_bachelor:'ব্যাচেলর ফ্ল্যাট', pub_cat_bachelor_ct:'৬৪০+ লিস্টিং', pub_cat_family:'ফ্যামিলি ফ্ল্যাট', pub_cat_family_ct:'৯২০+ লিস্টিং',
+    pub_cat_mess:'মেস সিট', pub_cat_mess_ct:'৫১০+ সিট', pub_cat_short:'শর্ট স্টে', pub_cat_short_ct:'ইনস্ট্যান্ট বুকিং',
+    pub_feat_title:'ঢাকায় ফিচারড লিস্টিং', pub_feat_sub:'ভেরিফাইড মালিক, বাস্তব ছবি, কমপক্ষে ৫টি ছবি',
+    pub_trust_1:'ভেরিফাইড লিস্টিং', pub_trust_2:'মালিক NID-ভেরিফায়েড', pub_trust_3:'ওয়ালেট/টোকেনে বুকিং', pub_trust_4:'দালাল ফি, কখনোই না',
+    pub_footer_note:'CBS Stays Bangladesh · ফেসবুক গ্রুপ ও দালালের বিশ্বস্ত বিকল্প', pub_footer_about:'আমাদের সম্পর্কে', pub_footer_help:'হেল্প সেন্টার', pub_footer_host:'আপনার প্রপার্টি লিস্ট করুন',
+    pub_login_title:'CBS Stays-এ লগ ইন করুন', pub_login_sub:'প্রোটোটাইপ — কোনো OTP বা পাসওয়ার্ড লাগবে না। প্রবেশ করতে একটি রোল বাছাই করুন।',
     footer_note:'CBS Stays Bangladesh · ফেজ ২ প্রোটোটাইপ · এই পেজের সব ডেটা সিমুলেটেড', footer_hub:'← প্রোটোটাইপ হাবে ফিরে যান',
     f_any:'যেকোনো টেন্যান্ট', f_family:'শুধু ফ্যামিলি', f_bachelor:'ব্যাচেলর অ্যালাউড', f_student:'স্টুডেন্ট',
     f_instant:'ইনস্ট্যান্ট বুকিং', f_cancel:'ফ্রি ক্যান্সেলেশন',
@@ -418,6 +687,12 @@ window.I18N = {
     selected_title:'আপনার সিলেকশন', selected_empty:'এখনো কোনো ইউনিট সিলেক্ট করা হয়নি — টেবিল থেকে একটি বেছে নিন।',
     continue_booking:'বুকিংয়ে এগিয়ে যান',
     prop_v1:'ভেরিফাইড ওনার · ভেরিফাইড প্রপার্টি', prop_v2:'৪.৮ রেটিং · ৩২টি ভেরিফাইড রিভিউ', prop_v3:'চেক-ইনের ২৪ ঘণ্টা আগ পর্যন্ত ফ্রি ক্যান্সেলেশন',
+    pd_amenities:'সুযোগসুবিধা', pd_rules:'বাড়ির নিয়ম', pd_rule_tenant:'শুধু ফ্যামিলি', pd_rule_smoking:'ধূমপান নিষিদ্ধ', pd_rule_pets:'পোষা প্রাণী নিষিদ্ধ', pd_rule_guests:'সর্বোচ্চ ৬ জন অতিথি',
+    pd_utilities:'ইউটিলিটিজ ক্লারিটি · FR-C7', pd_u_elec:'বিদ্যুৎ', pd_u_elec_v:'প্রিপেইড মিটার', pd_u_gas:'গ্যাস', pd_u_gas_v:'পাইপলাইন সংযোগ', pd_u_water:'পানি', pd_u_water_v:'২৪ ঘণ্টা সরবরাহ', pd_u_net:'ইন্টারনেট', pd_u_net_v:'মালিক ব্যবস্থা করতে পারবেন', pd_u_service:'সার্ভিস চার্জ',
+    pd_map:'অবস্থান', pd_avail:'অ্যাভেইলেবিলিটি (এই মাসে)', pd_cancel:'ক্যান্সেলেশন শর্তাবলী', cp_flex_name:'ফ্লেক্সিবল', cp_flex_body:'চেক-ইনের ২৪ ঘণ্টা আগ পর্যন্ত ১০০% রিফান্ড।',
+    pd_safety:'নিরাপত্তা তথ্য · FR-T11', pd_safety_caretaker:'কেয়ারটেকার', pd_safety_masked:'বুকিং নিশ্চিত না হওয়া পর্যন্ত মাস্কড', pd_safety_police:'নিকটস্থ থানা', pd_safety_hospital:'নিকটস্থ হাসপাতাল', pd_safety_emg:'জরুরি নম্বর', pd_report:'সমস্যা রিপোর্ট করুন',
+    pd_reviews_title:'রিভিউ', pd_reviews_sub:'৪.৮ গড় · ৩২টি ভেরিফাইড রিভিউ',
+    pd_owner_title:'হোস্ট করছেন', pd_owner_since:'জুন ২০২৬ থেকে সদস্য', pd_owner_resp:'রেসপন্স রেট', pd_owner_resptime:'রেসপন্স টাইম', pd_owner_resptime_v:'এক ঘণ্টার মধ্যে', pd_message:'মালিককে মেসেজ করুন',
     price_breakdown:'মূল্য বিবরণ', pr_rent:'রুম বি · ৬ রাত', pr_deposit:'সিকিউরিটি ডিপোজিট (২ মাস)', pr_service:'সার্ভিস চার্জ',
     pr_fee:'প্ল্যাটফর্ম ফি', pr_vat:'ভ্যাট (প্ল্যাটফর্ম ফি-এর উপর ১৫%)', pr_total:'এখন পরিশোধযোগ্য মোট',
     pm_title:'কীভাবে পেমেন্ট করতে চান?', pm_sub:'এখনই পুরো অর্থ পরিশোধ করুন (চেক-ইনের ২৪ ঘণ্টা পর পর্যন্ত হোল্ড থাকবে), অথবা সামান্য টোকেন দিয়ে বুকিং নিশ্চিত করুন এবং বাকিটা প্রপার্টিতে দিন।',
@@ -433,15 +708,35 @@ window.I18N = {
     r_rating:'রাইডার রেটিং', r_rating_sub:'মোট ১৮২টি ডেলিভারি',
     h_job:'নতুন জব অফার', job_pickup:'বিরিয়ানি বাড়ি, ধানমন্ডি', job_drop:'সানরাইজ রেসিডেন্সি, রোড ২৭',
     job_dist:'২.১ কিমি · ~৯ মিনিট', job_fee:'ডেলিভারি ফি: ৳ ৫৫', job_reject:'প্রত্যাখ্যান', job_accept:'জব গ্রহণ করুন',
-    nav_ops:'মালিক ও অপারেশন', nav_onboarding:'ওনার অনবোর্ডিং', nav_calendar:'অ্যাভেইলেবিলিটি ও iCal', nav_disputes:'ডিসপিউট', nav_reconcile:'পেমেন্ট রিকনসিলিয়েশন',
+    nav_ops:'মালিক ও অপারেশন', nav_ownerdash:'ওনার ড্যাশবোর্ড', nav_onboarding:'ওনার অনবোর্ডিং', nav_calendar:'অ্যাভেইলেবিলিটি ও iCal', nav_disputes:'ডিসপিউট', nav_reconcile:'পেমেন্ট রিকনসিলিয়েশন',
+    od_active:'অ্যাক্টিভ লিস্টিং', od_enquiries:'নতুন এনকোয়ারি', od_upcoming:'আসন্ন বুকিং', od_earnings:'এই মাসের আয়',
+    od_tab_props:'প্রপার্টিজ', od_tab_enq:'এনকোয়ারি', od_tab_earn:'আয় ও পেআউট', od_tab_rev:'রিভিউ', od_tab_team:'টিম',
+    od_col_prop:'প্রপার্টি', od_col_resp:'রেসপন্স রেট', od_col_tenant:'টেন্যান্ট', od_request_payout:'পেআউট রিকোয়েস্ট করুন',
+    od_reviews_empty:'অতিথি থাকা শেষ করলে আপনার প্রপার্টির রিভিউ এখানে দেখা যাবে।',
+    od_team_title:'এজেন্ট ও ম্যানেজার অ্যাকাউন্ট · FR-H13', od_team_sub:'প্রতি-বিল্ডিং পারমিশন সহ টিম মেম্বার আমন্ত্রণ করুন', od_invite_team:'টিম মেম্বার আমন্ত্রণ করুন',
     h_onboard:'ওনার অনবোর্ডিং উইজার্ড · FR-H1', h_onboard_sub:'বাংলা + ইংরেজি · ফোন-অ্যাসিস্টেড অনবোর্ডিং সাপোর্টেড',
-    wiz_step1:'প্রপার্টি টাইপ', wiz_step2:'ঠিকানা', wiz_step3:'ছবি', wiz_step4:'সুযোগসুবিধা ও নিয়ম', wiz_step5:'টেন্যান্ট টাইপ ও মূল্য',
+    wiz_step1:'প্রপার্টি টাইপ', wiz_step2:'ঠিকানা', wiz_step3:'ছবি', wiz_step4:'সুযোগসুবিধা ও নিয়ম', wiz_step5:'ইউনিট ও মূল্য', wiz_step6:'বুকিং শর্তাবলী', wiz_step7:'রিভিউ ও সাবমিট',
     wiz1_q:'এটি কোন ধরনের প্রপার্টি?', wiz1_a:'ফ্ল্যাট (পুরো)', wiz1_b:'রুম / সিট', wiz1_c:'মেস', wiz1_d:'ট্যুরিস্ট/গেস্ট হাউস',
     wiz2_title:'ঠিকানা দিন', wiz2_hint:'সঠিক ঠিকানা বুকিং না হওয়া পর্যন্ত গোপন থাকবে — শুধু এলাকা পাবলিক দেখানো হবে।',
     wiz2_division:'বিভাগ', wiz2_district:'জেলা', wiz2_thana:'থানা', wiz2_area:'এলাকা / মহল্লা', wiz2_exact:'সঠিক ঠিকানা (গোপন)',
     wiz3_title:'ছবি আপলোড করুন', wiz3_hint:'লাইভ লিস্টিংয়ের জন্য কমপক্ষে ৫টি ছবি প্রয়োজন (ড্রাফটের জন্য ১টি) — FR-H7',
-    wiz4_title:'সুযোগসুবিধা ও বাড়ির নিয়ম বাছাই করুন',
-    wiz5_title:'টেন্যান্ট টাইপ ও মূল্য নির্ধারণ করুন', wiz5_tt:'টেন্যান্ট টাইপ', wiz5_price:'মাসিক ভাড়া (৳)',
+    wiz4_title:'সুযোগসুবিধা', wiz4_amenity_hint:'যা যা আছে তা বাছাই করুন', wiz4_utilities:'ইউটিলিটিজ ক্লারিটি (FR-C7)',
+    wiz4_electricity:'বিদ্যুৎ মিটার', wiz4_prepaid:'প্রিপেইড মিটার', wiz4_postpaid:'পোস্টপেইড মিটার',
+    wiz4_gas:'গ্যাস সংযোগ', wiz4_piped:'পাইপলাইন', wiz4_cylinder:'সিলিন্ডার', wiz4_none:'নেই',
+    wiz4_water:'পানি সরবরাহ', wiz4_24h:'২৪ ঘণ্টা', wiz4_scheduled:'নির্ধারিত সময়ে',
+    wiz4_internet:'ইন্টারনেট', wiz4_included:'ভাড়ার অন্তর্ভুক্ত', wiz4_notincluded:'অন্তর্ভুক্ত নয়', wiz4_canarrange:'মালিক ব্যবস্থা করতে পারবেন',
+    wiz4_service:'সার্ভিস চার্জ', wiz4_rules:'বাড়ির নিয়ম', wiz4_tenanttype:'টেন্যান্ট টাইপ',
+    tt_family:'শুধু ফ্যামিলি', tt_bachelor_m:'ব্যাচেলর অ্যালাউড (পুরুষ)', tt_bachelor_f:'ব্যাচেলর অ্যালাউড (মহিলা)', tt_student:'স্টুডেন্ট', tt_any:'যেকোনো',
+    wiz4_maxguests:'সর্বোচ্চ অতিথি', wiz4_smoking:'ধূমপান অনুমোদিত', wiz4_pets:'পোষা প্রাণী অনুমোদিত', wiz4_otherrules:'অন্যান্য নিয়ম',
+    wiz5_title:'ইউনিট (রুম/সিট/পুরো ফ্ল্যাট)', wiz5_add:'+ ইউনিট যোগ করুন', wiz5_hint:'FR-H2/FR-H3 — প্রতিটি রো একটি বুকযোগ্য ইউনিট; পুরো ফ্ল্যাট ও তার ভেতরের রুম/সিট স্বয়ংক্রিয়ভাবে একে অপরকে ব্লক করবে।',
+    wiz5_kind:'ইউনিট ধরন', wiz5_cap:'ধারণক্ষমতা', wiz5_beds:'বেড/সিট সংখ্যা', wiz5_bath:'অ্যাটাচড বাথ',
+    wiz5_nightly:'প্রতি রাতের ভাড়া', wiz5_monthly:'মাসিক ভাড়া', wiz5_discount:'লং-স্টে ডিসকাউন্ট', wiz5_discount_hint:'৩+ মাসের থাকার জন্য (FR-H5)',
+    wiz5_gender:'জেন্ডার রেস্ট্রিকশন', wiz5_seats_only:'শুধু সিটের জন্য প্রযোজ্য', wiz5_meals:'মিল অন্তর্ভুক্ত',
+    wiz5_seasonal:'সিজনাল/উইকেন্ড প্রাইস ওভাররাইড', wiz5_seasonal_hint:'যেমন: ঈদ সপ্তাহে ভিন্ন মূল্য (FR-H5)',
+    wiz6_title:'প্রাইসিং ও বুকিং মোড', wiz6_deposit:'অগ্রিম/সিকিউরিটি ডিপোজিট', wiz6_mode:'বুকিং মোড', wiz6_instant:'ইনস্ট্যান্ট বুকিং', wiz6_request:'রিকোয়েস্ট টু বুক (২৪ঘ)',
+    wiz6_cancel:'ক্যান্সেলেশন পলিসি', cp_flex:'ফ্লেক্সিবল (চেক-ইনের ২৪ঘ আগ পর্যন্ত ১০০% রিফান্ড)', cp_mod:'মডারেট (৫ দিন আগ পর্যন্ত ১০০%)', cp_strict:'স্ট্রিক্ট/নন-রিফান্ডেবল (+১০% ছাড়)',
+    wiz6_commission:'প্ল্যাটফর্ম কমিশন', wiz6_strict_note:'স্ট্রিক্ট পলিসি বাছাই করলে টেন্যান্ট স্বয়ংক্রিয়ভাবে অতিরিক্ত ১০% ছাড় পাবেন (FR-B6)।',
+    wiz7_title:'রিভিউ করুন ও জমা দিন', wiz7_ready:'জমা দিতে প্রস্তুত',
     wiz_back:'পেছনে', wiz_next:'পরবর্তী', wiz_submit:'রিভিউর জন্য জমা দিন', wiz_agent:'এজেন্ট সাহায্যের জন্য অনুরোধ করুন',
     wiz_submitted_title:'রিভিউর জন্য জমা হয়েছে', wiz_submitted_sub:'প্রথম প্রকাশের আগে অ্যাডমিন অনুমোদন প্রয়োজন (FR-H8)। মালিক ড্যাশবোর্ডে স্ট্যাটাস দেখতে পারবেন।',
     h_cal:'প্রতি-ইউনিট অ্যাভেইলেবিলিটি ক্যালেন্ডার · FR-H4', cal_avail:'উপলব্ধ', cal_booked:'বুকড', cal_blocked:'মালিক-ব্লকড',
@@ -456,7 +751,18 @@ window.I18N = {
   en:{
     nav_stays:'Stays marketplace', nav_search:'Search & Map', nav_detail:'Property Detail', nav_booking:'Booking & Payment',
     nav_food:'Food ordering', nav_food_disc:'Discovery', nav_rest_dash:'Restaurant Dashboard', nav_rider:'Rider App',
-    other_phases:'Other phases', role_tenant:'Tenant · NID verified',
+    other_phases:'Other phases', role_tenant:'Tenant · NID verified', role_owner:'Property owner', role_restaurant:'Restaurant', role_rider:'Delivery rider', role_admin:'Admin operations',
+    role_opt_tenant:'👤 Tenant / Guest', role_opt_owner:'🏠 Owner', role_opt_restaurant:'🍴 Restaurant', role_opt_rider:'🏍 Rider', role_opt_admin:'🛡 Admin',
+    pub_nav_stays:'Rooms & Flats', pub_nav_food:'Food Delivery', pub_nav_partner:'Become a Host', pub_login:'Log in / Sign up',
+    pub_hero_title:'Find a room, flat or seat you can trust — anywhere in Dhaka', pub_hero_sub:'Verified owners, real photos, bKash/Nagad token booking. No broker fees, no Facebook-group guesswork.',
+    pub_search_ph:'Area, e.g. Mirpur-10, Dhanmondi 27…', pub_search_btn:'Search',
+    pub_cats_title:'Browse by type', pub_cats_sub:'Every listing shows tenant-type, utilities and cancellation terms up front',
+    pub_cat_bachelor:'Bachelor Flats', pub_cat_bachelor_ct:'640+ listings', pub_cat_family:'Family Flats', pub_cat_family_ct:'920+ listings',
+    pub_cat_mess:'Mess Seats', pub_cat_mess_ct:'510+ seats', pub_cat_short:'Short Stays', pub_cat_short_ct:'Instant booking',
+    pub_feat_title:'Featured listings in Dhaka', pub_feat_sub:'Verified owners, real photos, 5+ photos minimum',
+    pub_trust_1:'verified listings', pub_trust_2:'owners NID-verified', pub_trust_3:'bookings via wallet/token', pub_trust_4:'broker fees, ever',
+    pub_footer_note:'CBS Stays Bangladesh · a trusted alternative to Facebook groups and brokers', pub_footer_about:'About', pub_footer_help:'Help Center', pub_footer_host:'List your property',
+    pub_login_title:'Log in to CBS Stays', pub_login_sub:'Prototype — no OTP or password needed. Choose a role to enter.',
     footer_note:'CBS Stays Bangladesh · Phase 2 prototype · all data on this page is simulated', footer_hub:'← Back to prototype hub',
     f_any:'Any tenant', f_family:'Family only', f_bachelor:'Bachelor allowed', f_student:'Student',
     f_instant:'Instant booking', f_cancel:'Free cancellation',
@@ -482,15 +788,35 @@ window.I18N = {
     r_rating:'Rider rating', r_rating_sub:'182 deliveries total',
     h_job:'New job offer', job_pickup:'Biriyani Bari, Dhanmondi', job_drop:'Sunrise Residency, Road 27',
     job_dist:'2.1 km · ~9 min', job_fee:'Delivery fee: ৳ 55', job_reject:'Decline', job_accept:'Accept job',
-    nav_ops:'Owner & operations', nav_onboarding:'Owner Onboarding', nav_calendar:'Availability & iCal', nav_disputes:'Disputes', nav_reconcile:'Payment Reconciliation',
+    nav_ops:'Owner & operations', nav_ownerdash:'Owner Dashboard', nav_onboarding:'Owner Onboarding', nav_calendar:'Availability & iCal', nav_disputes:'Disputes', nav_reconcile:'Payment Reconciliation',
+    od_active:'Active listings', od_enquiries:'New enquiries', od_upcoming:'Upcoming bookings', od_earnings:"This month's earnings",
+    od_tab_props:'Properties', od_tab_enq:'Enquiries', od_tab_earn:'Earnings & Payouts', od_tab_rev:'Reviews', od_tab_team:'Team',
+    od_col_prop:'Property', od_col_resp:'Response rate', od_col_tenant:'Tenant', od_request_payout:'Request payout',
+    od_reviews_empty:'Reviews received on your properties will appear here once guests complete their stay.',
+    od_team_title:'Agent & manager accounts · FR-H13', od_team_sub:'Invite team members with per-building permissions', od_invite_team:'Invite team member',
     h_onboard:'Owner onboarding wizard · FR-H1', h_onboard_sub:'Bangla + English · phone-assisted onboarding supported',
-    wiz_step1:'Property type', wiz_step2:'Address', wiz_step3:'Photos', wiz_step4:'Amenities & rules', wiz_step5:'Tenant type & pricing',
+    wiz_step1:'Property type', wiz_step2:'Address', wiz_step3:'Photos', wiz_step4:'Amenities & rules', wiz_step5:'Units & Pricing', wiz_step6:'Booking Terms', wiz_step7:'Review & Submit',
     wiz1_q:'What type of property is this?', wiz1_a:'Whole flat', wiz1_b:'Room / seat', wiz1_c:'Mess', wiz1_d:'Tourist / guest house',
     wiz2_title:'Enter the address', wiz2_hint:'The exact address stays hidden until booking — only the area is shown publicly.',
     wiz2_division:'Division', wiz2_district:'District', wiz2_thana:'Thana', wiz2_area:'Area / neighbourhood', wiz2_exact:'Exact address (hidden)',
     wiz3_title:'Upload photos', wiz3_hint:'At least 5 photos required for a live listing (1 for draft) — FR-H7',
-    wiz4_title:'Select amenities and house rules',
-    wiz5_title:'Set tenant type and pricing', wiz5_tt:'Tenant type', wiz5_price:'Monthly rent (৳)',
+    wiz4_title:'Amenities', wiz4_amenity_hint:'Select everything the property has', wiz4_utilities:'Utilities clarity (FR-C7)',
+    wiz4_electricity:'Electricity meter', wiz4_prepaid:'Prepaid meter', wiz4_postpaid:'Postpaid meter',
+    wiz4_gas:'Gas supply', wiz4_piped:'Piped', wiz4_cylinder:'Cylinder', wiz4_none:'None',
+    wiz4_water:'Water supply', wiz4_24h:'24-hour', wiz4_scheduled:'Scheduled',
+    wiz4_internet:'Internet', wiz4_included:'Included in rent', wiz4_notincluded:'Not included', wiz4_canarrange:'Owner can arrange',
+    wiz4_service:'Service charge', wiz4_rules:'House rules', wiz4_tenanttype:'Tenant type',
+    tt_family:'Family only', tt_bachelor_m:'Bachelor allowed (male)', tt_bachelor_f:'Bachelor allowed (female)', tt_student:'Student', tt_any:'Any',
+    wiz4_maxguests:'Max guests', wiz4_smoking:'Smoking allowed', wiz4_pets:'Pets allowed', wiz4_otherrules:'Other rules',
+    wiz5_title:'Units (rooms / seats / whole flat)', wiz5_add:'+ Add unit', wiz5_hint:'FR-H2/FR-H3 — each row is a bookable unit; the whole flat and the rooms/seats inside it automatically block each other.',
+    wiz5_kind:'Unit kind', wiz5_cap:'Capacity', wiz5_beds:'Bed/seat count', wiz5_bath:'Attached bath',
+    wiz5_nightly:'Nightly price', wiz5_monthly:'Monthly price', wiz5_discount:'Long-stay discount', wiz5_discount_hint:'For stays of 3+ months (FR-H5)',
+    wiz5_gender:'Gender restriction', wiz5_seats_only:'Seats only', wiz5_meals:'Meals included',
+    wiz5_seasonal:'Seasonal/weekend price override', wiz5_seasonal_hint:'e.g. different pricing for Eid week (FR-H5)',
+    wiz6_title:'Pricing & booking mode', wiz6_deposit:'Advance/security deposit', wiz6_mode:'Booking mode', wiz6_instant:'Instant Booking', wiz6_request:'Request to Book (24h)',
+    wiz6_cancel:'Cancellation policy', cp_flex:'Flexible (100% refund up to 24h before check-in)', cp_mod:'Moderate (100% up to 5 days)', cp_strict:'Strict/Non-refundable (+10% discount)',
+    wiz6_commission:'Platform commission', wiz6_strict_note:'Choosing Strict automatically gives the tenant an extra 10% discount (FR-B6).',
+    wiz7_title:'Review & submit', wiz7_ready:'Ready to submit',
     wiz_back:'Back', wiz_next:'Next', wiz_submit:'Submit for review', wiz_agent:'Request agent assistance',
     wiz_submitted_title:'Submitted for review', wiz_submitted_sub:'Admin approval is required before first publication (FR-H8). The owner sees the status on their dashboard.',
     h_cal:'Per-unit availability calendar · FR-H4', cal_avail:'Available', cal_booked:'Booked', cal_blocked:'Owner-blocked',
@@ -651,7 +977,11 @@ function renderMenu(){
 let wizStep = 1;
 let wizSubmitted = false;
 let wizPropType = 'whole';
-const wizStepKeys = ['wiz_step1','wiz_step2','wiz_step3','wiz_step4','wiz_step5'];
+let wizUnits = [
+  {name:'Whole Flat',kind:'whole',cap:6,beds:3,bath:true,nightly:'',monthly:'22,000',discount:'5',gender:'any',meals:false},
+  {name:'Room A',kind:'room',cap:2,beds:1,bath:true,nightly:'',monthly:'9,000',discount:'',gender:'any',meals:false},
+];
+const wizStepKeys = ['wiz_step1','wiz_step2','wiz_step3','wiz_step4','wiz_step5','wiz_step6','wiz_step7'];
 function renderWizardSteps(){
   document.getElementById('wizardSteps').innerHTML = wizStepKeys.map((k,i)=>{
     const n=i+1;
@@ -693,26 +1023,98 @@ function renderWizardBody(){
         ${[1,2,3,4,5].map(i=>`<div class="wiz-photo-slot">${icon('file','icon-lg')}</div>`).join('')}
       </div>`;
   } else if(wizStep===4){
-    html = `<div style="font-weight:700;font-size:14px;margin-bottom:14px">${t.wiz4_title}</div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px">
+    html = `<div style="font-weight:700;font-size:14px;margin-bottom:4px">${t.wiz4_title}</div>
+      <div class="muted" style="font-size:12px;margin-bottom:10px">${t.wiz4_amenity_hint}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px">
         ${['Lift','Generator / IPS','Gas supply','Water','Parking','Wi-Fi','CCTV','Security guard'].map((a,i)=>`<span class="chip ${i<4?'on':''}" data-wiz-amenity>${a}</span>`).join('')}
+      </div>
+      <div class="modal-section-title" style="margin-top:0">${t.wiz4_utilities}</div>
+      <div class="wiz-grid">
+        <div class="field"><label>${t.wiz4_electricity}</label><select><option>${t.wiz4_prepaid}</option><option>${t.wiz4_postpaid}</option></select></div>
+        <div class="field"><label>${t.wiz4_gas}</label><select><option>${t.wiz4_piped}</option><option>${t.wiz4_cylinder}</option><option>${t.wiz4_none}</option></select></div>
+        <div class="field"><label>${t.wiz4_water}</label><select><option>${t.wiz4_24h}</option><option>${t.wiz4_scheduled}</option></select></div>
+        <div class="field"><label>${t.wiz4_internet}</label><select><option>${t.wiz4_included}</option><option>${t.wiz4_notincluded}</option><option>${t.wiz4_canarrange}</option></select></div>
+        <div class="field field-full"><label>${t.wiz4_service}</label><input type="text" placeholder="৳ 800 — ${LANG==='bn'?'লিফট ও সাধারণ রক্ষণাবেক্ষণ':'lift & common maintenance'}"></div>
+      </div>
+      <div class="modal-section-title">${t.wiz4_rules}</div>
+      <div class="wiz-grid">
+        <div class="field"><label>${t.wiz4_tenanttype}</label><select><option>${t.tt_family}</option><option>${t.tt_bachelor_m}</option><option>${t.tt_bachelor_f}</option><option>${t.tt_student}</option><option>${t.tt_any}</option></select></div>
+        <div class="field"><label>${t.wiz4_maxguests}</label><input type="number" value="4" min="1"></div>
+        <div class="field"><label style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox"> ${t.wiz4_smoking}</label></div>
+        <div class="field"><label style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox"> ${t.wiz4_pets}</label></div>
+        <div class="field field-full"><label>${t.wiz4_otherrules}</label><textarea rows="2" placeholder="${LANG==='bn'?'যেমন: রাত ১০টার পর অতিথি নয়':'e.g. no guests after 10pm'}"></textarea></div>
       </div>`;
   } else if(wizStep===5){
-    html = `<div style="font-weight:700;font-size:14px;margin-bottom:14px">${t.wiz5_title}</div>
+    html = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <div style="font-weight:700;font-size:14px">${t.wiz5_title}</div>
+        <button class="btn btn-outline btn-sm" id="wizAddUnitBtn"><i data-icon="layers" data-icon-cls="icon-sm"></i>${t.wiz5_add}</button>
+      </div>
+      <div class="muted" style="font-size:12px;margin-bottom:14px">${t.wiz5_hint}</div>
+      <div id="wizUnitRows" style="display:flex;flex-direction:column;gap:12px">${wizUnits.map((u,i)=>wizUnitRowHtml(u,i,t)).join('')}</div>`;
+  } else if(wizStep===6){
+    html = `<div style="font-weight:700;font-size:14px;margin-bottom:14px">${t.wiz6_title}</div>
       <div class="wiz-grid">
-        <div class="field"><label>${t.wiz5_tt}</label><select><option>Family only</option><option>Bachelor allowed</option><option>Student</option><option>Any</option></select></div>
-        <div class="field"><label>${t.wiz5_price}</label><input type="text" value="22,000"></div>
+        <div class="field"><label>${t.wiz6_deposit}</label><input type="text" value="2 ${LANG==='bn'?'মাস':'months'}"></div>
+        <div class="field"><label>${t.wiz6_mode}</label><select><option>${t.wiz6_instant}</option><option>${t.wiz6_request}</option></select></div>
+        <div class="field"><label>${t.wiz6_cancel}</label><select><option>${t.cp_flex}</option><option>${t.cp_mod}</option><option>${t.cp_strict}</option></select></div>
+        <div class="field"><label>${t.wiz6_commission}</label><input type="text" value="8% (${LANG==='bn'?'অ্যাডমিন নির্ধারিত':'admin-configured'})" readonly></div>
+      </div>
+      <div class="muted" style="font-size:11.5px;margin-top:4px">${t.wiz6_strict_note}</div>`;
+  } else if(wizStep===7){
+    html = `<div style="font-weight:700;font-size:14px;margin-bottom:14px">${t.wiz7_title}</div>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:13px">
+        <div class="price-row"><span>${t.wiz_step1}</span><span class="tabular" style="font-weight:600">${wizPropType}</span></div>
+        <div class="price-row"><span>${t.wiz_step2}</span><span>Road 27, Dhanmondi, Dhaka</span></div>
+        <div class="price-row"><span>${t.wiz_step3}</span><span>5 ${LANG==='bn'?'ছবি':'photos'}</span></div>
+        <div class="price-row"><span>${t.wiz_step5}</span><span>${wizUnits.length} ${LANG==='bn'?'ইউনিট':'units'}</span></div>
+        <div class="price-row total" style="border-top:1px solid var(--border);padding-top:10px"><span>${t.wiz7_ready}</span><span class="badge badge-warn">${icon('bell','icon-sm')}${LANG==='bn'?'রিভিউ পেন্ডিং':'Pending review'}</span></div>
       </div>`;
   }
   html += `<div class="wiz-actions">
     <button class="btn btn-ghost btn-sm" id="wizAgentBtn"><i data-icon="users" data-icon-cls="icon-sm"></i>${t.wiz_agent}</button>
     <div style="display:flex;gap:9px">
       ${wizStep>1?`<button class="btn btn-outline btn-sm" id="wizBackBtn">${t.wiz_back}</button>`:''}
-      ${wizStep<5?`<button class="btn btn-primary btn-sm" id="wizNextBtn">${t.wiz_next}</button>`:`<button class="btn btn-primary btn-sm" id="wizSubmitBtn"><i data-icon="check" data-icon-cls="icon-sm"></i>${t.wiz_submit}</button>`}
+      ${wizStep<7?`<button class="btn btn-primary btn-sm" id="wizNextBtn">${t.wiz_next}</button>`:`<button class="btn btn-primary btn-sm" id="wizSubmitBtn"><i data-icon="check" data-icon-cls="icon-sm"></i>${t.wiz_submit}</button>`}
     </div>
   </div>`;
   body.innerHTML = html;
   hydrateIcons(body);
+}
+function wizUnitRowHtml(u,i,t){
+  return `<div class="card" style="padding:14px" data-unit-row="${i}">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <input type="text" value="${u.name}" data-unit-field="name" data-unit-index="${i}" style="font-weight:700;border:none;background:transparent;padding:0;width:auto;max-width:60%">
+      <button class="btn btn-ghost btn-sm" data-wiz-remove-unit="${i}"><i data-icon="trash" data-icon-cls="icon-sm"></i></button>
+    </div>
+    <div class="wiz-grid">
+      <div class="field"><label>${t.wiz5_kind}</label>
+        <select data-unit-field="kind" data-unit-index="${i}">
+          <option value="whole" ${u.kind==='whole'?'selected':''}>${t.wiz1_a}</option>
+          <option value="room" ${u.kind==='room'?'selected':''}>${LANG==='bn'?'রুম':'Room'}</option>
+          <option value="seat" ${u.kind==='seat'?'selected':''}>${LANG==='bn'?'সিট':'Seat'}</option>
+        </select>
+      </div>
+      <div class="field"><label>${t.wiz5_cap}</label><input type="number" value="${u.cap}" min="1" data-unit-field="cap" data-unit-index="${i}"></div>
+      <div class="field"><label>${t.wiz5_beds}</label><input type="number" value="${u.beds}" min="1" data-unit-field="beds" data-unit-index="${i}"></div>
+      <div class="field"><label style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" ${u.bath?'checked':''} data-unit-field="bath" data-unit-index="${i}"> ${t.wiz5_bath}</label></div>
+      <div class="field"><label>${t.wiz5_nightly}</label><input type="text" value="${u.nightly}" placeholder="৳" data-unit-field="nightly" data-unit-index="${i}"></div>
+      <div class="field"><label>${t.wiz5_monthly}</label><input type="text" value="${u.monthly}" placeholder="৳" data-unit-field="monthly" data-unit-index="${i}"></div>
+      <div class="field"><label>${t.wiz5_discount}</label><input type="text" value="${u.discount}" placeholder="%" data-unit-field="discount" data-unit-index="${i}"><div class="field-hint">${t.wiz5_discount_hint}</div></div>
+      <div class="field"><label>${t.wiz5_gender}</label>
+        <select data-unit-field="gender" data-unit-index="${i}">
+          <option value="any" ${u.gender==='any'?'selected':''}>${LANG==='bn'?'যেকোনো':'Any'}</option>
+          <option value="male" ${u.gender==='male'?'selected':''}>${LANG==='bn'?'পুরুষ':'Male'}</option>
+          <option value="female" ${u.gender==='female'?'selected':''}>${LANG==='bn'?'মহিলা':'Female'}</option>
+        </select>
+        <div class="field-hint">${t.wiz5_seats_only}</div>
+      </div>
+      <div class="field"><label style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" ${u.meals?'checked':''} data-unit-field="meals" data-unit-index="${i}"> ${t.wiz5_meals}</label><div class="field-hint">${t.wiz5_seats_only}</div></div>
+      <div class="field field-full"><label>${t.wiz5_seasonal}</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><input type="text" placeholder="${LANG==='bn'?'তারিখ পরিসীমা (যেমন: ঈদ সপ্তাহ)':'Date range (e.g. Eid week)'}" style="flex:2"><input type="text" placeholder="৳" style="flex:1"></div>
+        <div class="field-hint">${t.wiz5_seasonal_hint}</div>
+      </div>
+    </div>
+  </div>`;
 }
 function renderWizard(){ renderWizardSteps(); renderWizardBody(); }
 
@@ -772,6 +1174,96 @@ function renderReconcile(){
 }
 
 /* ---- wiring ---- */
+/* ---- owner dashboard (FR-H10) ---- */
+const odProps=[
+  {name:'Sunrise Residency — Floor 3',status:'live',resp:'96%'},
+  {name:'Green View Flat, Mohammadpur',status:'pending',resp:'—'},
+  {name:'Lakeview Mess, Dhanmondi',status:'paused',resp:'88%'},
+  {name:'Studio, Bashundhara',status:'rejected',resp:'—'},
+];
+const odEnq=[
+  {name:'Farzana Yasmin',text:{bn:'রুম বি এখনো খালি আছে কিনা জানতে চাচ্ছিলাম।',en:'Asking if Room B is still available.'},time:'10m'},
+  {name:'Abu Rayhan',text:{bn:'হোল ফ্ল্যাটের জন্য রিকোয়েস্ট টু বুক পাঠিয়েছেন।',en:'Sent a Request to Book for the whole flat.'},time:'1h'},
+  {name:'Jannatul Ferdous',text:{bn:'ইউটিলিটি খরচ সম্পর্কে জিজ্ঞাসা।',en:'Asking about utility costs.'},time:'3h'},
+];
+const odEarnings=[
+  {booking:'#CBS-B-5602',tenant:'Farzana Yasmin',total:'৳ 34,318',status:'ok'},
+  {booking:'#CBS-B-5588',tenant:'Abu Rayhan Chowdhury',total:'৳ 9,450',status:'ok'},
+  {booking:'#CBS-B-5571',tenant:'Jannatul Ferdous',status:'warn',total:'৳ 12,000'},
+];
+function renderOwnerDash(){
+  document.getElementById('odPropsTbody').innerHTML=odProps.map(p=>`
+    <tr><td style="font-weight:600">${p.name}</td><td>${statusBadge(p.status, {live:LANG==='bn'?'লাইভ':'Live',pending:LANG==='bn'?'পেন্ডিং':'Pending',paused:LANG==='bn'?'বিরতি':'Paused',rejected:LANG==='bn'?'প্রত্যাখ্যাত':'Rejected'}[p.status])}</td><td class="mono">${p.resp}</td>
+    <td class="row-actions"><button class="btn btn-sm btn-outline">${LANG==='bn'?'এডিট':'Edit'}</button><button class="btn btn-sm btn-outline">${p.status==='paused'?(LANG==='bn'?'চালু করুন':'Resume'):(LANG==='bn'?'বিরতি দিন':'Pause')}</button></td></tr>`).join('');
+  document.getElementById('odEnqList').innerHTML=odEnq.map(e=>`
+    <div class="card" style="display:flex;gap:12px;align-items:flex-start">
+      <div class="avatar" style="width:34px;height:34px;font-size:12px">${e.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
+      <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:13px">${e.name}</div><div class="muted" style="font-size:12.5px;margin-top:2px">${e.text[LANG]}</div></div>
+      <span class="muted mono" style="font-size:11px;white-space:nowrap">${e.time}</span>
+    </div>`).join('');
+  document.getElementById('odEarningsTbody').innerHTML=odEarnings.map(e=>`
+    <tr><td class="mono">${e.booking}</td><td>${e.tenant}</td><td class="tabular">${e.total}</td><td>${statusBadge(e.status, e.status==='ok'?(LANG==='bn'?'পরিশোধিত':'Paid out'):(LANG==='bn'?'বিচারাধীন':'Pending'))}</td></tr>`).join('');
+}
+function switchOdTab(tab){
+  document.querySelectorAll('[data-od-tab]').forEach(c=>c.classList.toggle('on', c.dataset.odTab===tab));
+  ['properties','enquiries','earnings','reviews','team'].forEach(t=>{
+    document.getElementById('odPanel'+t.charAt(0).toUpperCase()+t.slice(1)).hidden = t!==tab;
+  });
+}
+
+/* ---------------- role switcher (view-as) ---------------- */
+const ROLE2_PEOPLE = {
+  tenant:{name:'Farzana Yasmin',init:'FY',roleKey:'role_tenant',defaultView:'search'},
+  owner:{name:'Md. Kamal Hossain',init:'KH',roleKey:'role_owner',defaultView:'ownerdash'},
+  restaurant:{name:'Biriyani Bari',init:'BB',roleKey:'role_restaurant',defaultView:'restaurant'},
+  rider:{name:'Rahim Mia',init:'RM',roleKey:'role_rider',defaultView:'rider'},
+  admin:{name:'CBS Ops',init:'CO',roleKey:'role_admin',defaultView:'disputes'},
+};
+let currentRole2='tenant';
+function applyRole2(role){
+  currentRole2=role;
+  const p=ROLE2_PEOPLE[role];
+  document.getElementById('acctName').textContent=p.name;
+  document.getElementById('acctAvatar').textContent=p.init;
+  document.getElementById('acctRole').textContent=window.I18N[LANG][p.roleKey]||role;
+  document.querySelectorAll('.sb-link[data-view]').forEach(btn=>{
+    const allowed = !btn.dataset.roles || btn.dataset.roles.split(',').includes(role);
+    btn.style.display = allowed ? '' : 'none';
+  });
+  document.querySelectorAll('.sb-group[data-roles-group]').forEach(g=>{
+    g.style.display = g.dataset.rolesGroup.split(',').includes(role) ? '' : 'none';
+  });
+  showView(p.defaultView);
+}
+
+/* ---------------- public site <-> app transitions ---------------- */
+function enterApp(role){
+  document.getElementById('pubLoginModal').classList.remove('open');
+  document.getElementById('publicSite').hidden=true;
+  document.getElementById('appShell').hidden=false;
+  document.getElementById('roleSwitch').value=role;
+  applyRole2(role);
+}
+function exitToSite(){
+  document.getElementById('appShell').hidden=true;
+  document.getElementById('publicSite').hidden=false;
+}
+function renderPubFeatured(){
+  document.getElementById('pubFeaturedGrid').innerHTML = listings.slice(0,6).map(l=>`
+    <div class="card listing-card card-hover" style="flex-direction:column" data-pub-listing>
+      <div class="photo ${l.ph}" style="width:100%;aspect-ratio:16/10"><span class="ph-label">${icon('map','icon-sm')}${l.area.split(',')[0]}</span></div>
+      <div class="listing-body" style="margin-top:10px">
+        <div class="listing-title">${l.title}</div>
+        <div class="listing-area">${icon('map','icon-sm')}${l.area}</div>
+        <div class="listing-tags">${l.tags.slice(0,2).map(t=>`<span>${t}</span>`).join('')}</div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:6px">
+          <div class="listing-price tabular">৳ ${l.price}<small> /${l.unit==='night'?(LANG==='bn'?'রাত':'night'):(LANG==='bn'?'মাস':'month')}</small></div>
+          <span class="listing-rating">${icon('star')}${l.rating}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
 function wirePage(){
   document.querySelectorAll('.filter-bar .chip').forEach(c=>{
     c.addEventListener('click',()=>{
@@ -818,10 +1310,16 @@ function wirePage(){
     if(wp){ wizPropType=wp.dataset.wizProp; renderWizardBody(); return; }
     const wa=e.target.closest('[data-wiz-amenity]');
     if(wa){ wa.classList.toggle('on'); return; }
-    if(e.target.closest('#wizNextBtn')){ wizStep=Math.min(5,wizStep+1); renderWizard(); return; }
+    if(e.target.closest('#wizNextBtn')){ wizStep=Math.min(7,wizStep+1); renderWizard(); return; }
     if(e.target.closest('#wizBackBtn')){ wizStep=Math.max(1,wizStep-1); renderWizard(); return; }
     if(e.target.closest('#wizSubmitBtn')){ wizSubmitted=true; renderWizard(); toastMsg(LANG==='bn'?'রিভিউর জন্য জমা হয়েছে':'Submitted for review','check'); return; }
     if(e.target.closest('#wizAgentBtn')){ toastMsg(LANG==='bn'?'এজেন্ট কল শিডিউল করা হয়েছে (ডেমো)':'Agent call scheduled (demo)','users'); return; }
+    if(e.target.closest('#wizAddUnitBtn')){
+      wizUnits.push({name:(LANG==='bn'?'নতুন ইউনিট':'New unit'),kind:'room',cap:2,beds:1,bath:false,nightly:'',monthly:'',discount:'',gender:'any',meals:false});
+      renderWizardBody(); return;
+    }
+    const wru=e.target.closest('[data-wiz-remove-unit]');
+    if(wru){ wizUnits.splice(parseInt(wru.dataset.wizRemoveUnit,10),1); renderWizardBody(); return; }
 
     const cu=e.target.closest('[data-cal-unit]');
     if(cu){ calActiveUnit=cu.dataset.calUnit; renderCalendar(); return; }
@@ -829,6 +1327,21 @@ function wirePage(){
     if(cc && cc.textContent) toastMsg((LANG==='bn'?'তারিখ ':'Day ')+cc.textContent+' — '+cc.title);
   });
   document.getElementById('mapRefreshBtn').addEventListener('click', simulateMapPan);
+  document.querySelectorAll('[data-od-tab]').forEach(c=>c.addEventListener('click',()=>switchOdTab(c.dataset.odTab)));
+  document.getElementById('odPayoutBtn').addEventListener('click',()=>toastMsg(LANG==='bn'?'পেআউট রিকোয়েস্ট পাঠানো হয়েছে':'Payout requested','wallet'));
+  document.getElementById('odInviteTeamBtn').addEventListener('click',()=>toastMsg(LANG==='bn'?'টিম মেম্বার আমন্ত্রণ (প্রোটোটাইপ)':'Team invite (prototype)','users'));
+  document.addEventListener('input',e=>{
+    const f=e.target.closest('[data-unit-field]');
+    if(!f) return;
+    const i=parseInt(f.dataset.unitIndex,10), key=f.dataset.unitField;
+    wizUnits[i][key] = f.type==='checkbox' ? f.checked : f.value;
+  });
+  document.addEventListener('change',e=>{
+    const f=e.target.closest('[data-unit-field]');
+    if(!f) return;
+    const i=parseInt(f.dataset.unitIndex,10), key=f.dataset.unitField;
+    wizUnits[i][key] = f.type==='checkbox' ? f.checked : f.value;
+  });
   document.getElementById('icalImportBtn').addEventListener('click',()=>toastMsg(LANG==='bn'?'.ics ফাইল ইমপোর্ট করা হয়েছে (ডেমো)':'.ics file imported (demo)','file'));
   document.getElementById('icalExportBtn').addEventListener('click',()=>toastMsg(LANG==='bn'?'iCal লিংক কপি হয়েছে: webcal://cbsstays.com/u/A.ics':'iCal link copied: webcal://cbsstays.com/u/A.ics','file'));
   document.getElementById('acceptJobBtn').addEventListener('click',()=>{
@@ -840,17 +1353,38 @@ function wirePage(){
 
   window.onLangChange = ()=>{
     renderListings('any'); renderMap(); renderUnits(); renderRestaurants(); renderOrders(); renderMenu();
-    renderWizard(); renderCalendar(); renderDisputes(); renderReconcile();
+    renderWizard(); renderCalendar(); renderDisputes(); renderReconcile(); renderOwnerDash();
   };
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{
   hydrateIcons(document);
   renderListings('any'); renderMap(); renderUnits(); renderRestaurants(); renderOrders(); renderMenu();
-  renderWizard(); renderCalendar(); renderDisputes(); renderReconcile();
+  renderWizard(); renderCalendar(); renderDisputes(); renderReconcile(); renderOwnerDash(); renderPubFeatured();
   wirePage();
+  document.getElementById('roleSwitch').addEventListener('change',e=>applyRole2(e.target.value));
+  document.getElementById('exitToSiteBtn').addEventListener('click', exitToSite);
+  document.getElementById('pubLoginBtn').addEventListener('click',()=>document.getElementById('pubLoginModal').classList.add('open'));
+  document.getElementById('pubLoginCancelBtn').addEventListener('click',()=>document.getElementById('pubLoginModal').classList.remove('open'));
+  document.getElementById('pubSearchBtn').addEventListener('click',()=>enterApp('tenant'));
+  document.getElementById('pubHostLink').addEventListener('click',e=>{ e.preventDefault(); enterApp('owner'); });
+  document.querySelectorAll('.pub-nav button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.pub-nav button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    if(b.dataset.pubNav==='food') enterApp('tenant');
+    else if(b.dataset.pubNav==='partner') enterApp('owner');
+  }));
+  document.addEventListener('click',e=>{
+    const er=e.target.closest('[data-enter-role]');
+    if(er){ enterApp(er.dataset.enterRole); return; }
+    const pc=e.target.closest('[data-pub-cat]');
+    if(pc){ enterApp('tenant'); return; }
+    const pl=e.target.closest('[data-pub-listing]');
+    if(pl){ enterApp('tenant'); return; }
+  });
   initNav('search');
   initLang();
+  applyRole2('tenant');
 });
 </script>
 </body>

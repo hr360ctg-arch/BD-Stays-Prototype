@@ -70,13 +70,13 @@
     </a>
 
     <div class="sb-group" data-t="nav_group">Differentiators</div>
-    <button class="sb-link active" data-view="pap"><i data-icon="key"></i><span data-t="nav_pap">Pay at Property</span></button>
-    <button class="sb-link" data-view="reviews"><i data-icon="star"></i><span data-t="nav_reviews">Verified Reviews</span></button>
-    <button class="sb-link" data-view="loyalty"><i data-icon="gift"></i><span data-t="nav_loyalty">CBS Club Loyalty</span></button>
-    <button class="sb-link" data-view="matcher"><i data-icon="users"></i><span data-t="nav_matcher">Roommate Matcher</span></button>
-    <button class="sb-link" data-view="agreement"><i data-icon="file"></i><span data-t="nav_agreement">Rental Agreement</span></button>
-    <button class="sb-link" data-view="notifications"><i data-icon="bell"></i><span data-t="nav_notif">Notifications</span></button>
-    <button class="sb-link" data-view="noshow"><i data-icon="shield"></i><span data-t="nav_noshow">No-Show &amp; Suspension</span></button>
+    <button class="sb-link active" data-view="pap" data-roles="tenant"><i data-icon="key"></i><span data-t="nav_pap">Pay at Property</span></button>
+    <button class="sb-link" data-view="reviews" data-roles="tenant"><i data-icon="star"></i><span data-t="nav_reviews">Verified Reviews</span></button>
+    <button class="sb-link" data-view="loyalty" data-roles="tenant"><i data-icon="gift"></i><span data-t="nav_loyalty">CBS Club Loyalty</span></button>
+    <button class="sb-link" data-view="matcher" data-roles="tenant"><i data-icon="users"></i><span data-t="nav_matcher">Roommate Matcher</span></button>
+    <button class="sb-link" data-view="agreement" data-roles="tenant"><i data-icon="file"></i><span data-t="nav_agreement">Rental Agreement</span></button>
+    <button class="sb-link" data-view="notifications" data-roles="admin"><i data-icon="bell"></i><span data-t="nav_notif">Notifications</span></button>
+    <button class="sb-link" data-view="noshow" data-roles="admin"><i data-icon="shield"></i><span data-t="nav_noshow">No-Show &amp; Suspension</span></button>
 
     <div class="phase-switch">
       <div class="phase-switch-label" data-t="other_phases">Other phases</div>
@@ -87,8 +87,8 @@
 
     <div class="sb-foot">
       <div class="sb-acct">
-        <div class="avatar">FY</div>
-        <div><div class="sb-acct-name">Farzana Yasmin</div><div class="sb-acct-role" data-t="role_tenant">CBS Club · Level 2 Plus</div></div>
+        <div class="avatar" id="acctAvatar">FY</div>
+        <div><div class="sb-acct-name" id="acctName">Farzana Yasmin</div><div class="sb-acct-role" id="acctRole">CBS Club · Level 2 Plus</div></div>
         <a class="sb-logout" href="../index.html" title="Exit prototype"><i data-icon="back" data-icon-cls="icon-sm"></i></a>
       </div>
     </div>
@@ -99,6 +99,12 @@
       <button class="menu-btn" id="menuBtn"><i data-icon="menu" data-icon-cls="icon-sm"></i></button>
       <div class="app-topbar-title"><h1 id="viewTitle" data-t="nav_pap">Pay at Property</h1><div class="crumbs" id="viewCrumb">Phase 3 · Differentiators</div></div>
       <span class="phase-pill">Phase 3</span>
+      <div class="lang-toggle" style="margin-left:0">
+        <select id="roleSwitch" style="font-size:11.5px;font-weight:700;padding:5px 8px;border-radius:999px;border:1px solid var(--border);background:var(--surface-2);color:var(--fg)">
+          <option value="tenant" data-t="role_opt_tenant">👤 Tenant</option>
+          <option value="admin" data-t="role_opt_admin">🛡 Admin</option>
+        </select>
+      </div>
       <div class="lang-toggle" style="margin-left:0"><button class="active" data-lang="bn">বাং</button><button data-lang="en">EN</button></div>
     </div>
 
@@ -250,6 +256,7 @@ window.I18N = {
   bn:{
     nav_group:'ডিফারেনশিয়েটর', nav_pap:'পে অ্যাট প্রপার্টি', nav_reviews:'ভেরিফাইড রিভিউ', nav_loyalty:'CBS ক্লাব লয়্যালটি',
     nav_matcher:'রুমমেট ম্যাচার', nav_agreement:'রেন্টাল এগ্রিমেন্ট', other_phases:'অন্য ফেজ', role_tenant:'CBS ক্লাব · লেভেল ২ প্লাস',
+    role_opt_tenant:'👤 টেন্যান্ট', role_opt_admin:'🛡 অ্যাডমিন',
     footer_note:'CBS Stays Bangladesh · ফেজ ৩ প্রোটোটাইপ · এই পেজের সব ডেটা সিমুলেটেড', footer_hub:'← প্রোটোটাইপ হাবে ফিরে যান',
     nav_notif:'নোটিফিকেশন', nav_noshow:'নো-শো ও সাসপেনশন',
     h_notif:'নোটিফিকেশন ম্যাট্রিক্স · সেকশন ১১', h_notif_sub:'SMS (প্রাইমারি), ইমেইল, ওয়েব পুশ, হোয়াটসঅ্যাপ (ঐচ্ছিক)',
@@ -280,6 +287,7 @@ window.I18N = {
   en:{
     nav_group:'Differentiators', nav_pap:'Pay at Property', nav_reviews:'Verified Reviews', nav_loyalty:'CBS Club Loyalty',
     nav_matcher:'Roommate Matcher', nav_agreement:'Rental Agreement', other_phases:'Other phases', role_tenant:'CBS Club · Level 2 Plus',
+    role_opt_tenant:'👤 Tenant', role_opt_admin:'🛡 Admin',
     footer_note:'CBS Stays Bangladesh · Phase 3 prototype · all data on this page is simulated', footer_hub:'← Back to prototype hub',
     nav_notif:'Notifications', nav_noshow:'No-Show & Suspension',
     h_notif:'Notification matrix · Section 11', h_notif_sub:'SMS (primary), email, web push, WhatsApp (optional)',
@@ -424,6 +432,22 @@ function toggleNoshow(i){
 }
 
 /* ---- wiring ---- */
+/* ---------------- role switcher (view-as) ---------------- */
+const ROLE3_PEOPLE = {
+  tenant:{name:'Farzana Yasmin',init:'FY',roleText:{bn:'CBS ক্লাব · লেভেল ২ প্লাস',en:'CBS Club · Level 2 Plus'},defaultView:'pap'},
+  admin:{name:'CBS Ops',init:'CO',roleText:{bn:'অ্যাডমিন অপারেশনস',en:'Admin operations'},defaultView:'notifications'},
+};
+function applyRole3(role){
+  const p=ROLE3_PEOPLE[role];
+  document.getElementById('acctName').textContent=p.name;
+  document.getElementById('acctAvatar').textContent=p.init;
+  document.getElementById('acctRole').textContent=p.roleText[LANG];
+  document.querySelectorAll('.sb-link[data-view]').forEach(btn=>{
+    btn.style.display = (!btn.dataset.roles || btn.dataset.roles===role) ? '' : 'none';
+  });
+  showView(p.defaultView);
+}
+
 function wirePage(){
   document.getElementById('secureTokenBtn').addEventListener('click', secureToken);
   document.getElementById('ownerSignBtn').addEventListener('click',()=>{
@@ -445,7 +469,8 @@ function wirePage(){
     const ns=e.target.closest('[data-noshow-action]');
     if(ns){ toggleNoshow(parseInt(ns.dataset.noshowAction,10)); return; }
   });
-  window.onLangChange = ()=>{ renderReviews(); renderMatches(); renderNotifMatrix(); renderNotifFeed(); renderNoshow(); };
+  window.onLangChange = ()=>{ renderReviews(); renderMatches(); renderNotifMatrix(); renderNotifFeed(); renderNoshow(); applyRole3(document.getElementById('roleSwitch').value); };
+  document.getElementById('roleSwitch').addEventListener('change',e=>applyRole3(e.target.value));
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{
@@ -454,6 +479,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   wirePage();
   initNav('pap');
   initLang();
+  applyRole3('tenant');
 });
 </script>
 </body>
