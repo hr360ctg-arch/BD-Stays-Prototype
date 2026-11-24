@@ -1780,7 +1780,6 @@ html, body {
         <button class="pub-nav-link" data-pub-nav="standard"><span data-t="pub_nav_standard">সিবিএস স্ট্যান্ডার্ড</span></button>
         <button class="pub-nav-link" data-pub-nav="pass"><span data-t="pub_nav_pass">স্মার্ট পাস</span></button>
         <button class="pub-nav-link" data-pub-nav="calc"><span data-t="pub_nav_calc">ভাড়া ক্যালকুলেটর</span></button>
-        <button class="pub-nav-link" data-pub-nav="food"><span data-t="pub_nav_food">সিবিএস ফুড</span></button>
       </nav>
 
       <!-- Actions -->
@@ -1822,7 +1821,6 @@ html, body {
         <button class="pub-nav-link" data-pub-nav="standard" style="text-align:left;width:100%"><i data-icon="shield" data-icon-cls="icon-sm"></i> <span data-t="pub_nav_standard">সিবিএস স্ট্যান্ডার্ড</span></button>
         <button class="pub-nav-link" data-pub-nav="pass" style="text-align:left;width:100%"><i data-icon="check" data-icon-cls="icon-sm"></i> <span data-t="pub_nav_pass">স্মার্ট পাস</span></button>
         <button class="pub-nav-link" data-pub-nav="calc" style="text-align:left;width:100%"><i data-icon="wallet" data-icon-cls="icon-sm"></i> <span data-t="pub_nav_calc">ভাড়া ক্যালকুলেটর</span></button>
-        <button class="pub-nav-link" data-pub-nav="food" style="text-align:left;width:100%"><i data-icon="food" data-icon-cls="icon-sm"></i> <span data-t="pub_nav_food">সিবিএস ফুড</span></button>
       </div>
 
       <div style="margin-top:auto;padding-top:16px;border-top:1px solid #e2e8f0;display:flex;flex-direction:column;gap:10px">
@@ -2227,26 +2225,6 @@ html, body {
     </div>
   </section>
 
-  <!-- CBS Cloud Kitchen Showcase -->
-  <section class="pub-section" id="pubFoodSection">
-    <div class="pub-food-banner">
-      <div>
-        <div style="display:inline-flex;align-items:center;gap:6px;background:#fef3c7;color:#92400e;padding:4px 10px;border-radius:999px;font-size:11.5px;font-weight:700;margin-bottom:12px">
-          <i data-icon="food" data-icon-cls="icon-sm"></i> CBS Cloud Kitchen Network
-        </div>
-        <h3 data-t="pub_food_title">মেসে ও ফ্ল্যাটে স্বাস্থ্যসম্মত পুষ্টিকর ৩ বেলার খাবার</h3>
-        <p data-t="pub_food_sub">শিক্ষার্থী, ব্যাচেলর ও ব্যস্ত চাকুরিজীবীদের জন্য স্পেশাল হোম-কুকড মিল প্ল্যান। ঢাকা ও চট্টগ্রামের প্রধান এলাকাগুলোতে ৩৫ মিনিটের মধ্যে উষ্ণ খাবার ডেলিভারি।</p>
-        <button class="btn btn-primary" id="pubFoodBannerBtn">
-          <i data-icon="food" data-icon-cls="icon-sm"></i>
-          <span data-t="pub_food_btn2">আজকের খাবার মেনু দেখুন</span>
-        </button>
-      </div>
-
-      <div class="pub-food-img-card">
-        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" alt="Fresh Healthy Bengali Meals" />
-      </div>
-    </div>
-  </section>
 
   <!-- Verified Testimonials -->
   <section class="pub-section" style="background:#ffffff;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0">
@@ -2454,22 +2432,6 @@ html, body {
           </div>
         </button>
 
-        <button class="btn btn-outline" style="justify-content:flex-start;padding:12px 16px" data-enter-role="restaurant">
-          <i data-icon="food"></i>
-          <div style="text-align:left;margin-left:8px">
-            <div style="font-weight:700" data-t="pl_rest_t">রেস্টুরেন্ট কিচেন পোর্টাল</div>
-            <div style="font-size:11px;color:#64748b" data-t="pl_rest_p">লাইভ খাবার অর্ডার ও মেনু ম্যানেজার</div>
-          </div>
-        </button>
-
-        <button class="btn btn-outline" style="justify-content:flex-start;padding:12px 16px" data-enter-role="rider">
-          <i data-icon="bike"></i>
-          <div style="text-align:left;margin-left:8px">
-            <div style="font-weight:700" data-t="pl_rider_t">ডেলিভারি রাইডার অ্যাপ</div>
-            <div style="font-size:11px;color:#64748b" data-t="pl_rider_p">অর্ডার পিকআপ, ড্রপ ও ডেলিভারি কমিশন</div>
-          </div>
-        </button>
-
         <button class="btn btn-outline" style="justify-content:flex-start;padding:12px 16px" data-enter-role="admin">
           <i data-icon="shield"></i>
           <div style="text-align:left;margin-left:8px">
@@ -2497,13 +2459,6 @@ html, body {
     <button class="sb-link" data-view="detail" data-roles="tenant"><i data-icon="layers"></i><span data-t="nav_detail">Property Detail</span></button>
     <button class="sb-link" data-view="booking" data-roles="tenant"><i data-icon="wallet"></i><span data-t="nav_booking">Booking &amp; Payment</span></button>
     <button class="sb-link" data-view="mybookings" data-roles="tenant"><i data-icon="calendar"></i><span data-t="nav_mybookings">My Bookings</span></button>
-
-    <div class="sb-group" data-t="nav_food" data-roles-group="tenant,restaurant,rider">Food ordering</div>
-    <button class="sb-link" data-view="food" data-roles="tenant"><i data-icon="food"></i><span data-t="nav_food_disc">Discovery</span></button>
-    <button class="sb-link" data-view="restaurant" data-roles="restaurant"><i data-icon="building"></i><span data-t="nav_rest_dash">Restaurant Dashboard</span></button>
-    <button class="sb-link" data-view="restonboard" data-roles="restaurant"><i data-icon="file"></i><span data-t="nav_rest_onboard">Restaurant Onboarding</span></button>
-    <button class="sb-link" data-view="rider" data-roles="rider"><i data-icon="bike"></i><span data-t="nav_rider">Rider App</span></button>
-    <button class="sb-link" data-view="rideronboard" data-roles="rider"><i data-icon="file"></i><span data-t="nav_rider_onboard">Rider Onboarding</span></button>
 
     <div class="sb-group" data-t="nav_trust_loyalty" data-roles-group="tenant">Trust &amp; loyalty</div>
     <button class="sb-link" data-view="pap" data-roles="tenant"><i data-icon="key"></i><span data-t="nav_pap">Pay at Property</span></button>
@@ -2534,8 +2489,6 @@ html, body {
     <button class="sb-link" data-view="reconcile" data-roles="admin"><i data-icon="wallet"></i><span data-t="nav_reconcile">Payment Reconciliation</span></button>
     <button class="sb-link" data-view="notifications" data-roles="admin"><i data-icon="bell"></i><span data-t="nav_notif">Notifications</span></button>
     <button class="sb-link" data-view="noshow" data-roles="admin"><i data-icon="shield"></i><span data-t="nav_noshow">No-Show &amp; Suspension</span></button>
-    <button class="sb-link" data-view="delivery" data-roles="admin"><i data-icon="map"></i><span data-t="nav_delivery">Delivery Zones &amp; Fees</span></button>
-    <button class="sb-link" data-view="dispatch" data-roles="admin"><i data-icon="clock"></i><span data-t="nav_dispatch">Dispatch Board</span></button>
 
     <div class="sb-group" data-t="nav_growth" data-roles-group="admin">Growth &amp; scale</div>
     <button class="sb-link" data-view="seo" data-roles="admin"><i data-icon="search"></i><span data-t="nav_seo">SEO Landing Pages</span></button>
@@ -2565,8 +2518,6 @@ html, body {
         <select id="roleSwitch" style="font-size:11.5px;font-weight:700;padding:5px 8px;border-radius:999px;border:1px solid var(--border);background:var(--surface-2);color:var(--fg)">
           <option value="tenant" data-t="role_opt_tenant">👤 Tenant / Guest</option>
           <option value="owner" data-t="role_opt_owner">🏠 Owner</option>
-          <option value="restaurant" data-t="role_opt_restaurant">🍴 Restaurant</option>
-          <option value="rider" data-t="role_opt_rider">🏍 Rider</option>
           <option value="admin" data-t="role_opt_admin">🛡 Admin</option>
         </select>
       </div>
@@ -2768,157 +2719,6 @@ html, body {
         <div style="display:flex;flex-direction:column;gap:14px" id="mbList"></div>
       </section>
 
-      <!-- ===== FOOD DISCOVERY ===== -->
-      <section class="view-section" id="view-food">
-        <div class="filter-bar">
-          <span class="chip on"><i data-icon="food"></i><span data-t="f_all">All cuisines</span></span>
-          <span class="chip"><i data-icon="check"></i><span data-t="f_halal">Halal</span></span>
-          <span class="chip"><i data-icon="rocket"></i><span data-t="f_fast">Under 30 min</span></span>
-          <span class="chip"><i data-icon="tag"></i><span data-t="f_offer">Offers</span></span>
-        </div>
-        <div class="grid cards-3" id="restList"></div>
-      </section>
-
-      <!-- ===== RESTAURANT DASHBOARD ===== -->
-      <section class="view-section" id="view-restaurant">
-        <div class="grid cards-4" style="margin-bottom:18px">
-          <div class="card"><div class="stat-label"><i data-icon="food" data-icon-cls="icon-sm"></i><span data-t="rest_stat_orders">Today's Orders</span></div><div class="stat-value tabular" id="restOrdersCount">18</div><div class="stat-sub up"><i data-icon="check" data-icon-cls="icon-sm"></i>+3 new hour</div></div>
-          <div class="card"><div class="stat-label"><i data-icon="wallet" data-icon-cls="icon-sm"></i><span data-t="rest_stat_rev">Today's Sales</span></div><div class="stat-value tabular" id="restSalesVal">৳ 7,850</div><div class="stat-sub up">bKash Settlement</div></div>
-          <div class="card"><div class="stat-label"><i data-icon="clock" data-icon-cls="icon-sm"></i><span data-t="rest_stat_prep">Avg Prep Time</span></div><div class="stat-value tabular">14 min</div><div class="stat-sub muted">Target &lt; 20 min</div></div>
-          <div class="card" id="restKitchenCard" style="cursor:pointer" title="Click to toggle"><div class="stat-label"><i data-icon="check" data-icon-cls="icon-sm" style="color:var(--ok)"></i><span data-t="rest_stat_status">Kitchen Status</span></div><div class="stat-value" id="restKitchenVal" style="font-size:18px;color:var(--ok)" data-t="rest_open">Open</div><div class="stat-sub muted" id="restKitchenSub" data-t="rest_open_sub">Accepting orders — click to pause</div></div>
-        </div>
-
-        <div class="filter-bar" id="restTabs">
-          <span class="chip on" data-rest-tab="orders"><i data-icon="food"></i><span data-t="rt_orders">Orders</span></span>
-          <span class="chip" data-rest-tab="hours"><i data-icon="clock"></i><span data-t="rt_hours">Opening Hours</span></span>
-          <span class="chip" data-rest-tab="earnings"><i data-icon="wallet"></i><span data-t="rt_earnings">Earnings &amp; Payouts</span></span>
-          <span class="chip" data-rest-tab="promo"><i data-icon="tag"></i><span data-t="rt_promo">Promotions</span></span>
-        </div>
-
-        <div id="restPanelOrders">
-          <div class="section-title"><h2 data-t="h_orders">Incoming orders</h2><span class="count" data-t="h_orders_sub">Accept within 2 minutes or the order auto-reassigns</span></div>
-          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px" id="orderQueue"></div>
-
-          <div class="section-title"><h2 data-t="h_active_orders">In Kitchen Preparation</h2><span class="count" data-t="h_active_sub">Mark ready to summon delivery rider</span></div>
-          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px" id="activePrepQueue"></div>
-
-          <div class="section-title"><h2 data-t="h_menu">Menu status</h2></div>
-          <div class="card">
-            <div id="menuRows"></div>
-          </div>
-        </div>
-
-        <div id="restPanelHours" hidden>
-          <div class="section-title"><h2 data-t="h_rest_hours">Opening hours</h2><span class="count" data-t="h_rest_hours_sub">Set per-day open/close times — closed days stop new orders automatically</span></div>
-          <div class="card" style="max-width:680px">
-            <div id="restHoursRows"></div>
-          </div>
-        </div>
-
-        <div id="restPanelEarnings" hidden>
-          <div class="section-title"><h2 data-t="h_rest_earn">Earnings &amp; payouts</h2><span class="count" data-t="h_rest_earn_sub">Daily settlement to your bKash merchant account</span></div>
-          <div class="grid cards-3" style="margin-bottom:20px">
-            <div class="card"><div class="stat-label" data-t="re_week">This week</div><div class="stat-value tabular">৳ 52,400</div><div class="stat-sub muted" data-t="re_week_sub">184 orders</div></div>
-            <div class="card"><div class="stat-label" data-t="re_commission">Platform commission</div><div class="stat-value tabular">12%</div><div class="stat-sub muted" data-t="re_commission_sub">Deducted before payout</div></div>
-            <div class="card"><div class="stat-label" data-t="re_next">Next payout</div><div class="stat-value tabular">৳ 8,120</div><div class="stat-sub muted" data-t="re_next_sub">Tomorrow, 6:00 AM</div></div>
-          </div>
-          <div class="card">
-            <table>
-              <thead><tr><th data-t="col_date">Date</th><th data-t="re_orders">Orders</th><th data-t="re_gross">Gross sales</th><th data-t="re_fee">Commission</th><th data-t="re_net">Net payout</th><th data-t="col_status">Status</th></tr></thead>
-              <tbody id="restEarnRows"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div id="restPanelPromo" hidden>
-          <div class="section-title"><h2 data-t="h_rest_promo">Promotions</h2><span class="count" data-t="h_rest_promo_sub">Discounts, combos and free-delivery thresholds</span></div>
-          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px" id="restPromoRows"></div>
-          <div class="section-title"><h2 data-t="promo_add">Create a new promotion</h2></div>
-          <div class="card" style="max-width:680px">
-            <div class="form-grid">
-              <div class="field"><label data-t="promo_f_type">Promotion type</label>
-                <select id="promoType">
-                  <option value="discount" data-t="promo_t_discount">Percentage discount</option>
-                  <option value="combo" data-t="promo_t_combo">Combo deal</option>
-                  <option value="freedelivery" data-t="promo_t_free">Free delivery threshold</option>
-                  <option value="ramadan" data-t="promo_t_ramadan">Ramadan Iftar schedule</option>
-                </select>
-              </div>
-              <div class="field"><label data-t="promo_f_value">Value</label><input type="text" id="promoValue" placeholder="e.g. 15% or ৳500"></div>
-            </div>
-            <button class="btn btn-primary" id="promoSaveBtn" style="margin-top:14px" data-t="promo_save">Launch promotion</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- ===== RESTAURANT ONBOARDING ===== -->
-      <section class="view-section" id="view-restonboard">
-        <div class="section-title"><h2 data-t="h_rest_onboard">Restaurant onboarding</h2><span class="count" data-t="h_rest_onboard_sub">Submitted outlets are reviewed before going live</span></div>
-        <div class="card" style="max-width:720px">
-          <div class="form-grid">
-            <div class="field"><label data-t="ro_f_name">Restaurant name</label><input type="text" placeholder="e.g. Khana Express"></div>
-            <div class="field"><label data-t="ro_f_owner">Owner's full name</label><input type="text" placeholder="e.g. Shahidul Islam"></div>
-            <div class="field"><label data-t="ro_f_nid">NID number</label><input type="text" placeholder="10-17 digit NID"></div>
-            <div class="field"><label data-t="ro_f_trade">Trade licence number</label><input type="text" placeholder="e.g. TRAD/DNCC/123456"></div>
-            <div class="field"><label data-t="ro_f_payout">Payout account (bKash merchant)</label><input type="text" placeholder="01XXXXXXXXX"></div>
-            <div class="field"><label data-t="ro_f_radius">Delivery radius (km)</label><input type="number" value="3"></div>
-          </div>
-          <div class="field" style="margin-top:14px"><label data-t="ro_f_location">Outlet location / map pin</label><input type="text" placeholder="e.g. House 12, Road 6, Mirpur 10"></div>
-          <div class="field" style="margin-top:14px"><label data-t="ro_f_cuisine">Cuisine type</label><input type="text" placeholder="e.g. Bengali, Fast food, Biryani"></div>
-          <button class="btn btn-primary" id="restOnboardSubmitBtn" style="margin-top:16px" data-t="ro_submit">Submit for approval</button>
-        </div>
-      </section>
-
-      <!-- ===== RIDER APP ===== -->
-      <section class="view-section" id="view-rider">
-        <div class="grid cards-3" style="margin-bottom:22px">
-          <div class="card"><div class="stat-label"><i data-icon="wallet" data-icon-cls="icon-sm"></i><span data-t="r_earn">Today's earnings</span></div><div class="stat-value tabular" id="riderEarnVal">৳ 1,240</div><div class="stat-sub muted" id="riderDeliveriesSub" data-t="r_earn_sub">11 deliveries</div></div>
-          <div class="card" id="riderStatusCard" style="cursor:pointer" title="Click to toggle status"><div class="stat-label"><i data-icon="bike" data-icon-cls="icon-sm"></i><span data-t="r_status">Status (Click to toggle)</span></div><div class="stat-value" id="riderStatusVal" style="font-size:18px;color:var(--ok)" data-t="r_online">Online</div><div class="stat-sub muted" id="riderStatusSub" data-t="r_status_sub">Accepting new jobs</div></div>
-          <div class="card"><div class="stat-label"><i data-icon="star" data-icon-cls="icon-sm"></i><span data-t="r_rating">Rider rating</span></div><div class="stat-value tabular">4.9</div><div class="stat-sub muted" data-t="r_rating_sub">182 deliveries total</div></div>
-        </div>
-
-        <div class="section-title"><h2 id="riderJobHeading" data-t="h_job">Active Delivery Mission</h2></div>
-        <div id="riderJobContainer"></div>
-
-        <div class="section-title"><h2 data-t="h_rider_earn">Earnings breakdown</h2><span class="count" data-t="h_rider_earn_sub">Base fee by distance, tips, bonuses &amp; cash-on-delivery settlement</span></div>
-        <div class="grid cards-4" style="margin-bottom:20px">
-          <div class="card"><div class="stat-label" data-t="rb_base">Base fees</div><div class="stat-value tabular">৳ 880</div><div class="stat-sub muted" data-t="rb_base_sub">11 trips</div></div>
-          <div class="card"><div class="stat-label" data-t="rb_tips">Tips</div><div class="stat-value tabular">৳ 180</div></div>
-          <div class="card"><div class="stat-label" data-t="rb_bonus">Bonuses</div><div class="stat-value tabular">৳ 180</div><div class="stat-sub muted" data-t="rb_bonus_sub">Peak-hour incentive</div></div>
-          <div class="card"><div class="stat-label" data-t="rb_cod">Cash-on-delivery held</div><div class="stat-value tabular">৳ 640</div><div class="stat-sub muted" data-t="rb_cod_sub">Settle at end of shift</div></div>
-        </div>
-        <div class="card">
-          <table>
-            <thead><tr><th data-t="col_date">Date</th><th data-t="rb_trips">Trips</th><th data-t="rb_distance">Distance</th><th data-t="re_gross">Gross earnings</th><th data-t="col_status">Payout status</th></tr></thead>
-            <tbody id="riderPayoutRows"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- ===== RIDER ONBOARDING ===== -->
-      <section class="view-section" id="view-rideronboard">
-        <div class="section-title"><h2 data-t="h_rider_onboard">Rider onboarding</h2><span class="count" data-t="h_rider_onboard_sub">Complete the training checklist before accepting live orders</span></div>
-        <div class="card" style="max-width:720px;margin-bottom:20px">
-          <div class="form-grid">
-            <div class="field"><label data-t="rio_f_name">Full name</label><input type="text" placeholder="e.g. Jahangir Alam"></div>
-            <div class="field"><label data-t="rio_f_nid">NID number</label><input type="text" placeholder="10-17 digit NID"></div>
-            <div class="field"><label data-t="rio_f_licence">Driving licence number</label><input type="text" placeholder="e.g. DHK-0123456"></div>
-            <div class="field"><label data-t="rio_f_vehicle">Vehicle type</label>
-              <select>
-                <option data-t="rio_v_bike">Motorcycle</option>
-                <option data-t="rio_v_cycle">Bicycle</option>
-                <option data-t="rio_v_walk">On foot</option>
-              </select>
-            </div>
-            <div class="field"><label data-t="rio_f_vehnum">Vehicle registration number</label><input type="text" placeholder="e.g. Dhaka Metro-GA-12-3456"></div>
-            <div class="field"><label data-t="rio_f_emergency">Emergency contact number</label><input type="text" placeholder="01XXXXXXXXX"></div>
-          </div>
-          <div class="field" style="margin-top:14px"><label data-t="rio_f_photo">Profile photo</label><input type="text" placeholder="upload-photo.jpg" disabled></div>
-        </div>
-        <div class="section-title"><h2 data-t="rio_checklist">Training checklist</h2></div>
-        <div class="card" style="max-width:720px;margin-bottom:16px" id="riderTrainingList"></div>
-        <button class="btn btn-primary" id="riderOnboardSubmitBtn" data-t="rio_submit">Submit for approval</button>
-      </section>
 
       <!-- ===== OWNER DASHBOARD (FR-H10, H11, H12, H13) ===== -->
       <section class="view-section" id="view-ownerdash">
@@ -3364,37 +3164,6 @@ html, body {
         </div>
       </section>
 
-      <!-- ===== ADMIN: DELIVERY ZONES & FEES ===== -->
-      <section class="view-section" id="view-delivery">
-        <div class="section-title"><h2 data-t="h_delivery">Delivery zones &amp; fees</h2><span class="count" data-t="h_delivery_sub">Base fee, per-km rate, minimum order, surge rules</span></div>
-        <div class="card">
-          <table>
-            <thead><tr><th data-t="col_zone">Zone</th><th data-t="col_basefee">Base fee</th><th data-t="col_perkm">Per km</th><th data-t="col_minorder">Min. order</th><th data-t="col_surge">Surge window</th><th></th></tr></thead>
-            <tbody id="deliveryZoneRows"></tbody>
-          </table>
-        </div>
-        <div class="section-title"><h2 data-t="dz_add">Add new zone</h2></div>
-        <div class="card" style="max-width:680px">
-          <div class="form-grid">
-            <div class="field"><label data-t="dz_f_name">Zone name</label><input type="text" placeholder="e.g. Mirpur 10 - 2km radius"></div>
-            <div class="field"><label data-t="dz_f_base">Base fee (৳)</label><input type="number" value="25"></div>
-            <div class="field"><label data-t="dz_f_perkm">Per km (৳)</label><input type="number" value="8"></div>
-            <div class="field"><label data-t="dz_f_min">Minimum order (৳)</label><input type="number" value="150"></div>
-          </div>
-          <button class="btn btn-primary" id="dzSaveBtn" data-t="dz_save" style="margin-top:14px">Save zone</button>
-        </div>
-      </section>
-
-      <!-- ===== ADMIN: DISPATCH BOARD ===== -->
-      <section class="view-section" id="view-dispatch">
-        <div class="section-title"><h2 data-t="h_dispatch">Dispatch board</h2><span class="count" data-t="h_dispatch_sub">Assign or reassign riders to open orders</span></div>
-        <div class="card">
-          <table>
-            <thead><tr><th data-t="col_order">Order</th><th data-t="col_restaurant">Restaurant</th><th data-t="col_dest">Destination</th><th data-t="col_rider">Rider</th><th data-t="col_status">Status</th><th></th></tr></thead>
-            <tbody id="dispatchRows"></tbody>
-          </table>
-        </div>
-      </section>
 
       <!-- ===== SEO ===== -->
       <section class="view-section" id="view-seo">
@@ -4739,210 +4508,6 @@ function renderPdReviews(){
     </div>`).join('');
 }
 
-/* ---- food ---- */
-const restaurants=[
-  {ph:'ph-food1',name:'Biriyani Bari',cuisine:'Kacchi Biriyani · Borhani · Polao',time:'25–35 min',rating:'4.8',tag:'Halal · Best Seller'},
-  {ph:'ph-food2',name:'Grameen Khana',cuisine:'Home-style Bengali · Fish Curry · Vorta',time:'20–30 min',rating:'4.7',tag:'Fresh Home Cooked'},
-  {ph:'ph-food3',name:'Tehari Express',cuisine:'Old Dhaka Beef Tehari · Snacks',time:'15–25 min',rating:'4.6',tag:'Fast 20m Delivery'},
-];
-function renderRestaurants(){
-  document.getElementById('restList').innerHTML = restaurants.map(r=>`
-    <div class="card rest-card card-hover">
-      <div class="photo ${r.ph}"><span class="ph-label">${icon('food','icon-sm')}${r.tag}</span></div>
-      <div style="font-weight:700;font-size:13.5px">${r.name}</div>
-      <div class="muted" style="font-size:12px">${r.cuisine}</div>
-      <div class="rest-meta"><span>${icon('check','icon-sm')}${r.rating}</span><span>${icon('rocket','icon-sm')}${r.time}</span></div>
-    </div>`).join('');
-}
-
-/* ---- restaurant order queue ---- */
-let orders=[
-  {id:'#CBS-10481',items:'1× Kacchi Biriyani (Large), 1× Borhani',total:'৳ 420',t:60},
-  {id:'#CBS-10480',items:'2× Morog Polao, 1× Firni',total:'৳ 560',t:95},
-];
-let activePrepOrders=[
-  {id:'#CBS-10479',items:'1× Kacchi Biriyani (Regular), 1× Borhani',total:'৳ 320',t:8,status:'cooking'}
-];
-function renderOrders(){
-  document.getElementById('orderQueue').innerHTML = orders.map((o,i)=>`
-    <div class="card order-card">
-      <div class="order-timer">${Math.floor(o.t/60)}:${String(o.t%60).padStart(2,'0')}</div>
-      <div style="flex:1;min-width:0">
-        <div style="display:flex;justify-content:space-between;gap:8px"><span style="font-weight:700;font-size:13.5px">${o.id}</span><span class="tabular" style="font-weight:700">${o.total}</span></div>
-        <div class="order-items">${o.items}</div>
-        <div style="display:flex;gap:8px;margin-top:10px">
-          <button class="btn btn-ok btn-sm" data-order-action="accept" data-index="${i}">${icon('check','icon-sm')}${LANG==='bn'?'গ্রহণ করুন (রান্না শুরু)':'Accept & Cook'}</button>
-          <button class="btn btn-danger-outline btn-sm" data-order-action="reject" data-index="${i}">${LANG==='bn'?'প্রত্যাখ্যান':'Reject'}</button>
-        </div>
-      </div>
-    </div>`).join('') || `<div class="empty">${icon('food','icon-lg')}<span>${LANG==='bn'?'কোনো নতুন অর্ডার নেই':'No new incoming orders'}</span></div>`;
-
-  const prepQueue = document.getElementById('activePrepQueue');
-  if(prepQueue){
-    prepQueue.innerHTML = activePrepOrders.map((o,i)=>`
-      <div class="card order-card" style="border-left:4px solid var(--ok);background:var(--surface)">
-        <div class="order-timer" style="background:var(--ok-soft);color:var(--ok)">${o.t}m</div>
-        <div style="flex:1;min-width:0">
-          <div style="display:flex;justify-content:space-between;gap:8px"><span style="font-weight:700;font-size:13.5px">${o.id} · <span class="badge badge-ok">${LANG==='bn'?'রান্না চলছে':'In Kitchen'}</span></span><span class="tabular" style="font-weight:700">${o.total}</span></div>
-          <div class="order-items">${o.items}</div>
-          <div style="display:flex;gap:8px;margin-top:10px">
-            <button class="btn btn-primary btn-sm" data-prep-ready="${i}"><i data-icon="bike" data-icon-cls="icon-sm"></i>${LANG==='bn'?'রান্না সম্পন্ন — রাইডারকে ডাকুন':'Mark Ready for Rider Pickup'}</button>
-          </div>
-        </div>
-      </div>`).join('') || `<div class="empty" style="padding:16px">${icon('check','icon-sm')}<span>${LANG==='bn'?'রান্নাঘরে কোনো পেন্ডিং অর্ডার নেই':'No orders currently in preparation'}</span></div>`;
-  }
-}
-function decideOrder(i, action){
-  const o = orders[i];
-  orders.splice(i,1);
-  if(action==='accept'){
-    activePrepOrders.push({id:o.id, items:o.items, total:o.total, t:12, status:'cooking'});
-    const cnt = document.getElementById('restOrdersCount');
-    if(cnt) cnt.textContent = String(parseInt(cnt.textContent||'18',10) + 1);
-    toastMsg((LANG==='bn'?'অর্ডার রান্না শুরু হয়েছে: ':'Cooking started for ')+o.id, 'check');
-  } else {
-    toastMsg((LANG==='bn'?'অর্ডার প্রত্যাখ্যাত: ':'Order rejected: ')+o.id, 'shield');
-  }
-  renderOrders();
-}
-function markPrepReady(i){
-  const o = activePrepOrders[i];
-  activePrepOrders.splice(i,1);
-  renderOrders();
-  toastMsg((LANG==='bn'?'অর্ডার প্যাকড ও রেডি! রাইডার রহিম মিয়াকে কল করা হয়েছে — ':'Order ready! Rider Rahim Mia notified for ')+o.id, 'bike');
-}
-const menuItems=[
-  {name:'Kacchi Biriyani (Large)',price:'৳ 380',on:true},
-  {name:'Morog Polao',price:'৳ 280',on:true},
-  {name:'Beef Tehari',price:'৳ 250',on:false},
-  {name:'Borhani',price:'৳ 40',on:true},
-];
-function renderMenu(){
-  document.getElementById('menuRows').innerHTML = menuItems.map((m,i)=>`
-    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)">
-      <div style="flex:1"><div style="font-weight:600;font-size:13px">${m.name}</div><div class="muted tabular" style="font-size:11.5px">${m.price}</div></div>
-      <span class="badge ${m.on?'badge-ok':'badge-muted'}">${m.on?(LANG==='bn'?'অ্যাভেইলেবল':'Available'):(LANG==='bn'?'স্টক শেষ':'Out of stock')}</span>
-      <div class="toggle ${m.on?'on':''}" data-menu-toggle="${i}"></div>
-    </div>`).join('');
-}
-
-/* ---- rider mission lifecycle ---- */
-let riderJobState = 'offer'; // 'offer' | 'to_pickup' | 'at_pickup' | 'delivering' | 'completed'
-let riderOnline = true;
-let riderTodayEarnings = 1240;
-let riderDeliveriesCount = 11;
-
-function renderRiderJob(){
-  const container = document.getElementById('riderJobContainer');
-  const heading = document.getElementById('riderJobHeading');
-  const earnEl = document.getElementById('riderEarnVal');
-  const delivEl = document.getElementById('riderDeliveriesSub');
-  const statVal = document.getElementById('riderStatusVal');
-  const statSub = document.getElementById('riderStatusSub');
-
-  if(earnEl) earnEl.textContent = '৳ ' + riderTodayEarnings.toLocaleString();
-  if(delivEl) delivEl.textContent = riderDeliveriesCount + (LANG==='bn'?'টি ডেলিভারি সম্পন্ন':' deliveries');
-  if(statVal){
-    statVal.textContent = riderOnline ? (LANG==='bn'?'অনলাইন':'Online') : (LANG==='bn'?'অফলাইন':'Offline');
-    statVal.style.color = riderOnline ? 'var(--ok)' : 'var(--warn)';
-  }
-  if(statSub){
-    statSub.textContent = riderOnline ? (LANG==='bn'?'নতুন জব গ্রহণ করছে':'Accepting new jobs') : (LANG==='bn'?'বিরতিতে আছেন':'On break');
-  }
-
-  if(!container) return;
-
-  if(!riderOnline){
-    if(heading) heading.textContent = LANG==='bn' ? 'রাইডার স্ট্যাটাস' : 'Rider Status';
-    container.innerHTML = `<div class="card" style="text-align:center;padding:28px">
-      <div style="font-size:32px;margin-bottom:8px">⏸️</div>
-      <div style="font-weight:700;font-size:14px">${LANG==='bn' ? 'আপনি বর্তমানে অফলাইনে আছেন' : 'You are currently offline'}</div>
-      <div class="muted" style="font-size:12.5px;margin:6px 0 16px">${LANG==='bn' ? 'নতুন ডেলিভারি জব পেতে অনলাইন স্ট্যাটাস চালু করুন।' : 'Switch status to online to start receiving delivery jobs.'}</div>
-      <button class="btn btn-primary btn-sm" id="riderGoOnlineBtn">${LANG==='bn' ? 'অনলাইন হোন' : 'Go Online'}</button>
-    </div>`;
-    return;
-  }
-
-  if(riderJobState === 'offer'){
-    if(heading) heading.textContent = LANG==='bn' ? 'নতুন ডেলিভারি অফার' : 'New Job Offer';
-    container.innerHTML = `
-      <div class="job-card">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <span class="badge badge-brand"><i data-icon="food" data-icon-cls="icon-sm"></i>Order #CBS-10482</span>
-          <span class="badge badge-warn tabular" id="jobTimer">00:42</span>
-        </div>
-        <div class="job-route">
-          <div class="pt"><span class="d"></span><div class="lbl">Biriyani Bari, Dhanmondi (1.2 km)</div></div>
-          <div class="ln"></div>
-          <div class="pt end"><span class="d"></span><div class="lbl">Sunrise Residency, Rd 27, Flat 3B</div></div>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--fg-muted);margin-bottom:14px">
-          <span>2.1 km · ~9 min</span>
-          <span class="tabular" style="font-weight:700;color:var(--fg)">${LANG==='bn'?'ডেলিভারি ফি: ৳ ৫৫ + টিপ ৳ ২০':'Delivery fee: ৳ 55 + Tip ৳ 20'}</span>
-        </div>
-        <div style="display:flex;gap:9px">
-          <button class="btn btn-outline btn-block" id="rejectJobBtn">${LANG==='bn'?'প্রত্যাখ্যান':'Decline'}</button>
-          <button class="btn btn-primary btn-block" id="acceptJobBtn">${LANG==='bn'?'জব গ্রহণ করুন':'Accept Job'}</button>
-        </div>
-      </div>`;
-  } else if(riderJobState === 'to_pickup'){
-    if(heading) heading.textContent = LANG==='bn' ? 'ধাপ ১: রেস্টুরেন্টে যাত্রা' : 'Step 1: En Route to Restaurant';
-    container.innerHTML = `
-      <div class="job-card" style="border-color:var(--brand)">
-        <div class="rider-stage-step active">
-          <i data-icon="bike" data-icon-cls="icon-sm"></i>
-          <div style="flex:1"><b>${LANG==='bn'?'বিরিয়ানি বাড়ি, ধানমন্ডির দিকে যাচ্ছেন':'Heading to Biriyani Bari, Dhanmondi'}</b><div class="muted" style="font-size:11.5px">১.২ কিমি · ৪ মিনিট বাকি · অর্ডার #CBS-10482</div></div>
-          <span class="badge badge-ok badge-pulsing">${LANG==='bn'?'চলমান':'Live GPS'}</span>
-        </div>
-        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
-          <button class="btn btn-outline btn-sm" id="riderCallRestBtn"><i data-icon="phone" data-icon-cls="icon-sm"></i>${LANG==='bn'?'রেস্টুরেন্টে কল দিন':'Call Restaurant'}</button>
-          <button class="btn btn-primary btn-sm" id="riderArrivedRestBtn"><i data-icon="check" data-icon-cls="icon-sm"></i>${LANG==='bn'?'রেস্টুরেন্টে পৌঁছেছি':'Arrived at Restaurant'}</button>
-        </div>
-      </div>`;
-  } else if(riderJobState === 'at_pickup'){
-    if(heading) heading.textContent = LANG==='bn' ? 'ধাপ ২: খাবার সংগ্রহ করুন' : 'Step 2: Collect Food Package';
-    container.innerHTML = `
-      <div class="job-card" style="border-color:var(--warn)">
-        <div class="rider-stage-step active" style="background:var(--warn-soft);border-color:var(--warn);color:var(--warn)">
-          <i data-icon="food" data-icon-cls="icon-sm"></i>
-          <div style="flex:1"><b>${LANG==='bn'?'রেস্টুরেন্ট কাউন্টার থেকে খাবার নিন':'Collect from Kitchen Counter'}</b><div class="muted" style="font-size:11.5px">আইটেম: ১× কাচ্চি বিরিয়ানি (লার্জ), ১× বোরহানি</div></div>
-          <span class="badge badge-warn">${LANG==='bn'?'প্যাকড রেডি':'Ready'}</span>
-        </div>
-        <div style="margin-top:14px">
-          <button class="btn btn-primary btn-block" id="riderPickedUpBtn"><i data-icon="check" data-icon-cls="icon-sm"></i>${LANG==='bn'?'খাবার সংগ্রহ নিশ্চিত করুন (ডেলিভারিতে রওনা)':'Confirm Pickup (Start Delivery)'}</button>
-        </div>
-      </div>`;
-  } else if(riderJobState === 'delivering'){
-    if(heading) heading.textContent = LANG==='bn' ? 'ধাপ ৩: কাস্টমারের কাছে ডেলিভারি' : 'Step 3: Delivering to Customer';
-    container.innerHTML = `
-      <div class="job-card" style="border-color:var(--info)">
-        <div class="rider-stage-step active" style="background:var(--info-soft);border-color:var(--info);color:var(--info)">
-          <i data-icon="home" data-icon-cls="icon-sm"></i>
-          <div style="flex:1"><b>${LANG==='bn'?'সানরাইজ রেসিডেন্সি, রোড ২৭, ফ্ল্যাট ৩বি':'Sunrise Residency, Rd 27, Flat 3B'}</b><div class="muted" style="font-size:11.5px">কাস্টমার: ফারজানা ইয়াসমিন · গেট কোড: ৪৪৭৭</div></div>
-          <span class="badge badge-info">${LANG==='bn'?'ডেলিভারি ড্রপ':'Drop-off'}</span>
-        </div>
-        <div style="background:var(--surface-2);border-radius:var(--radius-md);padding:14px;margin:14px 0">
-          <div style="font-size:12px;font-weight:700;margin-bottom:6px">${LANG==='bn'?'কাস্টমার ওটিপি দিন (ডেমো ওটিপি: 4821)':'Enter Customer Delivery OTP (Demo OTP: 4821)'}</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <input type="text" id="riderOtpInput" placeholder="৪-সংখ্যার OTP" style="font-size:14px;font-family:var(--font-mono);max-width:180px;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius-sm)" value="4821">
-            <button class="btn btn-primary btn-sm" id="riderCompleteDeliveryBtn"><i data-icon="check" data-icon-cls="icon-sm"></i>${LANG==='bn'?'ডেলিভারি সম্পন্ন করুন':'Complete Delivery'}</button>
-          </div>
-        </div>
-        <button class="btn btn-outline btn-sm" id="riderCallCustBtn"><i data-icon="phone" data-icon-cls="icon-sm"></i>${LANG==='bn'?'কাস্টমারকে কল করুন (মাস্কড)':'Call Customer (Masked)'}</button>
-      </div>`;
-  } else if(riderJobState === 'completed'){
-    if(heading) heading.textContent = LANG==='bn' ? 'ডেলিভারি সফল হয়েছে!' : 'Delivery Completed!';
-    container.innerHTML = `
-      <div class="card" style="text-align:center;padding:28px;border-color:var(--ok)">
-        <div style="width:52px;height:52px;border-radius:50%;background:var(--ok-soft);color:var(--ok);display:flex;align-items:center;justify-content:center;margin:0 auto 12px">${icon('check','icon-lg')}</div>
-        <h3 style="font-size:16px;color:var(--ok)">${LANG==='bn'?'অর্ডার #CBS-10482 সফলভাবে ডেলিভারি হয়েছে!':'Order #CBS-10482 Delivered Successfully!'}</h3>
-        <p class="muted" style="font-size:13px;margin:6px auto 16px;max-width:40ch">${LANG==='bn'?'আপনার অ্যাকাউন্টে ফি ৳ ৫৫ এবং টিপ ৳ ২০ মোট ৳ ৭৫ যোগ হয়েছে।':'৳ 55 delivery fee + ৳ 20 tip (Total ৳ 75) added to your wallet.'}</p>
-        <button class="btn btn-primary btn-sm" id="riderNextJobBtn">${LANG==='bn'?'পরবর্তী অর্ডারের জন্য প্রস্তুত':'Ready for Next Mission'}</button>
-      </div>`;
-  }
-  hydrateIcons(container);
-}
-
 /* ---- owner onboarding wizard (FR-H1) ---- */
 let wizStep = 1;
 let wizSubmitted = false;
@@ -5735,7 +5300,7 @@ function fnd_logAction(action,ic,before,after){
   fnd_auditLog.unshift({actor:'Ariyan Rahman',action,ic:ic||'check',time:'now',before:before||'—',after:after||'—'});
   fnd_renderAudit();
 }
-function fnd_renderAll(){ fnd_renderUsers(); fnd_renderVerifs(); fnd_renderTrash(); fnd_renderBackupTbl(); fnd_renderCms(); fnd_renderAudit(); adm_renderListings(); adm_renderDelivery(); adm_renderDispatch(); }
+function fnd_renderAll(){ fnd_renderUsers(); fnd_renderVerifs(); fnd_renderTrash(); fnd_renderBackupTbl(); fnd_renderCms(); fnd_renderAudit(); adm_renderListings(); }
 
 const adm_listings=[
   {id:'LST-2291',name:'Mirpur 10 — 2 Bed Family Flat',owner:'Kamal Hossain',type:'Flat',status:'live',flags:0},
@@ -5750,25 +5315,6 @@ function adm_renderListings(){
     <button class="btn btn-sm" data-action="adm-listing-approve" data-id="${l.id}" data-t="v_approve">Approve</button>
     <button class="btn btn-sm btn-danger-outline" data-action="adm-listing-pause" data-id="${l.id}">${LANG==='bn'?'পজ':'Pause'}</button>
   </td></tr>`).join('');
-}
-const adm_deliveryZones=[
-  {zone:'Mirpur core (0-2km)',base:25,perkm:8,min:150,surge:'8-10pm · +৳15'},
-  {zone:'Dhanmondi - Jigatola',base:30,perkm:9,min:150,surge:'1-2pm · +৳10'},
-  {zone:'Uttara full sector',base:35,perkm:10,min:200,surge:'—'}
-];
-function adm_renderDelivery(){
-  const el=document.getElementById('deliveryZoneRows'); if(!el) return;
-  el.innerHTML=adm_deliveryZones.map(z=>`<tr><td>${z.zone}</td><td class="tabular">৳${z.base}</td><td class="tabular">৳${z.perkm}</td><td class="tabular">৳${z.min}</td><td>${z.surge}</td><td><button class="btn btn-sm" data-action="adm-zone-edit">${LANG==='bn'?'এডিট':'Edit'}</button></td></tr>`).join('');
-}
-const adm_dispatch=[
-  {order:'FD-5521',restaurant:'Khana Express — Mirpur',dest:'House 12, Road 6, Mirpur 10',rider:'Jahangir Alam',status:'assigned'},
-  {order:'FD-5524',restaurant:'Dhaka Biriyani House',dest:'Road 27, Dhanmondi',rider:'—',status:'unassigned'},
-  {order:'FD-5519',restaurant:'Cafe Mojo — Uttara',dest:'Sector 7, Uttara',rider:'Mehedi Hasan',status:'enroute'}
-];
-function adm_renderDispatch(){
-  const el=document.getElementById('dispatchRows'); if(!el) return;
-  const lbl={assigned:LANG==='bn'?'বরাদ্দকৃত':'Assigned',unassigned:LANG==='bn'?'অবরাদ্দকৃত':'Unassigned',enroute:LANG==='bn'?'পথে':'En route'};
-  el.innerHTML=adm_dispatch.map(d=>`<tr><td class="mono">${d.order}</td><td>${d.restaurant}</td><td>${d.dest}</td><td>${d.rider}</td><td>${statusBadge(d.status,lbl[d.status])}</td><td><button class="btn btn-sm" data-action="adm-dispatch-reassign" data-id="${d.order}" data-t="disp_reassign">Reassign</button></td></tr>`).join('');
 }
 
 /* ---- Tenant: My Bookings ---- */
@@ -5830,114 +5376,6 @@ function rm_wire(){
     document.getElementById('rmProfileStatus').removeAttribute('data-t');
     document.getElementById('rmProfileStatus').textContent = LANG==='bn' ? 'প্রোফাইল সংরক্ষিত — মিল দেখানো হচ্ছে' : 'Profile saved — showing matches';
     toastMsg(LANG==='bn'?'রুমমেট প্রোফাইল সংরক্ষিত হয়েছে':'Roommate profile saved','check');
-  });
-}
-
-/* ---- Restaurant: tabs, hours, earnings, promotions, onboarding ---- */
-const restHours=[
-  {day:'Saturday',open:'10:00 AM',close:'11:00 PM',closed:false},
-  {day:'Sunday',open:'10:00 AM',close:'11:00 PM',closed:false},
-  {day:'Monday',open:'10:00 AM',close:'11:00 PM',closed:false},
-  {day:'Tuesday',open:'10:00 AM',close:'11:00 PM',closed:false},
-  {day:'Wednesday',open:'10:00 AM',close:'11:00 PM',closed:false},
-  {day:'Thursday',open:'10:00 AM',close:'12:00 AM',closed:false},
-  {day:'Friday',open:'2:00 PM',close:'12:00 AM',closed:false}
-];
-function rest_renderHours(){
-  const el=document.getElementById('restHoursRows'); if(!el) return;
-  el.innerHTML=restHours.map((h,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
-    <div style="font-weight:600;font-size:13px">${h.day}</div>
-    <div style="display:flex;align-items:center;gap:10px;font-size:12.5px">
-      <span class="${h.closed?'muted':''}">${h.closed?(LANG==='bn'?'বন্ধ':'Closed'):(h.open+' – '+h.close)}</span>
-      <button class="btn btn-sm btn-ghost" data-action="rest-hours-toggle" data-idx="${i}">${h.closed?(LANG==='bn'?'খুলুন':'Open'):(LANG==='bn'?'বন্ধ করুন':'Close')}</button>
-    </div>
-  </div>`).join('');
-}
-const restEarnHistory=[
-  {date:'Nov 22',orders:28,gross:'৳ 11,200',fee:'৳ 1,344',net:'৳ 9,856',status:'paid'},
-  {date:'Nov 21',orders:24,gross:'৳ 9,600',fee:'৳ 1,152',net:'৳ 8,448',status:'paid'},
-  {date:'Nov 20',orders:19,gross:'৳ 7,850',fee:'৳ 942',net:'৳ 6,908',status:'pending'}
-];
-function rest_renderEarnings(){
-  const el=document.getElementById('restEarnRows'); if(!el) return;
-  const lbl={paid:LANG==='bn'?'পরিশোধিত':'Paid',pending:LANG==='bn'?'বিচারাধীন':'Pending'};
-  el.innerHTML=restEarnHistory.map(r=>`<tr><td>${r.date}</td><td class="tabular">${r.orders}</td><td class="tabular">${r.gross}</td><td class="tabular">${r.fee}</td><td class="tabular">${r.net}</td><td>${statusBadge(r.status,lbl[r.status])}</td></tr>`).join('');
-}
-const restPromos=[
-  {title:'20% off orders over ৳500',sub:'Active · ends Nov 30',status:'live'},
-  {title:'Buy 1 Get 1 — Chicken Biryani',sub:'Weekends only',status:'live'},
-  {title:'Free delivery over ৳800',sub:'Draft — not yet launched',status:'draft'}
-];
-function rest_renderPromo(){
-  const el=document.getElementById('restPromoRows'); if(!el) return;
-  const lbl={live:LANG==='bn'?'লাইভ':'Live',draft:LANG==='bn'?'ড্রাফট':'Draft'};
-  el.innerHTML=restPromos.map(p=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center">
-    <div><div style="font-weight:700;font-size:13.5px">${p.title}</div><div class="muted" style="font-size:12px">${p.sub}</div></div>
-    ${statusBadge(p.status,lbl[p.status])}
-  </div>`).join('');
-}
-function rest_wireTabs(){
-  document.getElementById('restTabs').addEventListener('click',e=>{
-    const chip=e.target.closest('[data-rest-tab]'); if(!chip) return;
-    document.querySelectorAll('#restTabs .chip').forEach(c=>c.classList.remove('on'));
-    chip.classList.add('on');
-    const tab=chip.dataset.restTab;
-    document.getElementById('restPanelOrders').hidden = tab!=='orders';
-    document.getElementById('restPanelHours').hidden = tab!=='hours';
-    document.getElementById('restPanelEarnings').hidden = tab!=='earnings';
-    document.getElementById('restPanelPromo').hidden = tab!=='promo';
-  });
-  document.getElementById('restHoursRows').addEventListener('click',e=>{
-    const btn=e.target.closest('[data-action="rest-hours-toggle"]'); if(!btn) return;
-    const h=restHours[parseInt(btn.dataset.idx,10)]; h.closed=!h.closed; rest_renderHours();
-  });
-  document.getElementById('promoSaveBtn').addEventListener('click',()=>{
-    toastMsg(LANG==='bn'?'নতুন প্রোমোশন চালু করা হয়েছে':'New promotion launched','tag');
-  });
-  const kc=document.getElementById('restKitchenCard');
-  if(kc) kc.addEventListener('click',()=>{
-    const v=document.getElementById('restKitchenVal'); const sub=document.getElementById('restKitchenSub');
-    const isOpen = v.textContent.trim()===(LANG==='bn'?'খোলা':'Open') || v.getAttribute('data-t')==='rest_open';
-    v.removeAttribute('data-t'); sub.removeAttribute('data-t');
-    if(isOpen){ v.textContent=LANG==='bn'?'বন্ধ':'Paused'; v.style.color='var(--warn)'; sub.textContent=LANG==='bn'?'নতুন অর্ডার নেওয়া বন্ধ':'Not accepting new orders'; }
-    else { v.textContent=LANG==='bn'?'খোলা':'Open'; v.style.color='var(--ok)'; sub.textContent=LANG==='bn'?'অর্ডার গ্রহণ চলছে — বন্ধ করতে ক্লিক করুন':'Accepting orders — click to pause'; }
-  });
-  const ro=document.getElementById('restOnboardSubmitBtn');
-  if(ro) ro.addEventListener('click',()=>toastMsg(LANG==='bn'?'অনুমোদনের জন্য জমা দেওয়া হয়েছে':'Submitted for approval','check'));
-}
-
-/* ---- Rider: onboarding + earnings breakdown ---- */
-const riderPayoutHistory=[
-  {date:'Nov 22',trips:14,dist:'38 km',gross:'৳ 1,240',status:'paid'},
-  {date:'Nov 21',trips:11,dist:'29 km',gross:'৳ 980',status:'paid'},
-  {date:'Nov 20',trips:9,dist:'24 km',gross:'৳ 760',status:'pending'}
-];
-function rider_renderPayouts(){
-  const el=document.getElementById('riderPayoutRows'); if(!el) return;
-  const lbl={paid:LANG==='bn'?'পরিশোধিত':'Paid',pending:LANG==='bn'?'বিচারাধীন':'Pending'};
-  el.innerHTML=riderPayoutHistory.map(r=>`<tr><td>${r.date}</td><td class="tabular">${r.trips}</td><td class="tabular">${r.dist}</td><td class="tabular">${r.gross}</td><td>${statusBadge(r.status,lbl[r.status])}</td></tr>`).join('');
-}
-const riderTraining=[
-  {t:'Platform safety & conduct guidelines',done:true},
-  {t:'Food handling & delivery bag hygiene',done:true},
-  {t:'Traffic law & helmet requirement briefing',done:false},
-  {t:'App navigation & order-acceptance walkthrough',done:false}
-];
-function rider_renderTraining(){
-  const el=document.getElementById('riderTrainingList'); if(!el) return;
-  el.innerHTML=riderTraining.map((c,i)=>`<label style="display:flex;align-items:center;gap:10px;padding:8px 0;cursor:pointer">
-    <input type="checkbox" data-action="rio-check" data-idx="${i}" ${c.done?'checked':''}><span style="font-size:13px">${c.t}</span>
-  </label>`).join('');
-}
-function rider_wireOnboard(){
-  document.getElementById('riderTrainingList').addEventListener('change',e=>{
-    const cb=e.target.closest('[data-action="rio-check"]'); if(!cb) return;
-    riderTraining[parseInt(cb.dataset.idx,10)].done=cb.checked;
-  });
-  const sb=document.getElementById('riderOnboardSubmitBtn');
-  if(sb) sb.addEventListener('click',()=>{
-    if(riderTraining.some(c=>!c.done)){ toastMsg(LANG==='bn'?'জমা দেওয়ার আগে পুরো প্রশিক্ষণ চেকলিস্ট সম্পন্ন করুন':'Complete the full training checklist before submitting','shield'); return; }
-    toastMsg(LANG==='bn'?'অনুমোদনের জন্য জমা দেওয়া হয়েছে':'Submitted for approval','check');
   });
 }
 
@@ -6297,11 +5735,6 @@ function wirePage(){
     if(sel){ selectUnit(sel.dataset.selectUnit); return; }
     const row=e.target.closest('.unit-row:not(.blocked)');
     if(row && !e.target.closest('[data-select-unit]')){ selectUnit(row.dataset.unit); return; }
-    const oa=e.target.closest('[data-order-action]');
-    if(oa){ decideOrder(parseInt(oa.dataset.index,10), oa.dataset.orderAction); return; }
-    const mt=e.target.closest('[data-menu-toggle]');
-    if(mt){ const i=parseInt(mt.dataset.menuToggle,10); menuItems[i].on=!menuItems[i].on; renderMenu(); return; }
-
     const wj=e.target.closest('[data-wiz-jump]');
     if(wj){ const n=parseInt(wj.dataset.wizJump,10); if(wizSubmitted || n<=wizStep){ wizStep=n; renderWizard(); } return; }
     const wp=e.target.closest('[data-wiz-prop]');
@@ -6329,64 +5762,6 @@ function wirePage(){
       calOverrides[calActiveUnit + '-' + d] = next;
       renderCalendar();
       toastMsg((LANG==='bn'?`তারিখ ${d} নভেম্বর: `:`Date Nov ${d}: `) + (next==='blocked'?(LANG==='bn'?'ব্লক করা হয়েছে':'Blocked'):(LANG==='bn'?'বুকিংয়ের জন্য উন্মুক্ত':'Open for booking')), 'calendar');
-      return;
-    }
-
-    /* Restaurant active prep queue ready */
-    const pr=e.target.closest('[data-prep-ready]');
-    if(pr){ markPrepReady(parseInt(pr.dataset.prepReady,10)); return; }
-
-    /* Rider Interactive Missions */
-    if(e.target.closest('#acceptJobBtn')){
-      riderJobState = 'to_pickup'; renderRiderJob();
-      toastMsg(LANG==='bn'?'জব গ্রহণ করা হয়েছে — রেস্টুরেন্টের দিকে রওনা হন':'Job accepted — proceed to restaurant','bike');
-      return;
-    }
-    if(e.target.closest('#rejectJobBtn')){
-      riderJobState = 'offer';
-      toastMsg(LANG==='bn'?'জব প্রত্যাখ্যাত — পরবর্তী রাইডারকে পাঠানো হচ্ছে':'Job declined — reassigning to next rider','shield');
-      renderRiderJob(); return;
-    }
-    if(e.target.closest('#riderArrivedRestBtn')){
-      riderJobState = 'at_pickup'; renderRiderJob();
-      toastMsg(LANG==='bn'?'রেস্টুরেন্টে পৌঁছেছেন — খাবার সংগ্রহ করুন':'Arrived at restaurant — pick up order','food');
-      return;
-    }
-    if(e.target.closest('#riderCallRestBtn')){
-      toastMsg(LANG==='bn'?'রেস্টুরেন্ট ম্যানেজারকে কল করা হচ্ছে: ০১৭১১-০০২২১১':'Calling restaurant: 01711-002211','phone');
-      return;
-    }
-    if(e.target.closest('#riderPickedUpBtn')){
-      riderJobState = 'delivering'; renderRiderJob();
-      toastMsg(LANG==='bn'?'খাবার সংগ্রহ সম্পন্ন — ধানমন্ডি ২৭-এ কাস্টমারের ঠিকানায় যান':'Food picked up — heading to Sunrise Residency','bike');
-      return;
-    }
-    if(e.target.closest('#riderCallCustBtn')){
-      toastMsg(LANG==='bn'?'মাস্কড কল সংযুক্ত হচ্ছে: ফারজানা ইয়াসমিন':'Calling customer (masked): Farzana Yasmin','phone');
-      return;
-    }
-    if(e.target.closest('#riderCompleteDeliveryBtn')){
-      const otpIn = document.getElementById('riderOtpInput');
-      if(otpIn && otpIn.value.trim() === '4821'){
-        riderJobState = 'completed';
-        riderTodayEarnings += 75;
-        riderDeliveriesCount += 1;
-        renderRiderJob();
-        toastMsg(LANG==='bn'?'ডেলিভারি সফল! ৳ ৭৫ আর্নিং যোগ হয়েছে':'Delivery completed! ৳ 75 added to wallet','check');
-      } else {
-        toastMsg(LANG==='bn'?'ভুল OTP! সঠিক OTP (4821) দিন':'Invalid OTP! Please enter 4821','shield');
-      }
-      return;
-    }
-    if(e.target.closest('#riderNextJobBtn')){
-      riderJobState = 'offer'; renderRiderJob();
-      toastMsg(LANG==='bn'?'পরবর্তী অর্ডারের জন্য প্রস্তুত!':'Ready for next mission!','bike');
-      return;
-    }
-    if(e.target.closest('#riderStatusCard') || e.target.closest('#riderGoOnlineBtn')){
-      riderOnline = !riderOnline;
-      renderRiderJob();
-      toastMsg((LANG==='bn'?'রাইডার স্ট্যাটাস: ':'Rider status: ')+(riderOnline?(LANG==='bn'?'অনলাইন':'Online'):(LANG==='bn'?'অফলাইন':'Offline')),'bike');
       return;
     }
 
@@ -6530,7 +5905,6 @@ function wirePage(){
   document.getElementById('openRestoreModalBtn').addEventListener('click',()=>openModal('restoreModal'));
   document.getElementById('modalCancelBtn').addEventListener('click',()=>closeModal('restoreModal'));
   document.getElementById('modalConfirmBtn').addEventListener('click',fnd_runRestoreTest);
-  document.getElementById('dzSaveBtn').addEventListener('click',()=>toastMsg(LANG==='bn'?'নতুন ডেলিভারি জোন সংরক্ষিত হয়েছে':'New delivery zone saved','map'));
 
   document.addEventListener('click',e=>{
     const btn=e.target.closest('[data-action]');
@@ -6543,8 +5917,6 @@ function wirePage(){
     else if(action==='restore-trash') fnd_restoreTrash(parseInt(btn.dataset.index,10));
     else if(action==='adm-listing-approve'){ const l=adm_listings.find(x=>x.id===btn.dataset.id); if(l){ l.status='live'; l.flags=0; adm_renderListings(); toastMsg(LANG==='bn'?'লিস্টিং অনুমোদিত হয়েছে':'Listing approved','check'); } }
     else if(action==='adm-listing-pause'){ const l=adm_listings.find(x=>x.id===btn.dataset.id); if(l){ l.status='pending'; adm_renderListings(); toastMsg(LANG==='bn'?'লিস্টিং পজ করা হয়েছে':'Listing paused','shield'); } }
-    else if(action==='adm-zone-edit') toastMsg(LANG==='bn'?'জোন এডিট (প্রোটোটাইপ)':'Zone edit (prototype)','map');
-    else if(action==='adm-dispatch-reassign'){ const d=adm_dispatch.find(x=>x.order===btn.dataset.id); if(d){ d.rider=LANG==='bn'?'নতুন রাইডার বাছাই হচ্ছে…':'Reassigning…'; d.status='assigned'; adm_renderDispatch(); toastMsg(LANG==='bn'?'রাইডার পুনর্বরাদ্দ করা হয়েছে':'Rider reassigned','clock'); } }
   });
 
   // Invite admin
@@ -6604,14 +5976,12 @@ function wirePage(){
 
 
   window.onLangChange = ()=>{
-    renderListings('any'); renderMap(); renderUnits(); renderRestaurants(); renderOrders(); renderMenu(); renderRiderJob(); renderPdAmenities(); renderPdCalGrid(); renderPdReviews();
+    renderListings('any'); renderMap(); renderUnits(); renderPdAmenities(); renderPdCalGrid(); renderPdReviews();
     renderWizard(); renderCalendar(); renderDisputes(); renderReconcile(); renderOwnerDash();
     fnd_renderAll();
     diff_renderReviews(); diff_renderMatches(); diff_renderNotifMatrix(); diff_renderNotifFeed(); diff_renderNoshow();
     scale_renderAll();
     mb_renderList();
-    rest_renderHours(); rest_renderEarnings(); rest_renderPromo();
-    rider_renderPayouts(); rider_renderTraining();
     if (typeof switchNeighborhood === 'function') switchNeighborhood(activeNeighborKey);
     if (typeof calcRent === 'function') calcRent();
     if (typeof renderPubFeatured === 'function') renderPubFeatured();
@@ -6620,15 +5990,13 @@ function wirePage(){
 
 document.addEventListener('DOMContentLoaded', ()=>{
   hydrateIcons(document);
-  renderListings('any'); renderMap(); renderUnits(); renderRestaurants(); renderOrders(); renderMenu(); renderRiderJob(); renderPdAmenities(); renderPdCalGrid(); renderPdReviews();
+  renderListings('any'); renderMap(); renderUnits(); renderPdAmenities(); renderPdCalGrid(); renderPdReviews();
   renderWizard(); renderCalendar(); renderDisputes(); renderReconcile(); renderOwnerDash(); renderPubFeatured();
   fnd_renderAll();
   diff_renderReviews(); diff_renderMatches(); diff_renderNotifMatrix(); diff_renderNotifFeed(); diff_renderNoshow();
   scale_renderAll();
   mb_renderList(); mb_wire();
   rm_wire();
-  rest_renderHours(); rest_renderEarnings(); rest_renderPromo(); rest_wireTabs();
-  rider_renderPayouts(); rider_renderTraining(); rider_wireOnboard();
   wirePage();
   scale_wirePwa();
   document.getElementById('roleSwitch').addEventListener('change',e=>applyRole2(e.target.value));
@@ -6687,8 +6055,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     document.querySelectorAll('.pub-nav button').forEach(x=>x.classList.remove('active'));
     b.classList.add('active');
     const nv = b.dataset.pubNav;
-    if(nv==='food'){ enterApp('tenant'); showView('food'); }
-    else if(nv==='partner'){ enterApp('owner'); showView('ownerdash'); }
+    if(nv==='partner'){ enterApp('owner'); showView('ownerdash'); }
     else if(nv==='stays'){ enterApp('tenant'); showView('search'); }
     else if(nv==='why'){ const w=document.getElementById('pubWhySection'); if(w) w.scrollIntoView({behavior:'smooth'}); }
     else if(nv==='faq'){ const f=document.getElementById('pubFaqSection'); if(f) f.scrollIntoView({behavior:'smooth'}); }
@@ -6801,9 +6168,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
       } else if (nv === 'calc') {
         const s = document.getElementById('pubCalcSection');
         if (s) s.scrollIntoView({ behavior: 'smooth' });
-      } else if (nv === 'food') {
-        enterApp('tenant');
-        showView('food');
       } else if (nv === 'partner') {
         enterApp('owner');
         showView('ownerdash');
@@ -6890,9 +6254,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
       } else if (nv === 'calc') {
         const s = document.getElementById('pubCalcSection');
         if (s) s.scrollIntoView({ behavior: 'smooth' });
-      } else if (nv === 'food') {
-        enterApp('tenant');
-        showView('food');
       }
     });
   });
