@@ -2986,6 +2986,21 @@ html, body {
             </div>
             <div class="field" id="busLowerRowsField" hidden><label data-t="bus_f_lowerrows">Lower deck rows</label><input type="number" id="busLowerRowsInput" value="6"><div class="field-hint" data-t="bus_f_lowerrows_hint">Lower deck is often shorter (entrance, stairs, luggage/engine space)</div></div>
             <div class="field"><label data-t="bus_f_frontrow">Front-row seats (optional)</label><input type="number" id="busFrontRowInput" placeholder="leave blank for a full row" min="0"><div class="field-hint" data-t="bus_f_frontrow_hint">For a door/stairwell cutout at the front — e.g. 1 seat instead of a full row</div></div>
+            <div class="field"><label data-t="bus_f_doorside">Door side</label>
+              <select id="busDoorSideInput">
+                <option value="left" data-t="bus_door_left">Left (kerb side)</option>
+                <option value="right" data-t="bus_door_right">Right</option>
+              </select>
+            </div>
+            <div class="field"><label data-t="bus_f_bizrows">Business/sofa rows at front (optional)</label><input type="number" id="busBusinessRowsInput" placeholder="0" min="0"></div>
+            <div class="field"><label data-t="bus_f_bizleft">Business — left of aisle</label><input type="number" id="busBusinessLeftInput" placeholder="e.g. 1" min="0" max="4"></div>
+            <div class="field"><label data-t="bus_f_bizright">Business — right of aisle</label><input type="number" id="busBusinessRightInput" placeholder="e.g. 2" min="0" max="4"></div>
+            <div class="field">
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+                <input type="checkbox" id="busBackBenchInput">
+                <span data-t="bus_f_backbench">Last row is a continuous bench (no aisle gap)</span>
+              </label>
+            </div>
           </div>
           <div style="margin-top:16px">
             <div class="muted" style="font-size:12px;margin-bottom:8px" data-t="bus_preview">Live preview — confirm this matches the real bus before saving</div>
@@ -4252,7 +4267,10 @@ Object.assign(window.I18N.bn, {
   bus_f_deck: 'ডেক টাইপ', bus_deck_single: 'সিঙ্গেল ডেক', bus_deck_double: 'ডাবল ডেকার (উপরে + নিচে)',
   bus_f_rows_upper: 'উপরের ডেকের সারি সংখ্যা',
   bus_f_lowerrows: 'নিচের ডেকের সারি সংখ্যা', bus_f_lowerrows_hint: 'নিচের ডেক প্রায়ই ছোট হয় (প্রবেশপথ, সিঁড়ি, লাগেজ/ইঞ্জিন জায়গার জন্য)',
-  bus_f_frontrow: 'সামনের সারির সিট (ঐচ্ছিক)', bus_f_frontrow_hint: 'সামনে দরজা/সিঁড়ির জন্য — যেমন পূর্ণ সারির বদলে মাত্র ১টি সিট'
+  bus_f_frontrow: 'সামনের সারির সিট (ঐচ্ছিক)', bus_f_frontrow_hint: 'সামনে দরজা/সিঁড়ির জন্য — যেমন পূর্ণ সারির বদলে মাত্র ১টি সিট',
+  bus_f_doorside: 'দরজার পাশ', bus_door_left: 'বামে (কার্ব সাইড)', bus_door_right: 'ডানে',
+  bus_f_bizrows: 'সামনে বিজনেস/সোফা সারি (ঐচ্ছিক)', bus_f_bizleft: 'বিজনেস — আইলের বামে', bus_f_bizright: 'বিজনেস — আইলের ডানে',
+  bus_f_backbench: 'শেষ সারি একটি একটানা বেঞ্চ (কোনো আইল গ্যাপ নেই)'
 });
 Object.assign(window.I18N.en, {
   nav_reporting: 'Platform Reporting',
@@ -4405,7 +4423,10 @@ Object.assign(window.I18N.en, {
   bus_f_deck: 'Deck type', bus_deck_single: 'Single deck', bus_deck_double: 'Double decker (upper + lower)',
   bus_f_rows_upper: 'Upper deck rows',
   bus_f_lowerrows: 'Lower deck rows', bus_f_lowerrows_hint: 'Lower deck is often shorter (entrance, stairs, luggage/engine space)',
-  bus_f_frontrow: 'Front-row seats (optional)', bus_f_frontrow_hint: 'For a door/stairwell cutout at the front — e.g. 1 seat instead of a full row'
+  bus_f_frontrow: 'Front-row seats (optional)', bus_f_frontrow_hint: 'For a door/stairwell cutout at the front — e.g. 1 seat instead of a full row',
+  bus_f_doorside: 'Door side', bus_door_left: 'Left (kerb side)', bus_door_right: 'Right',
+  bus_f_bizrows: 'Business/sofa rows at front (optional)', bus_f_bizleft: 'Business — left of aisle', bus_f_bizright: 'Business — right of aisle',
+  bus_f_backbench: 'Last row is a continuous bench (no aisle gap)'
 });
 Object.assign(window.I18N.bn, {
   pub_nav_why: 'কেন CBS?',
@@ -5771,7 +5792,7 @@ const tk_cityLabel = { dhaka:'Dhaka', chattogram:'Chattogram', sylhet:'Sylhet', 
 const tk_tripsData = [
   { id:'TRP-1', operator:'Green Line Paribahan', origin:'dhaka', dest:'chattogram', originLabel:'Dhaka (Gabtoli)', destLabel:'Chattogram (GEC Circle)', date:'2026-12-05', departTime:'10:00 PM', arriveTime:'4:30 AM', timeBand:'night', busLabel:'Volvo 9800 (AC)', left:2, right:2, rows:9, deck:'single', fareAc:1200, fareNonAc:null, soldSeats:['1A','1B','2C','3A','4B','5A','5C','6D','7A','8C','9B'], heldSeats:['2A'] },
   { id:'TRP-2', operator:'Shyamoli Paribahan', origin:'dhaka', dest:'sylhet', originLabel:'Dhaka (Sayedabad)', destLabel:'Sylhet (Kadamtoli)', date:'2026-12-05', departTime:'11:30 PM', arriveTime:'6:00 AM', timeBand:'night', busLabel:'Scania (Non-AC)', left:2, right:3, rows:9, deck:'single', fareAc:null, fareNonAc:650, soldSeats:['1A','1E','3C','4A','6B','7E'], heldSeats:[] },
-  { id:'TRP-3', operator:'Green Line Paribahan', origin:'dhaka', dest:'coxsbazar', originLabel:'Dhaka (Kallyanpur)', destLabel:"Cox's Bazar (Kolatoli)", date:'2026-12-05', departTime:'9:00 AM', arriveTime:'7:00 PM', timeBand:'morning', busLabel:'Scania Double Decker (AC)', left:2, right:2, rows:9, lowerRows:6, frontRowSeats:1, deck:'double', fareAc:1600, fareNonAc:null, soldSeats:['L1D','L2A','L2B','L2C','L2D','L3A','L3B','L4C','L4D','L5A','U1A','U1B','U2A','U2B','U3C','U3D','U4A','U4B','U5C'], heldSeats:['U4C','L6B'] },
+  { id:'TRP-3', operator:'Green Line Paribahan', origin:'dhaka', dest:'coxsbazar', originLabel:'Dhaka (Kallyanpur)', destLabel:"Cox's Bazar (Kolatoli)", date:'2026-12-05', departTime:'9:00 AM', arriveTime:'7:00 PM', timeBand:'morning', busLabel:'Scania Double Decker (AC)', left:2, right:2, rows:9, lowerRows:6, frontRowSeats:1, doorSide:'left', businessRows:2, businessLeft:1, businessRight:2, backBench:true, deck:'double', fareAc:1600, fareNonAc:null, soldSeats:['L1D','L2A','L2B','L2C','L2D','L3A','L3B','L4C','L4D','L5A','U1A','U1B','U2A','U2B','U3C','U3D','U4A','U4B','U5C'], heldSeats:['U4C','L6B'] },
   { id:'TRP-4', operator:'Hanif Enterprise', origin:'dhaka', dest:'sylhet', originLabel:'Dhaka (Mohakhali)', destLabel:'Sylhet (Amberkhana)', date:'2026-12-05', departTime:'2:30 PM', arriveTime:'9:00 PM', timeBand:'afternoon', busLabel:'Hino AC', left:2, right:2, rows:9, deck:'single', fareAc:1050, fareNonAc:null, soldSeats:['1A','2B','3C'], heldSeats:[] },
 ];
 let tk_currentTripId = null;
@@ -5788,31 +5809,55 @@ const TK_HOLD_SECONDS_TOTAL = 480;
 function tk_decksFor(bus){
   return bus.deck === 'double' ? ['U','L'] : [''];
 }
-function tk_seatCols(bus){
+function tk_colsForCounts(left, right){
   const cols = [];
-  for(let i=0;i<bus.left;i++) cols.push(String.fromCharCode(65+i));
-  for(let i=0;i<bus.right;i++) cols.push(String.fromCharCode(65+bus.left+i));
+  for(let i=0;i<left;i++) cols.push(String.fromCharCode(65+i));
+  for(let i=0;i<right;i++) cols.push(String.fromCharCode(65+left+i));
   return cols;
+}
+function tk_seatCols(bus){
+  return tk_colsForCounts(bus.left, bus.right);
 }
 function tk_rowsForDeck(bus, deckPrefix){
   if(bus.deck === 'double' && deckPrefix === 'L') return bus.lowerRows || bus.rows;
   return bus.rows;
 }
-/* Front-row reduction only ever applies to the deck with the entrance door:
-   the lower deck on a double-decker, or the only deck on a single-decker. */
-function tk_colsForRow(bus, deckPrefix, rowNum){
-  const cols = tk_seatCols(bus);
-  const appliesToThisDeck = bus.deck === 'double' ? deckPrefix === 'L' : true;
-  if(rowNum === 1 && appliesToThisDeck && bus.frontRowSeats && bus.frontRowSeats < cols.length){
-    return cols.slice(cols.length - bus.frontRowSeats);
+/* Per-row seat layout, handling every real-world irregularity in one place:
+   - Business/sofa rows at the front of the premium deck (upper deck on a
+     double-decker, the only deck on a single-decker) can use a different,
+     usually wider, left/right split than the rest of the bus.
+   - The back row can be a continuous bench (no aisle break).
+   - The front row of whichever deck has the entrance door can be reduced
+     to fewer seats, cut from whichever side ('left' or 'right') the door
+     is actually on — never hardcoded to one side.
+   Returns { cols, leftCount, aisle } — leftCount/aisle tell the renderer
+   where (or whether) to draw the aisle gap for this specific row. */
+function tk_rowLayout(bus, deckPrefix, rowNum){
+  const rows = tk_rowsForDeck(bus, deckPrefix);
+  const isDoorDeck = bus.deck === 'double' ? deckPrefix === 'L' : true;
+  const isPremiumDeck = bus.deck === 'double' ? deckPrefix === 'U' : true;
+  const fullCols = tk_seatCols(bus);
+
+  if(bus.businessRows && isPremiumDeck && rowNum <= bus.businessRows){
+    const bl = bus.businessLeft != null ? bus.businessLeft : bus.left;
+    const br = bus.businessRight != null ? bus.businessRight : bus.right;
+    return { cols: tk_colsForCounts(bl, br), leftCount: bl, aisle: true };
   }
-  return cols;
+  if(bus.backBench && rowNum === rows){
+    return { cols: fullCols, leftCount: fullCols.length, aisle: false };
+  }
+  if(rowNum === 1 && isDoorDeck && bus.frontRowSeats && bus.frontRowSeats < fullCols.length){
+    const side = bus.doorSide || 'left';
+    const cols = side === 'left' ? fullCols.slice(fullCols.length - bus.frontRowSeats) : fullCols.slice(0, bus.frontRowSeats);
+    return { cols, leftCount: cols.length, aisle: false };
+  }
+  return { cols: fullCols, leftCount: bus.left, aisle: true };
 }
 function tk_seatsRemaining(trip){
   let total = 0;
   tk_decksFor(trip).forEach(deckPrefix=>{
     const rows = tk_rowsForDeck(trip, deckPrefix);
-    for(let r=1; r<=rows; r++) total += tk_colsForRow(trip, deckPrefix, r).length;
+    for(let r=1; r<=rows; r++) total += tk_rowLayout(trip, deckPrefix, r).cols.length;
   });
   return total - trip.soldSeats.length - trip.heldSeats.length;
 }
@@ -5902,31 +5947,32 @@ function tk_openSeatMap(tripId){
 }
 
 function tk_seatFare(t, seatId){
+  const deckPrefix = /^[UL]/.test(seatId) ? seatId[0] : '';
   const row = parseInt(seatId.replace(/^[UL]/,''), 10);
   const base = t.fareAc || t.fareNonAc;
-  return row <= 2 ? Math.round(base * 1.15) : base;
+  const isPremiumDeck = t.deck === 'double' ? deckPrefix === 'U' : true;
+  const inBusinessRows = t.businessRows ? row <= t.businessRows && isPremiumDeck : row <= 2;
+  return inBusinessRows ? Math.round(base * 1.15) : base;
 }
 
 function tk_renderSeatGrid(){
   const t = tk_tripsData.find(x=>x.id===tk_currentTripId); if(!t) return;
   const el = document.getElementById('seatGrid'); if(!el) return;
-  const fullCols = tk_seatCols(t);
   const decks = tk_decksFor(t);
   el.innerHTML = decks.map(deckPrefix=>{
     let rowsHtml = '';
     const rows = tk_rowsForDeck(t, deckPrefix);
     for(let r=1; r<=rows; r++){
-      const cols = tk_colsForRow(t, deckPrefix, r);
-      const isReduced = cols.length < fullCols.length;
+      const layout = tk_rowLayout(t, deckPrefix, r);
       rowsHtml += '<div class="seat-row">';
-      cols.forEach((c,i)=>{
+      layout.cols.forEach((c,i)=>{
         const seatId = deckPrefix + r + c;
         let state = 'avail';
         if(t.soldSeats.includes(seatId)) state='sold';
         else if(t.heldSeats.includes(seatId)) state='held';
         else if(tk_selectedSeats.includes(seatId)) state='selected';
         rowsHtml += `<button type="button" class="seat-btn seat-${state}" data-seat="${seatId}" ${state==='sold'||state==='held'?'disabled':''}>${seatId}</button>`;
-        if(!isReduced && i === t.left-1) rowsHtml += '<span class="aisle-gap"></span>';
+        if(layout.aisle && i === layout.leftCount-1) rowsHtml += '<span class="aisle-gap"></span>';
       });
       rowsHtml += '</div>';
     }
@@ -6148,28 +6194,34 @@ function op_renderBuses(){
   const sel = document.getElementById('tripBusSelect');
   if(sel) sel.innerHTML = op_buses.map(b=>`<option value="${b.id}">${b.label} (${b.reg})</option>`).join('');
 }
-function op_renderBusPreview(){
-  const el = document.getElementById('busPreviewGrid'); if(!el) return;
-  const bus = {
+function op_readBusForm(){
+  return {
     rows: parseInt(document.getElementById('busRowsInput')?.value,10) || 9,
     left: parseInt(document.getElementById('busLeftInput')?.value,10) || 2,
     right: parseInt(document.getElementById('busRightInput')?.value,10) || 2,
     deck: document.getElementById('busDeckInput')?.value || 'single',
     lowerRows: parseInt(document.getElementById('busLowerRowsInput')?.value,10) || null,
-    frontRowSeats: parseInt(document.getElementById('busFrontRowInput')?.value,10) || null
+    frontRowSeats: parseInt(document.getElementById('busFrontRowInput')?.value,10) || null,
+    doorSide: document.getElementById('busDoorSideInput')?.value || 'left',
+    businessRows: parseInt(document.getElementById('busBusinessRowsInput')?.value,10) || null,
+    businessLeft: parseInt(document.getElementById('busBusinessLeftInput')?.value,10) || null,
+    businessRight: parseInt(document.getElementById('busBusinessRightInput')?.value,10) || null,
+    backBench: document.getElementById('busBackBenchInput')?.checked || false
   };
-  const fullCols = tk_seatCols(bus);
+}
+function op_renderBusPreview(){
+  const el = document.getElementById('busPreviewGrid'); if(!el) return;
+  const bus = op_readBusForm();
   const decks = tk_decksFor(bus);
   el.innerHTML = decks.map(deckPrefix=>{
     let rowsHtml = '';
     const rows = tk_rowsForDeck(bus, deckPrefix);
     for(let r=1; r<=rows; r++){
-      const cols = tk_colsForRow(bus, deckPrefix, r);
-      const isReduced = cols.length < fullCols.length;
+      const layout = tk_rowLayout(bus, deckPrefix, r);
       rowsHtml += '<div class="seat-row">';
-      cols.forEach((c,i)=>{
+      layout.cols.forEach((c,i)=>{
         rowsHtml += `<button type="button" class="seat-btn seat-avail" disabled>${deckPrefix}${r}${c}</button>`;
-        if(!isReduced && i === bus.left-1) rowsHtml += '<span class="aisle-gap"></span>';
+        if(layout.aisle && i === layout.leftCount-1) rowsHtml += '<span class="aisle-gap"></span>';
       });
       rowsHtml += '</div>';
     }
@@ -6192,20 +6244,17 @@ function op_wireBuses(){
   document.getElementById('busSaveBtn').addEventListener('click', ()=>{
     const reg = document.getElementById('busRegInput').value.trim() || 'New-Bus-0001';
     const label = document.getElementById('busLabelInput').value.trim() || (LANG==='bn'?'নতুন বাস':'New bus');
-    const rows = parseInt(document.getElementById('busRowsInput').value,10) || 9;
-    const left = parseInt(document.getElementById('busLeftInput').value,10) || 2;
-    const right = parseInt(document.getElementById('busRightInput').value,10) || 2;
-    const deck = document.getElementById('busDeckInput').value;
-    const lowerRows = deck === 'double' ? (parseInt(document.getElementById('busLowerRowsInput').value,10) || rows) : null;
-    const frontRowSeats = parseInt(document.getElementById('busFrontRowInput').value,10) || null;
-    op_buses.push({ id:'BUS-'+(op_buses.length+1), reg, label, rows, left, right, deck, lowerRows, frontRowSeats });
+    const form = op_readBusForm();
+    if(form.deck !== 'double') form.lowerRows = null;
+    op_buses.push({ id:'BUS-'+(op_buses.length+1), reg, label, ...form });
     op_renderBuses();
     toastMsg(LANG==='bn'?'বাস সংরক্ষিত হয়েছে':'Bus saved','bus');
   });
   document.getElementById('busDeckInput').addEventListener('change', op_toggleLowerRowsField);
-  ['busRowsInput','busLeftInput','busRightInput','busDeckInput','busLowerRowsInput','busFrontRowInput'].forEach(id=>{
-    document.getElementById(id).addEventListener('input', op_renderBusPreview);
-    document.getElementById(id).addEventListener('change', op_renderBusPreview);
+  ['busRowsInput','busLeftInput','busRightInput','busDeckInput','busLowerRowsInput','busFrontRowInput','busDoorSideInput','busBusinessRowsInput','busBusinessLeftInput','busBusinessRightInput','busBackBenchInput'].forEach(id=>{
+    const node = document.getElementById(id); if(!node) return;
+    node.addEventListener('input', op_renderBusPreview);
+    node.addEventListener('change', op_renderBusPreview);
   });
   op_toggleLowerRowsField();
   op_renderBusPreview();
