@@ -13,7 +13,7 @@ Companion to `CBS_Stays_Phase4_Scale_Plan.md`. Builds on
 | Multi-currency display layer (FX rate cache, display-only — settlement stays in BDT) | FR-C6 NRB cards |
 | Seasonal pricing engine (date-range price overrides on `units`) | FR-C8 hotel inventory |
 | Partner-service booking adapter | FR-C9 |
-| Multi-city config (per-city delivery zones, tax/commission overrides if any) | city expansion |
+| Multi-city config (per-city tax/commission overrides if any) | city expansion |
 | Load-testing harness (k6 or similar) against NFR-6 | |
 
 ## 2. Frontend Component & State Plan
@@ -71,9 +71,6 @@ partner_bookings
 cities
   id, name, division, launch_status ('planned'|'onboarding'|'active'),
   field_agent_lead_user_id
-
-city_delivery_zones (extends Phase 2's delivery-zone concept per city)
-  id, city_id, polygon_geojson, base_fee_bdt, per_km_fee_bdt, min_order_bdt
 ```
 
 ## 4. API Surface (Phase 4 additions)
@@ -121,7 +118,7 @@ reused from Phase 2 for Cox's Bazar/Sylhet properties.
 point so a partner service can attach to an existing booking or stand alone;
 commission calculation reusing the Phase 2/3 commission engine.
 
-**Sprint 7** — `cities` + `city_delivery_zones`; config-driven city launch
+**Sprint 7** — `cities`; config-driven city launch
 (adding a city should be a data/config change, not a code deploy); replicate the
 Phase 1 field-agent verification workflow and Phase 2 cold-start playbook per
 new city.

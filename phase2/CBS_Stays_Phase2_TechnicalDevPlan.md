@@ -1,13 +1,9 @@
 # CBS Stays Bangladesh — Phase 2: Core Listing MVP — Technical Development Plan
 
 Companion to `CBS_Stays_Phase2_CoreMVP_Plan.md`. Builds on the stack and
-foundation established in `CBS_Stays_Phase1_TechnicalDevPlan.md`. Two parallel
-engineering workstreams (Stays, Food) sharing the Phase 1 auth/admin/audit core —
-keep them as separate `src/modules/{listings,bookings}/` and `src/modules/food/`
-backend modules with separate owners, and separate `features/{listings,food}/`
-slices on the frontend (per the module shape defined in the Phase 1 tech plan),
-per the product plan's R-11 mitigation, even though they share the database and
-deploy pipeline.
+foundation established in `CBS_Stays_Phase1_TechnicalDevPlan.md`, as
+`src/modules/{listings,bookings}/` backend modules and a `features/{listings}/`
+slice on the frontend (per the module shape defined in the Phase 1 tech plan).
 
 ## 1. New Infrastructure This Phase
 
@@ -17,8 +13,7 @@ deploy pipeline.
 | bKash/Nagad merchant API (direct, for token deposits in Phase 3 — stub the interface now) | Forward-compatible with FR-B2 |
 | Geo search: PostGIS extension on Postgres | FR-S1/S2 bounding-box map search |
 | Image pipeline: on-upload resize/compress/watermark (Sharp, run as a BullMQ job) | FR-H7 |
-| SMS/push notification dispatcher module | Booking/order lifecycle events |
-| Dispatch engine (distance-based rider assignment) | FR-F17 |
+| SMS/push notification dispatcher module | Booking lifecycle events |
 
 ## 2. Frontend Component & State Plan
 
@@ -30,7 +25,7 @@ the atomic breakdown before Sprint 1 starts.
 |---|---|
 | Atoms (shadcn primitives, mostly as-is) | `Button`, `Input`, `Checkbox`, `Badge`, `Tabs`, `Dialog`, `Skeleton` |
 | Molecules | `PriceTag`, `TenantTypeChip`, `StatusBadge`, `MapPin`, `PhotoThumb`, `FilterChip` |
-| Organisms | `PropertyCard`, `UnitSelectionTable` (the FR-H3 UI — see below), `BookingPriceBreakdown`, `PaymentMethodPicker`, `ArrivalPassCard`, `RestaurantCard`, `OrderQueueList`, `RiderJobCard` |
+| Organisms | `PropertyCard`, `UnitSelectionTable` (the FR-H3 UI — see below), `BookingPriceBreakdown`, `PaymentMethodPicker`, `ArrivalPassCard` |
 | Templates | `SearchMapLayout` (split list/map), `PropertyDetailLayout`, `CheckoutLayout` |
 
 **`UnitSelectionTable` is the component to get right first.** It consumes a
@@ -45,12 +40,10 @@ table so a second browser tab sees the unit go unavailable without a manual
 refresh.
 
 **RTK Query API slices this phase**: `listingsApi` (search, property detail,
-units), `bookingsApi` (booking, payment, arrival pass, disputes), `foodApi`
-(restaurants, menu, orders), `riderApi` (job offers, status). Each injects into
-the single root `apiSlice` created in Phase 1, rather than standing up separate
-`createApi` instances — this keeps the RTK Query cache and tag invalidation
-graph in one place, which matters once a food order and a stay booking can
-both affect the same user's dashboard view.
+units), `bookingsApi` (booking, payment, arrival pass, disputes). Each injects
+into the single root `apiSlice` created in Phase 1, rather than standing up
+separate `createApi` instances — this keeps the RTK Query cache and tag
+invalidation graph in one place.
 
 ## 3. Data Model (Phase 2 tables, additive to Phase 1)
 
@@ -95,28 +88,6 @@ payments
 arrival_passes
   booking_id, address_decrypted_snapshot, caretaker_contact,
   lock_instructions, wifi_json, released_at   -- only written once payment/token clears
-
--- food ordering (separate module, shares users table)
-restaurants
-  id, owner_user_id, trade_licence_no, nid_number_encrypted,
-  outlet_lat, outlet_lng, delivery_radius_km, status
-
-menu_items
-  id, restaurant_id, name, price_bdt, category, available (bool)
-
-riders
-  id, user_id, nid_number_encrypted, licence_no, vehicle_type, status, online (bool)
-
-food_orders
-  id, customer_id, restaurant_id, status
-    ('placed'|'accepted'|'preparing'|'ready'|'picked_up'|'delivered'|'cancelled'),
-  delivery_lat, delivery_lng, total_bdt
-
-food_order_items
-  order_id, menu_item_id, qty, price_bdt
-
-deliveries
-  id, order_id, rider_id, assigned_at, picked_up_at, delivered_at, fee_bdt
 ```
 
 ## 4. The One Piece of Logic That Must Not Be Wrong: FR-H3
@@ -154,16 +125,11 @@ it as a database constraint, not just application logic:
 | `GET /owner/calendar/:unitId`, `POST /owner/calendar/:unitId/ical-export`, `POST /owner/calendar/:unitId/ical-import` | FR-H4 |
 | `POST /bookings/:id/dispute` | FR-B13 |
 | `GET /admin/reconciliation` | FR-B14 |
-| `GET /food/restaurants?lat=&lng=`, `GET /food/restaurants/:id/menu` | FR-F1, F2 |
-| `POST /food/orders`, `PATCH /food/orders/:id/status` | FR-F3–F6 |
-| `POST /food/restaurants` (onboarding), `PATCH /admin/restaurants/:id/status` | FR-F10 |
-| `POST /riders` (onboarding), `PATCH /riders/:id/online` | FR-F14, F15 |
-| `POST /dispatch/assign/:orderId` (internal, triggered on order acceptance) | FR-F17 |
 
 ## 6. Sprint-Level Engineering Tasks (maps to the 6×2-week plan)
 
-**Sprint 1** — `owners` + NID verification queue endpoints; `restaurants`/`riders`
-onboarding tables and endpoints; admin verification queue UI wired to real data.
+**Sprint 1** — `owners` + NID verification queue endpoints; admin verification
+queue UI wired to real data.
 
 **Sprint 2** — `properties`/`units`/`unit_photos`; image pipeline (resize/
 compress/watermark + moderation flag); listing state machine (`FR-H8`) enforced
@@ -175,22 +141,19 @@ bounding-box search endpoint; `tenant_type` enforcement on the booking endpoint
 (reject a bachelor-profile user booking a family-only unit at the API layer, not
 just hidden in the UI).
 
-**Sprint 4** — full filter set on the search endpoint; mess/seat fields; cart/
-checkout endpoints for food (`food_orders` + `food_order_items`).
+**Sprint 4** — full filter set on the search endpoint; mess/seat fields.
 
 **Sprint 5** — payment aggregator integration behind an interface
 (`PaymentProvider`) so OQ-5's final choice is a config swap, not a rewrite;
 `payments` table with held/released state machine; `arrival_passes` write-once
-logic gated on payment confirmation; food payment + order lifecycle state
-machine; dispatch engine v1 (nearest-available-rider by haversine distance,
-simple at this stage — refine later if needed).
+logic gated on payment confirmation.
 
 **Sprint 6** — cancellation policy engine; masked-chat proxy (phone numbers
 never leave the server before booking confirmation — enforce by never sending
 the raw phone number to the client, not by UI hiding); commission/VAT
-calculation on both bookings and food orders; load test against NFR-1 (search
-p95 < 2s) and fix the worst offender before sign-off; field-agent bulk-onboarding
-CLI/script to seed the 1,000-listing exit target realistically.
+calculation on bookings; load test against NFR-1 (search p95 < 2s) and fix the
+worst offender before sign-off; field-agent bulk-onboarding CLI/script to seed
+the 1,000-listing exit target realistically.
 
 ## 7. Testing Priorities
 
@@ -205,6 +168,5 @@ CLI/script to seed the 1,000-listing exit target realistically.
 ## 8. Exit Gate Into Phase 3
 
 Don't start Phase 3 payment/loyalty work until: the booking exclusion constraint
-has survived a concurrency test (parallel booking attempts on dependent units),
-at least one real aggregator payment has completed in staging, and the dispatch
-engine has assigned and completed a delivery end-to-end in staging.
+has survived a concurrency test (parallel booking attempts on dependent units)
+and at least one real aggregator payment has completed in staging.

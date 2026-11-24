@@ -7,8 +7,8 @@ Exit criteria (from BRD): Section 2 (Business Objectives) targets met
 
 ## 1. Objective
 
-By the start of this phase, CBS Stays is a working, trusted, Dhaka-proven product
-with a mature food vertical. Phase 4 is about reach and ceiling: organic discovery
+By the start of this phase, CBS Stays is a working, trusted, Dhaka-proven product.
+Phase 4 is about reach and ceiling: organic discovery
 (SEO), the NRB/tourist segment, adjacent revenue (partner services), and
 geographic expansion beyond Dhaka — while holding every Section 2 KPI (BO-1
 through BO-9) to its 12-month target.
@@ -58,15 +58,15 @@ infrastructure rather than building a second marketplace engine.
 ### Sprint 7 (Weeks 13–14) — Other-City Expansion
 Roll the proven Dhaka playbook (field-agent onboarding, verification, launch
 checklist from Phase 1–2) to Chattogram, Sylhet, Khulna, Rajshahi per the BRD's
-stated city sequence. Validate area/thana data coverage, delivery-zone config
-(FR-F18) and localized content for each new city before opening search there.
+stated city sequence. Validate area/thana data coverage and localized content
+for each new city before opening search there.
 
 ### Sprint 8 (Weeks 15–16) — KPI Hardening & Program Close-Out
 Full pass against every Section 2 KPI (BO-1–BO-9): verified-listing count, visit-to-
 enquiry/enquiry-to-booking conversion, wallet-payment share, NID-verification
 rate, revenue break-even status, retention rates, scam-report rate, backup/
-uptime record, food-order volume and on-time rate. Remediate any KPI short of
-target with a scoped follow-up rather than letting the phase close open-ended.
+uptime record. Remediate any KPI short of target with a scoped follow-up
+rather than letting the phase close open-ended.
 Native iOS/Android app decision revisited here per BRD's stated "reconsidered
 after Phase 4 based on usage" — make this a decision checkpoint, not a build item.
 
@@ -84,7 +84,6 @@ All Section 2 targets met at the 12-month mark, specifically:
 | BO-6 Repeat tenants/guests / owner MAU | 25% / 70% |
 | BO-7 Scam reports per 1,000 listings | Below 5 |
 | BO-8 Backup success rate / uptime | 100% of days / 99.5% |
-| BO-9 Active restaurants / orders per month / on-time rate | 300 / 30,000 / 85% |
 
 Plus feature-level checks: SEO pages indexable and ranking for at least a sample
 of target area+type queries; an NRB user can complete a card payment in a
@@ -102,9 +101,6 @@ checkout; at least one additional city beyond Dhaka has live, verified listings.
 - **NFR-6 (scalability: 100k monthly users, 5,000 concurrent)** should be load-tested
   explicitly in this phase, since multi-city + tourist + partner-services traffic is the
   first time the platform sees combined load anywhere near this ceiling.
-- **R-10 (delivery economics)** — city expansion must repeat the "2–3 dense areas
-  first" discipline from Phase 2 in each new city, not launch city-wide delivery on
-  day one.
 - If any BO target in Section 3's table is materially short at Sprint 8, treat it as a
   scope item for a Phase 5 (not yet defined in the BRD) rather than silently
   declaring the program complete.

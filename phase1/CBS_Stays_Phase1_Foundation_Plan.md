@@ -7,9 +7,9 @@ Exit criteria (from BRD): restore test passed; no placeholder pages
 
 ## 1. Objective
 
-Stand up the shared platform foundation that both the stays marketplace and the
-food ordering vertical will run on, before any listing, booking or ordering feature is
-built. Nothing in Phase 2 can start safely until this phase's exit criteria are met.
+Stand up the shared platform foundation that the stays marketplace will run on,
+before any listing or booking feature is built. Nothing in Phase 2 can start safely
+until this phase's exit criteria are met.
 
 ## 2. Scope (in this phase)
 
@@ -27,15 +27,15 @@ built. Nothing in Phase 2 can start safely until this phase's exit criteria are 
 | — | Bangla/English i18n scaffolding (underpins NFR-7, used by every later phase) |
 
 Out of scope for Phase 1 (deferred to Phase 2+): listings, search, booking, payments,
-reviews, food ordering, loyalty, notifications content (the notification *pipe* may be
-stubbed, but no booking/order triggers exist yet).
+reviews, loyalty, notifications content (the notification *pipe* may be stubbed, but
+no booking triggers exist yet).
 
 ## 3. Weekly Breakdown
 
 ### Week 1 — Environment and Identity
 - Repo, CI/CD pipeline, staging + production environments, secrets management (NFR-3, NFR-9)
 - Hosting decision confirmed against OQ-6 (data localization) before provisioning
-- User/account data model: single identity shared across stays and food (owner, tenant/guest, admin, restaurant, rider roles)
+- User/account data model: single identity shared across all roles (owner, tenant/guest, admin, and later transport operator)
 - Auth: mobile OTP sign-up/login, session management, password-less by default
 
 ### Week 2 — Verification Primitives (FR-T8, feeds FR-T7)
@@ -86,6 +86,6 @@ Phase 1 is done only when all of the following hold:
 
 ## 6. What Explicitly Does Not Start Yet
 
-No listing, search, booking, payment, review, loyalty, or food-ordering work begins in
-this phase. Phase 2 (Core Listing MVP) depends on this phase's auth, admin,
-audit-log, soft-delete, and CMS foundation being signed off first.
+No listing, search, booking, payment, review, or loyalty work begins in this phase.
+Phase 2 (Core Listing MVP) depends on this phase's auth, admin, audit-log,
+soft-delete, and CMS foundation being signed off first.

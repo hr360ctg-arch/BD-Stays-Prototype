@@ -12,7 +12,7 @@ once it's answered, but the architecture below stands regardless.
 
 | Layer | Choice | Why |
 |---|---|---|
-| Backend | Node.js + TypeScript, Express, **modular architecture** (one folder per domain module — `auth`, `admin`, `listings`, `bookings`, `food` — each with its own `routes/controller/service/repository`) | Keeps the Stays and Food workstreams genuinely separable (per the product plan's R-11 mitigation) without a heavier framework than the project needs |
+| Backend | Node.js + TypeScript, Express, **modular architecture** (one folder per domain module — `auth`, `admin`, `listings`, `bookings`, and later `ticketing` in Phase 5 — each with its own `routes/controller/service/repository`) | Keeps each vertical genuinely separable without a heavier framework than the project needs |
 | ORM | **Prisma** | Type-safe queries end-to-end with TypeScript, migrations as code, `prisma.$transaction` for the booking exclusion logic, soft-delete enforced via Prisma middleware (`$use`) rather than per-query discipline |
 | Database | PostgreSQL 15+ | Relational integrity needed for inventory-dependency logic (FR-H3), financial ledgers, audit log |
 | API style | REST + JSON, OpenAPI-documented | Matches NFR-9 (documented APIs) |
@@ -21,7 +21,7 @@ once it's answered, but the architecture below stands regardless.
 | Frontend | **Next.js (App Router) + shadcn/ui**, installable PWA | Mobile-first, lazy-loaded images, Bangla/English i18n via next-intl |
 | Frontend state/data | **Redux Toolkit + RTK Query** | RTK Query owns all server-state (listings, bookings, admin data) with cache tags for invalidation (e.g. booking a unit invalidates that property's unit-table query); plain Redux slices only for client-only UI state (wizard step, filters, modal open/close) |
 | Frontend structure | **Atomic design** — `components/atoms` (shadcn primitives: Button, Input, Badge), `molecules` (FormField, StatCard, UnitRow), `organisms` (UnitSelectionTable, BookingSummaryCard, AdminSidebar), `templates` (DashboardLayout, AuthLayout), and route-level `app/` pages that compose templates + organisms | Keeps the component tree aligned with how the Phase 1–4 prototypes are already organized (shell → sections → cards/tables), and makes shadcn's unstyled primitives the actual atoms instead of ad-hoc one-off components |
-| Realtime | Socket.io (admin live updates, rider dispatch in Phase 2) | |
+| Realtime | Socket.io (admin live updates, seat-hold/booking updates in Phase 5 ticketing) | |
 | Hosting | Containerized (Docker), deployed to a Bangladesh-or-nearby region (NFR-5) behind a CDN | Pending OQ-6 confirmation |
 | CI/CD | GitHub Actions → staging → production, with the staging environment required by NFR-9 | |
 
@@ -43,7 +43,7 @@ centralized and auditable.
 ```
 src/
   components/{atoms,molecules,organisms,templates}/
-  features/{auth,admin,listings,bookings,food}/
+  features/{auth,admin,listings,bookings}/
     <feature>Api.ts        -- RTK Query endpoints (injected into one root apiSlice)
     <feature>Slice.ts       -- client-only UI state for that feature, if any
   app/                      -- Next.js App Router pages, composed from the above
@@ -51,8 +51,8 @@ src/
 
 ## 2. Phase 1 Scope (from the product plan)
 
-FR-A1–A7, FR-H9, FR-T7, FR-T8, plus auth/CMS/i18n scaffolding. Nothing listing-,
-booking-, or food-related is built yet.
+FR-A1–A7, FR-H9, FR-T7, FR-T8, plus auth/CMS/i18n scaffolding. Nothing listing- or
+booking-related is built yet.
 
 ## 3. Data Model (Phase 1 tables)
 

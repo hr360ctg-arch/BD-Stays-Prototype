@@ -1,13 +1,11 @@
 # CBS Stays Bangladesh — Phase 2: Core Listing MVP — Screens & Field Specification
 
 Field-level companion to `CBS_Stays_Phase2_CoreMVP_Plan.md` and
-`CBS_Stays_Phase2_TechnicalDevPlan.md`. Two tracks: **Stays** (public search
-through booking) and **Food** (customer, restaurant, rider). Builds on the
-Phase 1 admin shell — new admin screens here extend `/admin`.
+`CBS_Stays_Phase2_TechnicalDevPlan.md`. Covers the **Stays** marketplace
+(public search through booking). Builds on the Phase 1 admin shell — new
+admin screens here extend `/admin`.
 
 ---
-
-# TRACK A — STAYS
 
 ## P2-01 — Search & Map (home)
 
@@ -274,58 +272,6 @@ Listing review detail mirrors P2-03's fields plus an admin-only moderation panel
 - **Bookings table:** booking ID, tenant, property/unit, dates, status, amount, payment method.
 - **Disputes sub-view:** list of `pending`/`in_review`/`resolved` disputes (from P2-08 submissions) with full tenant-submitted detail, `Resolve in tenant's favour (refund)` / `Resolve in owner's favour (release payout)` / `Request more info` actions.
 - **Reconciliation sub-view:** stat tiles (Settled today, Flagged mismatches, Aggregator name), table of transaction ID ↔ booking ↔ aggregator amount ↔ platform amount ↔ match status.
-
----
-
-# TRACK B — FOOD ORDERING
-
-## P2-14 — Restaurant Discovery
-
-**Route:** `/food` · **Src:** FR-F1
-
-Search bar (by dish or restaurant, Bangla+English) · "Near me" location prompt · filter chips: Cuisine, Rating, Delivery time, Price band, Offers, Halal, Vegetarian · restaurant card: photo, name, cuisine tags, rating, delivery-time estimate, price band (৳/৳৳/৳৳৳).
-
-## P2-15 — Restaurant Page & Menu
-
-**Route:** `/food/restaurants/:id` · **Src:** FR-F2
-
-Header: cover photo, name, rating, opening hours (open/closed now indicator), cuisine tags. Menu: category tabs, each dish row shows photo, name, description, price, size/option/add-on selectors (modal on tap), availability (greyed if unavailable today), `Add to cart`.
-
-## P2-16 — Cart & Checkout
-
-**Route:** `/food/cart` · **Src:** FR-F3, FR-F4, FR-F9
-
-Cart list (single-restaurant enforced — adding from a second restaurant prompts "Start a new cart?"), quantity steppers, delivery address (map pin + landmark note, with a `Use my booked property` option linking to an active Phase-2 stay booking, FR-F9), delivery timing (Now / Schedule — date+time picker), special instructions textarea, price breakdown (items, delivery fee, service fee, VAT, discount), payment method (bKash/Nagad/Rocket/card/Cash on delivery with a stated limit), optional rider tip, `Place order`.
-
-## P2-17 — Order Tracking
-
-**Route:** `/food/orders/:id` · **Src:** FR-F5, FR-F6
-
-Status stepper: Placed → Accepted → Preparing → Ready → Picked up → Delivered (or Cancelled, with reason). `Cancel order` (only enabled pre-Accepted — free cancellation). Post-delivery: `Report an issue` (missing/wrong items → refund-to-wallet flow, FR-F6) and rating prompt (full spec in Phase 3).
-
-## P2-18 — Restaurant Dashboard
-
-**Route:** `/restaurant` · **Src:** FR-F10, FR-F11, FR-F12
-
-**Onboarding (FR-F10):** owner name, trade licence number+upload, NID number+upload, bank or wallet payout account, outlet address+map pin, delivery radius (km slider) — submitted for admin approval before going live.
-
-**Live dashboard:** incoming-order queue (sound alert, countdown timer, `Accept`/`Reject`, auto-reject on timeout), `Set preparation time` per accepted order, `Mark ready`, `Pause ordering` (store-wide toggle), menu editor (add/edit/delete dish, toggle in-stock), opening-hours editor (per day of week), orders history, earnings & payouts view (commission %, VAT, payout statements, FR-F12), promotions (discounts, combos, free-delivery threshold, scheduled Ramadan/iftar menus — FR-F13, Phase 3 growth item but the editor UI exists here).
-
-## P2-19 — Rider App
-
-**Route:** `/rider` · **Src:** FR-F14, FR-F15, FR-F16, FR-F17
-
-**Onboarding (FR-F14):** NID, driving licence, vehicle type+details, photo, emergency contact — admin approval + training-checklist gate before activation.
-
-**Live app:** Online/Offline toggle, incoming job-offer card (pickup, drop-off, distance, fee, `Accept`/`Decline`), active-delivery screen (pickup confirmation, one-tap navigation link, drop-off confirmation via customer OTP, FR-F15), earnings tab (today's total, per-delivery breakdown: base fee by distance + tips + bonuses, cash-on-delivery settlement tracker, payout history to bKash/Nagad, FR-F16).
-
-**Admin dispatch board (FR-F17), part of `/admin`:** map view of online riders, unassigned orders queue, manual `Assign to rider` override, auto-reassignment log on rider rejection/delay.
-
-## P2-20 — Admin: Delivery Zones & Fees
-
-**Route:** `/admin/delivery-zones` · **Src:** FR-F18
-
-Map-drawn zone polygons per area, per-zone: base fee, per-km fee, minimum order value, peak-time surcharge rule, weather-surcharge toggle.
 
 ---
 

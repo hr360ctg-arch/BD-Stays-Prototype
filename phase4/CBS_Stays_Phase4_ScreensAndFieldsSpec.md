@@ -106,10 +106,8 @@ form with the same fields.
 | Launch status | Planned / Onboarding / Active |
 | Verified listings | live count |
 | Field-agent lead | assigned admin/agent |
-| Delivery zones configured | Y/N (food vertical readiness) |
 
-**City detail drawer:** `Edit delivery zones` (reuses P2-20's zone-polygon
-editor, scoped per city), `Change launch status`, field-agent onboarding
+**City detail drawer:** `Change launch status`, field-agent onboarding
 checklist (reused from Phase 1/2's verification workflow, scoped per city).
 
 ---
@@ -144,8 +142,7 @@ Rows cover every BO-1 through BO-9 metric defined in the BRD: active verified
 listings, visit→enquiry / enquiry→booking rates, % bookings via
 wallet/card/token, owner NID-verification rate, listings-with-5+-photos rate,
 monthly break-even status, repeat-tenant rate, owner MAU rate, scam-reports-
-per-1000-listings, backup-success rate, uptime, active restaurants, monthly
-completed orders, on-time delivery rate.
+per-1000-listings, backup-success rate, uptime.
 
 ---
 

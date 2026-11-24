@@ -103,8 +103,7 @@ notification_log
 ## 5. Sprint-Level Engineering Tasks (maps to the 8×2-week plan)
 
 **Sprint 1** — `pay_at_property_eligibility` table + the rules engine (admin-
-configurable thresholds, not hardcoded); live-tracking data pipeline groundwork
-for food (rider location ping endpoint feeding a Redis geo set).
+configurable thresholds, not hardcoded).
 
 **Sprint 2** — token deposit flow end-to-end; `no_show_incidents` +
 scheduled job that recomputes `eligible` on a rolling 6-month window and flips
