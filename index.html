@@ -2766,7 +2766,25 @@ html, body {
           </div>
           <button class="btn btn-primary" id="tkSearchBtn" style="margin-top:14px" data-t="tk_search_btn">Search trips</button>
         </div>
-        <div class="section-title"><h2 data-t="tk_results">Available trips</h2></div>
+        <div class="filter-bar" style="margin-bottom:4px">
+          <span class="chip on" data-tk-time="any"><span data-t="tk_time_any">Any time</span></span>
+          <span class="chip" data-tk-time="morning"><span data-t="tk_time_morning">Morning</span></span>
+          <span class="chip" data-tk-time="afternoon"><span data-t="tk_time_afternoon">Afternoon</span></span>
+          <span class="chip" data-tk-time="evening"><span data-t="tk_time_evening">Evening</span></span>
+          <span class="chip" data-tk-time="night"><span data-t="tk_time_night">Night</span></span>
+          <span class="chip" data-tk-class="ac"><span data-t="tk_class_ac">AC only</span></span>
+          <span class="chip" data-tk-class="nonac"><span data-t="tk_class_nonac">Non-AC only</span></span>
+        </div>
+        <div class="section-title">
+          <h2 data-t="tk_results">Available trips</h2>
+          <span class="spacer"></span>
+          <select id="tkSort" style="font-size:12px;padding:5px 8px;border-radius:8px;border:1px solid var(--border)">
+            <option value="departure" data-t="tk_sort_departure">Sort: Departure time</option>
+            <option value="price_low" data-t="tk_sort_price_low">Sort: Price (low–high)</option>
+            <option value="price_high" data-t="tk_sort_price_high">Sort: Price (high–low)</option>
+            <option value="seats" data-t="tk_sort_seats">Sort: Seats remaining</option>
+          </select>
+        </div>
         <div style="display:flex;flex-direction:column;gap:14px" id="tkResults"></div>
       </section>
 
@@ -2788,6 +2806,10 @@ html, body {
           <div>
             <div class="card">
               <div style="font-weight:700;font-size:14px;margin-bottom:10px" data-t="seat_summary_title">Your selection</div>
+              <div id="seatHoldTimerWrap" hidden style="display:flex;align-items:center;gap:8px;background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn);border-radius:8px;padding:8px 10px;margin-bottom:12px;font-size:12.5px;font-weight:700">
+                <i data-icon="clock" data-icon-cls="icon-sm"></i>
+                <span data-t="seat_hold_msg">Seats held for</span> <span id="seatHoldCountdown" class="tabular">8:00</span>
+              </div>
               <div id="seatSelectionSummary" class="muted" style="font-size:13px" data-t="seat_summary_empty">No seats selected yet</div>
               <div class="price-row total" style="margin-top:14px"><span data-t="seat_total">Total</span><span class="tabular" id="seatTotalPrice">৳ 0</span></div>
               <button class="btn btn-primary btn-block" id="seatContinueBtn" style="margin-top:14px" disabled data-t="seat_continue">Continue to checkout</button>
@@ -2961,6 +2983,10 @@ html, body {
               </select>
             </div>
           </div>
+          <div style="margin-top:16px">
+            <div class="muted" style="font-size:12px;margin-bottom:8px" data-t="bus_preview">Live preview — confirm this matches the real bus before saving</div>
+            <div id="busPreviewGrid" class="seat-grid" style="transform:scale(0.85);transform-origin:top left"></div>
+          </div>
           <button class="btn btn-primary" id="busSaveBtn" style="margin-top:14px" data-t="bus_save">Save bus</button>
         </div>
       </section>
@@ -2980,6 +3006,8 @@ html, body {
             <div class="field"><label data-t="trip_f_datetime">Departure date &amp; time</label><input type="datetime-local" id="tripDepartInput" value="2026-12-05T22:00"></div>
             <div class="field"><label data-t="trip_f_fareac">Fare — AC (৳)</label><input type="number" id="tripFareAcInput" value="1200"></div>
             <div class="field"><label data-t="trip_f_farenonac">Fare — Non-AC (৳)</label><input type="number" id="tripFareNonAcInput" value="650"></div>
+            <div class="field"><label data-t="trip_f_boarding">Boarding point</label><input type="text" id="tripBoardingInput" placeholder="e.g. Gabtoli Bus Terminal, 9:30 PM"></div>
+            <div class="field"><label data-t="trip_f_dropping">Dropping point</label><input type="text" id="tripDroppingInput" placeholder="e.g. GEC Circle Counter"></div>
           </div>
           <button class="btn btn-primary" id="tripSaveBtn" style="margin-top:14px" data-t="trip_save">Publish trip</button>
         </div>
@@ -2990,9 +3018,17 @@ html, body {
         <div class="section-title"><h2 data-t="h_policies">Cancellation policies</h2><span class="count" data-t="h_policies_sub">Applied automatically at ticket cancellation time based on hours before departure</span></div>
         <div class="card" style="max-width:680px">
           <table>
-            <thead><tr><th data-t="pol_hours">Hours before departure</th><th data-t="pol_refund">Refund</th></tr></thead>
+            <thead><tr><th data-t="pol_hours">Hours before departure</th><th data-t="pol_refund">Refund</th><th></th></tr></thead>
             <tbody id="policyRows"></tbody>
           </table>
+        </div>
+        <div class="section-title"><h2 data-t="pol_add">Add a new rule</h2></div>
+        <div class="card" style="max-width:680px">
+          <div class="form-grid">
+            <div class="field"><label data-t="pol_f_hours">Hours before departure</label><input type="number" id="polHoursInput" value="12"></div>
+            <div class="field"><label data-t="pol_f_refund">Refund percentage</label><input type="number" id="polRefundInput" value="100" max="100" min="0"></div>
+          </div>
+          <button class="btn btn-primary" id="polAddBtn" style="margin-top:14px" data-t="pol_add_btn">Add rule</button>
         </div>
       </section>
 
@@ -3545,6 +3581,28 @@ html, body {
     <div class="modal-actions">
       <button class="btn btn-ghost btn-sm" id="wrCancelBtn" data-t="cancel">Cancel</button>
       <button class="btn btn-primary btn-sm" id="wrSubmitBtn" data-t="wr_submit">Post review</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tenant: cancel a bus ticket -->
+<div class="modal-backdrop" id="cancelTicketModal">
+  <div class="modal">
+    <h3 data-t="ct_title">Cancel this ticket?</h3>
+    <p class="muted" style="font-size:12.5px" id="ctPolicyNote"></p>
+    <div class="price-row total" style="margin-top:4px"><span data-t="ct_refund_amount">Refund amount</span><span class="tabular" id="ctRefundAmount">৳ 0</span></div>
+    <div class="field" style="margin-top:14px"><label data-t="ct_f_reason">Reason (optional)</label>
+      <select id="ctReason">
+        <option value="" data-t="ct_r_none">— Select a reason —</option>
+        <option value="plans_changed" data-t="ct_r_plans">Travel plans changed</option>
+        <option value="found_cheaper" data-t="ct_r_cheaper">Found a cheaper option</option>
+        <option value="wrong_booking" data-t="ct_r_wrong">Booked by mistake</option>
+        <option value="other" data-t="ct_r_other">Other</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost btn-sm" id="ctBackBtn" data-t="ct_back">Keep ticket</button>
+      <button class="btn btn-primary btn-sm" id="ctConfirmBtn" data-t="ct_confirm">Confirm cancellation</button>
     </div>
   </div>
 </div>
@@ -4174,7 +4232,18 @@ Object.assign(window.I18N.bn, {
   h_adminoperators: 'অপারেটর ভেরিফিকেশন কিউ', h_adminoperators_sub: 'অনুমোদনের আগে ট্রেড লাইসেন্স, এনআইডি ও রুট বিবরণ পর্যালোচনা করুন',
   col_operator: 'অপারেটর', ao_owner: 'মালিক',
   h_adminticketing: 'ট্রিপ ও রুট তদারকি', h_adminticketing_sub: 'ট্রিপ বিরতি দিন বা অপারেটর ডিলিস্ট করুন; টিকেট বিরোধ সমাধান করুন',
-  ato_seats: 'বিক্রিত সিট', ato_disputes: 'টিকেট বিরোধ'
+  ato_seats: 'বিক্রিত সিট', ato_disputes: 'টিকেট বিরোধ',
+  tk_time_any: 'যেকোনো সময়', tk_time_morning: 'সকাল', tk_time_afternoon: 'বিকাল', tk_time_evening: 'সন্ধ্যা', tk_time_night: 'রাত',
+  tk_class_ac: 'শুধু এসি', tk_class_nonac: 'শুধু নন-এসি',
+  tk_sort_departure: 'সাজান: ছাড়ার সময়', tk_sort_price_low: 'সাজান: মূল্য (কম–বেশি)', tk_sort_price_high: 'সাজান: মূল্য (বেশি–কম)', tk_sort_seats: 'সাজান: বাকি সিট',
+  seat_hold_msg: 'সিট হোল্ড করা আছে আরও',
+  ct_title: 'এই টিকেট বাতিল করবেন?', ct_refund_amount: 'ফেরতযোগ্য পরিমাণ',
+  ct_f_reason: 'কারণ (ঐচ্ছিক)', ct_r_none: '— একটি কারণ বাছাই করুন —', ct_r_plans: 'ভ্রমণ পরিকল্পনা পরিবর্তন হয়েছে',
+  ct_r_cheaper: 'সস্তা অপশন পেয়েছি', ct_r_wrong: 'ভুলবশত বুক হয়েছে', ct_r_other: 'অন্যান্য',
+  ct_back: 'টিকেট রাখুন', ct_confirm: 'বাতিলকরণ নিশ্চিত করুন',
+  pol_add: 'নতুন নিয়ম যোগ করুন', pol_f_hours: 'ছাড়ার কত ঘণ্টা আগে', pol_f_refund: 'ফেরতের শতাংশ', pol_add_btn: 'নিয়ম যোগ করুন',
+  trip_f_boarding: 'বোর্ডিং পয়েন্ট', trip_f_dropping: 'ড্রপিং পয়েন্ট',
+  bus_preview: 'লাইভ প্রিভিউ — সংরক্ষণের আগে নিশ্চিত করুন এটি আসল বাসের সাথে মিলছে'
 });
 Object.assign(window.I18N.en, {
   nav_reporting: 'Platform Reporting',
@@ -4311,7 +4380,18 @@ Object.assign(window.I18N.en, {
   h_adminoperators: 'Operator verification queue', h_adminoperators_sub: 'Review trade licence, NID, and route details before approval',
   col_operator: 'Operator', ao_owner: 'Owner',
   h_adminticketing: 'Trip & route oversight', h_adminticketing_sub: 'Pause a trip or delist an operator; resolve ticket disputes',
-  ato_seats: 'Seats sold', ato_disputes: 'Ticket disputes'
+  ato_seats: 'Seats sold', ato_disputes: 'Ticket disputes',
+  tk_time_any: 'Any time', tk_time_morning: 'Morning', tk_time_afternoon: 'Afternoon', tk_time_evening: 'Evening', tk_time_night: 'Night',
+  tk_class_ac: 'AC only', tk_class_nonac: 'Non-AC only',
+  tk_sort_departure: 'Sort: Departure time', tk_sort_price_low: 'Sort: Price (low–high)', tk_sort_price_high: 'Sort: Price (high–low)', tk_sort_seats: 'Sort: Seats remaining',
+  seat_hold_msg: 'Seats held for',
+  ct_title: 'Cancel this ticket?', ct_refund_amount: 'Refund amount',
+  ct_f_reason: 'Reason (optional)', ct_r_none: '— Select a reason —', ct_r_plans: 'Travel plans changed',
+  ct_r_cheaper: 'Found a cheaper option', ct_r_wrong: 'Booked by mistake', ct_r_other: 'Other',
+  ct_back: 'Keep ticket', ct_confirm: 'Confirm cancellation',
+  pol_add: 'Add a new rule', pol_f_hours: 'Hours before departure', pol_f_refund: 'Refund percentage', pol_add_btn: 'Add rule',
+  trip_f_boarding: 'Boarding point', trip_f_dropping: 'Dropping point',
+  bus_preview: 'Live preview — confirm this matches the real bus before saving'
 });
 Object.assign(window.I18N.bn, {
   pub_nav_why: 'কেন CBS?',
@@ -5675,25 +5755,41 @@ function rm_wire(){
 /* ================= TRANSPORT TICKETING (Phase 5) ================= */
 const tk_cityLabel = { dhaka:'Dhaka', chattogram:'Chattogram', sylhet:'Sylhet', coxsbazar:"Cox's Bazar" };
 const tk_tripsData = [
-  { id:'TRP-1', operator:'Green Line Paribahan', origin:'dhaka', dest:'chattogram', originLabel:'Dhaka (Gabtoli)', destLabel:'Chattogram (GEC Circle)', date:'2026-12-05', departTime:'10:00 PM', arriveTime:'4:30 AM', busLabel:'Volvo 9800 (AC)', layout:'2-2', rows:9, fareAc:1200, fareNonAc:null, soldSeats:['1A','1B','2C','3A','4B','5A','5C','6D','7A','8C','9B'], heldSeats:['2A'] },
-  { id:'TRP-2', operator:'Shyamoli Paribahan', origin:'dhaka', dest:'sylhet', originLabel:'Dhaka (Sayedabad)', destLabel:'Sylhet (Kadamtoli)', date:'2026-12-05', departTime:'11:30 PM', arriveTime:'6:00 AM', busLabel:'Scania (Non-AC)', layout:'2-3', rows:9, fareAc:null, fareNonAc:650, soldSeats:['1A','1E','3C','4A','6B','7E'], heldSeats:[] },
-  { id:'TRP-3', operator:'Ena Transport', origin:'dhaka', dest:'coxsbazar', originLabel:'Dhaka (Kallyanpur)', destLabel:"Cox's Bazar (Kolatoli)", date:'2026-12-05', departTime:'9:00 PM', arriveTime:'7:00 AM', busLabel:'Scania Irizar (AC)', layout:'2-2', rows:9, fareAc:1600, fareNonAc:null, soldSeats:['1A','1B','1C','1D','2A','2B','2C','3A','3B','4C','4D','5A','5B','5C','6A','6B','6C','6D','7A','7B','7C','8A','8B','8C','9A','9B','9C','9D'], heldSeats:['3C'] },
+  { id:'TRP-1', operator:'Green Line Paribahan', origin:'dhaka', dest:'chattogram', originLabel:'Dhaka (Gabtoli)', destLabel:'Chattogram (GEC Circle)', date:'2026-12-05', departTime:'10:00 PM', arriveTime:'4:30 AM', timeBand:'night', busLabel:'Volvo 9800 (AC)', layout:'2-2', rows:9, fareAc:1200, fareNonAc:null, soldSeats:['1A','1B','2C','3A','4B','5A','5C','6D','7A','8C','9B'], heldSeats:['2A'] },
+  { id:'TRP-2', operator:'Shyamoli Paribahan', origin:'dhaka', dest:'sylhet', originLabel:'Dhaka (Sayedabad)', destLabel:'Sylhet (Kadamtoli)', date:'2026-12-05', departTime:'11:30 PM', arriveTime:'6:00 AM', timeBand:'night', busLabel:'Scania (Non-AC)', layout:'2-3', rows:9, fareAc:null, fareNonAc:650, soldSeats:['1A','1E','3C','4A','6B','7E'], heldSeats:[] },
+  { id:'TRP-3', operator:'Ena Transport', origin:'dhaka', dest:'coxsbazar', originLabel:'Dhaka (Kallyanpur)', destLabel:"Cox's Bazar (Kolatoli)", date:'2026-12-05', departTime:'9:00 AM', arriveTime:'7:00 PM', timeBand:'morning', busLabel:'Scania Irizar (AC)', layout:'2-2', rows:9, fareAc:1600, fareNonAc:null, soldSeats:['1A','1B','1C','1D','2A','2B','2C','3A','3B','4C','4D','5A','5B','5C','6A','6B','6C','6D','7A','7B','7C','8A','8B','8C','9A','9B','9C','9D'], heldSeats:['3C'] },
+  { id:'TRP-4', operator:'Hanif Enterprise', origin:'dhaka', dest:'sylhet', originLabel:'Dhaka (Mohakhali)', destLabel:'Sylhet (Amberkhana)', date:'2026-12-05', departTime:'2:30 PM', arriveTime:'9:00 PM', timeBand:'afternoon', busLabel:'Hino AC', layout:'2-2', rows:9, fareAc:1050, fareNonAc:null, soldSeats:['1A','2B','3C'], heldSeats:[] },
 ];
 let tk_currentTripId = null;
 let tk_selectedSeats = [];
+let tk_holdTimerId = null;
+let tk_holdSeconds = 0;
+const TK_HOLD_SECONDS_TOTAL = 480;
 
 function tk_seatsRemaining(trip){
   const total = trip.layout==='2-2' ? trip.rows*4 : trip.rows*5;
   return total - trip.soldSeats.length - trip.heldSeats.length;
 }
 
+let tk_activeTimeFilter = 'any';
+let tk_activeClassFilter = null;
+
 function tk_renderSearch(){
   const el = document.getElementById('tkResults'); if(!el) return;
   const origin = document.getElementById('tkOrigin')?.value;
   const dest = document.getElementById('tkDest')?.value;
+  const sort = document.getElementById('tkSort')?.value || 'departure';
   let list = tk_tripsData.slice();
   if(origin) list = list.filter(t=>t.origin===origin);
   if(dest) list = list.filter(t=>t.dest===dest);
+  if(tk_activeTimeFilter !== 'any') list = list.filter(t=>t.timeBand===tk_activeTimeFilter);
+  if(tk_activeClassFilter === 'ac') list = list.filter(t=>t.fareAc);
+  else if(tk_activeClassFilter === 'nonac') list = list.filter(t=>t.fareNonAc);
+
+  if(sort === 'price_low') list.sort((a,b)=>(a.fareAc||a.fareNonAc)-(b.fareAc||b.fareNonAc));
+  else if(sort === 'price_high') list.sort((a,b)=>(b.fareAc||b.fareNonAc)-(a.fareAc||a.fareNonAc));
+  else if(sort === 'seats') list.sort((a,b)=>tk_seatsRemaining(b)-tk_seatsRemaining(a));
+
   if(!list.length){
     el.innerHTML = `<div class="card muted" style="text-align:center;padding:30px">${LANG==='bn'?'এই রুটে কোনো ট্রিপ পাওয়া যায়নি':'No trips found for this route'}</div>`;
     return;
@@ -5717,6 +5813,37 @@ function tk_renderSearch(){
   }).join('');
 }
 
+function tk_startHoldTimer(){
+  clearInterval(tk_holdTimerId);
+  tk_holdSeconds = TK_HOLD_SECONDS_TOTAL;
+  const wrap = document.getElementById('seatHoldTimerWrap');
+  const cd = document.getElementById('seatHoldCountdown');
+  if(!wrap || !cd) return;
+  const tick = ()=>{
+    const m = Math.floor(tk_holdSeconds/60), s = tk_holdSeconds%60;
+    cd.textContent = m+':'+String(s).padStart(2,'0');
+    if(tk_holdSeconds<=0){
+      clearInterval(tk_holdTimerId);
+      wrap.hidden = true;
+      if(tk_selectedSeats.length){
+        tk_selectedSeats = [];
+        tk_renderSeatGrid();
+        tk_renderSeatSummary();
+        toastMsg(LANG==='bn'?'আপনার সিট হোল্ড মেয়াদ শেষ হয়েছে — আবার নির্বাচন করুন':'Your seat hold expired — please reselect','clock');
+      }
+      return;
+    }
+    tk_holdSeconds--;
+  };
+  tick();
+  tk_holdTimerId = setInterval(tick, 1000);
+}
+function tk_stopHoldTimer(){
+  clearInterval(tk_holdTimerId);
+  const wrap = document.getElementById('seatHoldTimerWrap');
+  if(wrap) wrap.hidden = true;
+}
+
 function tk_openSeatMap(tripId){
   tk_currentTripId = tripId;
   tk_selectedSeats = [];
@@ -5724,6 +5851,7 @@ function tk_openSeatMap(tripId){
   document.getElementById('tkTripSummary').textContent = `${t.operator} · ${t.originLabel} → ${t.destLabel} · ${t.date} ${t.departTime}`;
   tk_renderSeatGrid();
   tk_renderSeatSummary();
+  tk_stopHoldTimer();
   showView('seatmap');
 }
 
@@ -5779,9 +5907,16 @@ function tk_wireSeatGrid(){
     const btn = e.target.closest('.seat-btn:not([disabled])'); if(!btn) return;
     const seat = btn.dataset.seat;
     const idx = tk_selectedSeats.indexOf(seat);
+    const wasEmpty = tk_selectedSeats.length === 0;
     if(idx>-1) tk_selectedSeats.splice(idx,1); else tk_selectedSeats.push(seat);
     tk_renderSeatGrid();
     tk_renderSeatSummary();
+    if(wasEmpty && tk_selectedSeats.length){
+      document.getElementById('seatHoldTimerWrap').hidden = false;
+      tk_startHoldTimer();
+    } else if(!tk_selectedSeats.length){
+      tk_stopHoldTimer();
+    }
   });
   document.getElementById('seatContinueBtn').addEventListener('click', ()=>{
     if(!tk_selectedSeats.length) return;
@@ -5823,13 +5958,21 @@ function tk_pay(){
   t.soldSeats.push(...tk_selectedSeats);
   const ref = 'CBST-' + (tk_ticketSeq++);
   tk_myTickets.unshift({
-    ref, operator:t.operator, originLabel:t.originLabel, destLabel:t.destLabel,
-    date:t.date, departTime:t.departTime, seats:tk_selectedSeats.slice(), status:'upcoming'
+    ref, tripId:t.id, operator:t.operator, originLabel:t.originLabel, destLabel:t.destLabel,
+    date:t.date, departTime:t.departTime, seats:tk_selectedSeats.slice(), status:'upcoming',
+    hoursBeforeDeparture: 8
   });
   tk_selectedSeats = [];
+  tk_stopHoldTimer();
   tk_renderMyTickets();
   showView('myticket');
   toastMsg(LANG==='bn'?'টিকেট নিশ্চিত হয়েছে':'Ticket confirmed','ticket');
+}
+
+function tk_refundPercentFor(hoursBefore){
+  const sorted = [...op_policies].sort((a,b)=>b.hours-a.hours);
+  for(const p of sorted){ if(hoursBefore >= p.hours) return p.refund; }
+  return 0;
 }
 
 function tk_renderMyTickets(){
@@ -5838,7 +5981,10 @@ function tk_renderMyTickets(){
     el.innerHTML = `<div class="card muted" style="text-align:center;padding:30px">${LANG==='bn'?'এখনো কোনো টিকেট কেনা হয়নি':'No tickets booked yet'}</div>`;
     return;
   }
-  el.innerHTML = tk_myTickets.map(tk=>`
+  el.innerHTML = tk_myTickets.map(tk=>{
+    const statusLbl = tk.status==='cancelled' ? (LANG==='bn'?'বাতিল':'Cancelled') : (LANG==='bn'?'নিশ্চিত':'Confirmed');
+    const badgeCls = tk.status==='cancelled' ? 'badge-muted' : 'badge-ok';
+    return `
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
         <div>
@@ -5847,18 +5993,67 @@ function tk_renderMyTickets(){
           <div class="muted" style="font-size:12px;margin-top:4px">${tk.date} · ${tk.departTime} · ${LANG==='bn'?'সিট':'Seats'}: ${tk.seats.join(', ')}</div>
         </div>
         <div style="text-align:right">
-          <span class="badge badge-ok">${LANG==='bn'?'নিশ্চিত':'Confirmed'}</span>
+          <span class="badge ${badgeCls}">${statusLbl}</span>
           <div class="mono" style="font-size:11px;margin-top:6px;color:var(--fg-faint)">${tk.ref}</div>
         </div>
       </div>
+      ${tk.status==='upcoming' ? `<div style="display:flex;justify-content:flex-end;margin-top:10px">
+        <button class="btn btn-sm btn-danger-outline" data-action="tk-cancel-ticket" data-ref="${tk.ref}">${LANG==='bn'?'টিকেট বাতিল করুন':'Cancel ticket'}</button>
+      </div>` : ''}
       <div style="display:flex;justify-content:center;margin-top:14px;padding-top:14px;border-top:1px dashed var(--border)">
         <div style="width:84px;height:84px;background:repeating-linear-gradient(45deg,#000,#000 3px,#fff 3px,#fff 6px);border-radius:6px" title="QR"></div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
+}
+
+let tk_cancelTarget = null;
+function tk_openCancelModal(ref){
+  const tk = tk_myTickets.find(x=>x.ref===ref); if(!tk) return;
+  tk_cancelTarget = ref;
+  const pct = tk_refundPercentFor(tk.hoursBeforeDeparture);
+  const t = tk_tripsData.find(x=>x.id===tk.tripId);
+  const perSeatFare = t ? tk.seats.reduce((s,seat)=>s+tk_seatFare(t,seat),0) : 0;
+  const refundAmt = Math.round(perSeatFare * pct / 100);
+  document.getElementById('ctPolicyNote').textContent = LANG==='bn'
+    ? `ছাড়ার ${tk.hoursBeforeDeparture} ঘণ্টা আগে — এই অপারেটরের নীতি অনুযায়ী আপনি ${pct}% ফেরত পাবেন।`
+    : `Departure is in ${tk.hoursBeforeDeparture} hours — you qualify for a ${pct}% refund per this operator's policy.`;
+  document.getElementById('ctRefundAmount').textContent = '৳ ' + refundAmt.toLocaleString();
+  openModal('cancelTicketModal');
+}
+function tk_wireCancelModal(){
+  document.getElementById('ctBackBtn').addEventListener('click', ()=>closeModal('cancelTicketModal'));
+  document.getElementById('ctConfirmBtn').addEventListener('click', ()=>{
+    const tk = tk_myTickets.find(x=>x.ref===tk_cancelTarget); if(!tk) return;
+    tk.status = 'cancelled';
+    const t = tk_tripsData.find(x=>x.id===tk.tripId);
+    if(t) t.soldSeats = t.soldSeats.filter(s=>!tk.seats.includes(s));
+    closeModal('cancelTicketModal');
+    tk_renderMyTickets();
+    toastMsg(LANG==='bn'?'টিকেট বাতিল করা হয়েছে':'Ticket cancelled','shield');
+  });
 }
 
 function tk_wireSearch(){
   document.getElementById('tkSearchBtn').addEventListener('click', tk_renderSearch);
+  document.getElementById('tkSort').addEventListener('change', tk_renderSearch);
+  document.querySelectorAll('[data-tk-time]').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      document.querySelectorAll('[data-tk-time]').forEach(c=>c.classList.remove('on'));
+      chip.classList.add('on');
+      tk_activeTimeFilter = chip.dataset.tkTime;
+      tk_renderSearch();
+    });
+  });
+  document.querySelectorAll('[data-tk-class]').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      const isOn = chip.classList.contains('on');
+      document.querySelectorAll('[data-tk-class]').forEach(c=>c.classList.remove('on'));
+      if(isOn){ tk_activeClassFilter = null; }
+      else { chip.classList.add('on'); tk_activeClassFilter = chip.dataset.tkClass; }
+      tk_renderSearch();
+    });
+  });
   document.getElementById('tkResults').addEventListener('click', e=>{
     const btn = e.target.closest('[data-action="tk-view-seats"]');
     const card = e.target.closest('[data-trip]');
@@ -5872,6 +6067,11 @@ function tk_wireSearch(){
       p.classList.add('on');
     });
   });
+  document.getElementById('myTicketList').addEventListener('click', e=>{
+    const btn = e.target.closest('[data-action="tk-cancel-ticket"]'); if(!btn) return;
+    tk_openCancelModal(btn.dataset.ref);
+  });
+  tk_wireCancelModal();
 }
 
 /* ---- Transport Operator: buses, trips, policies, dashboard ---- */
@@ -5888,6 +6088,23 @@ function op_renderBuses(){
   const sel = document.getElementById('tripBusSelect');
   if(sel) sel.innerHTML = op_buses.map(b=>`<option value="${b.id}">${b.label} (${b.reg})</option>`).join('');
 }
+function op_renderBusPreview(){
+  const el = document.getElementById('busPreviewGrid'); if(!el) return;
+  const rows = parseInt(document.getElementById('busRowsInput')?.value,10) || 9;
+  const layout = document.getElementById('busLayoutInput')?.value || '2-2';
+  const cols = layout==='2-2' ? ['A','B','C','D'] : ['A','B','C','D','E'];
+  const perSide = layout==='2-2' ? 2 : 3;
+  let html = '';
+  for(let r=1; r<=rows; r++){
+    html += '<div class="seat-row">';
+    cols.forEach((c,i)=>{
+      html += `<button type="button" class="seat-btn seat-avail" disabled>${r+c}</button>`;
+      if(i === perSide-1) html += '<span class="aisle-gap"></span>';
+    });
+    html += '</div>';
+  }
+  el.innerHTML = html;
+}
 function op_wireBuses(){
   document.getElementById('busSaveBtn').addEventListener('click', ()=>{
     const reg = document.getElementById('busRegInput').value.trim() || 'New-Bus-0001';
@@ -5898,18 +6115,32 @@ function op_wireBuses(){
     op_renderBuses();
     toastMsg(LANG==='bn'?'বাস সংরক্ষিত হয়েছে':'Bus saved','bus');
   });
+  ['busRowsInput','busLayoutInput'].forEach(id=>{
+    document.getElementById(id).addEventListener('input', op_renderBusPreview);
+    document.getElementById(id).addEventListener('change', op_renderBusPreview);
+  });
+  op_renderBusPreview();
 }
 
 const op_trips = [
-  { id:'OPT-1', bus:'Volvo 9800 (AC)', origin:'Dhaka (Gabtoli)', dest:'Chattogram (GEC Circle)', depart:'2026-12-05 22:00', soldSeats:11, totalSeats:36, status:'scheduled' },
-  { id:'OPT-2', bus:'Scania (Non-AC)', origin:'Dhaka (Sayedabad)', dest:'Sylhet (Kadamtoli)', depart:'2026-12-06 23:30', soldSeats:6, totalSeats:45, status:'scheduled' },
+  { id:'OPT-1', bus:'Volvo 9800 (AC)', origin:'Dhaka (Gabtoli)', dest:'Chattogram (GEC Circle)', depart:'2026-12-05 22:00', soldSeats:11, totalSeats:36, status:'scheduled',
+    manifest:[ {name:'Rafiul Alam', seat:'3A', phone:'01712-345678'}, {name:'Nasima Sultana', seat:'5C', phone:'01812-998877'} ] },
+  { id:'OPT-2', bus:'Scania (Non-AC)', origin:'Dhaka (Sayedabad)', dest:'Sylhet (Kadamtoli)', depart:'2026-12-06 23:30', soldSeats:6, totalSeats:45, status:'scheduled',
+    manifest:[ {name:'Tanvir Ahmed', seat:'2B', phone:'01912-556611'} ] },
 ];
 function op_renderTrips(){
   const el = document.getElementById('operatorTripList'); if(!el) return;
   const lbl = { scheduled:LANG==='bn'?'নির্ধারিত':'Scheduled', departed:LANG==='bn'?'ছেড়ে গেছে':'Departed', cancelled:LANG==='bn'?'বাতিল':'Cancelled' };
-  el.innerHTML = op_trips.map(t=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+  el.innerHTML = op_trips.map((t,i)=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
     <div><div style="font-weight:700;font-size:13.5px">${t.origin} ${icon('arrowRight','icon-sm')} ${t.dest}</div><div class="muted" style="font-size:12px;margin-top:3px">${t.bus} · ${t.depart}</div></div>
-    <div style="text-align:right"><div class="tabular" style="font-size:13px">${t.soldSeats}/${t.totalSeats} ${LANG==='bn'?'বিক্রিত':'sold'}</div>${statusBadge(t.status,lbl[t.status])}</div>
+    <div style="text-align:right">
+      <div class="tabular" style="font-size:13px">${t.soldSeats}/${t.totalSeats} ${LANG==='bn'?'বিক্রিত':'sold'}</div>
+      ${statusBadge(t.status,lbl[t.status])}
+      <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;justify-content:flex-end">
+        <button class="btn btn-sm btn-ghost" data-action="op-manifest" data-idx="${i}">${LANG==='bn'?'ম্যানিফেস্ট এক্সপোর্ট':'Export manifest'}</button>
+        ${t.status!=='cancelled' ? `<button class="btn btn-sm btn-danger-outline" data-action="op-cancel-trip" data-idx="${i}">${LANG==='bn'?'ট্রিপ বাতিল করুন':'Cancel trip'}</button>` : ''}
+      </div>
+    </div>
   </div>`).join('');
 }
 function op_wireTrips(){
@@ -5919,9 +6150,27 @@ function op_wireTrips(){
     const origin = document.getElementById('tripOriginInput').value.trim() || 'Dhaka';
     const dest = document.getElementById('tripDestInput').value.trim() || 'Destination';
     const depart = document.getElementById('tripDepartInput').value || '2026-12-05 22:00';
-    op_trips.unshift({ id:'OPT-'+(op_trips.length+1), bus:busLabel, origin, dest, depart:depart.replace('T',' '), soldSeats:0, totalSeats:36, status:'scheduled' });
+    op_trips.unshift({ id:'OPT-'+(op_trips.length+1), bus:busLabel, origin, dest, depart:depart.replace('T',' '), soldSeats:0, totalSeats:36, status:'scheduled', manifest:[] });
     op_renderTrips();
     toastMsg(LANG==='bn'?'ট্রিপ প্রকাশিত হয়েছে':'Trip published','bus');
+  });
+  document.getElementById('operatorTripList').addEventListener('click', e=>{
+    const btn = e.target.closest('[data-action]'); if(!btn) return;
+    const t = op_trips[parseInt(btn.dataset.idx,10)];
+    if(btn.dataset.action==='op-cancel-trip'){
+      t.status = 'cancelled';
+      op_renderTrips();
+      toastMsg(LANG==='bn'?'ট্রিপ বাতিল করা হয়েছে — যাত্রীদের স্বয়ংক্রিয়ভাবে রিফান্ড দেওয়া হবে':'Trip cancelled — passengers will be auto-refunded','shield');
+    } else if(btn.dataset.action==='op-manifest'){
+      const lines = [`${t.origin} -> ${t.dest}`, t.depart, '', 'Name,Seat,Phone', ...t.manifest.map(p=>`${p.name},${p.seat},${p.phone}`)];
+      const blob = new Blob([lines.join('\n')], { type:'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `manifest-${t.id}.csv`;
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+      toastMsg(LANG==='bn'?'ম্যানিফেস্ট ডাউনলোড হয়েছে':'Manifest downloaded','file');
+    }
   });
 }
 
@@ -5932,7 +6181,22 @@ const op_policies = [
 ];
 function op_renderPolicies(){
   const el = document.getElementById('policyRows'); if(!el) return;
-  el.innerHTML = op_policies.map(p=>`<tr><td>${p.hours > 0 ? (LANG==='bn'?`${p.hours} ঘণ্টা আগ পর্যন্ত`:`Up to ${p.hours}h before`) : (LANG==='bn'?'তার পরে':'After that')}</td><td class="tabular">${p.refund}%</td></tr>`).join('');
+  op_policies.sort((a,b)=>b.hours-a.hours);
+  el.innerHTML = op_policies.map((p,i)=>`<tr><td>${p.hours > 0 ? (LANG==='bn'?`${p.hours} ঘণ্টা আগ পর্যন্ত`:`Up to ${p.hours}h before`) : (LANG==='bn'?'তার পরে':'After that')}</td><td class="tabular">${p.refund}%</td><td><button class="btn btn-sm btn-ghost" data-action="pol-remove" data-idx="${i}">${LANG==='bn'?'মুছুন':'Remove'}</button></td></tr>`).join('');
+}
+function op_wirePolicies(){
+  document.getElementById('polAddBtn').addEventListener('click', ()=>{
+    const hours = parseInt(document.getElementById('polHoursInput').value,10) || 0;
+    const refund = Math.min(100, Math.max(0, parseInt(document.getElementById('polRefundInput').value,10) || 0));
+    op_policies.push({ hours, refund });
+    op_renderPolicies();
+    toastMsg(LANG==='bn'?'নিয়ম যোগ করা হয়েছে':'Rule added','check');
+  });
+  document.getElementById('policyRows').addEventListener('click', e=>{
+    const btn = e.target.closest('[data-action="pol-remove"]'); if(!btn) return;
+    op_policies.splice(parseInt(btn.dataset.idx,10),1);
+    op_renderPolicies();
+  });
 }
 
 const op_bookings = [
@@ -5976,7 +6240,14 @@ const adm_ticketDisputes = [
 ];
 function adm_renderTicketDisputes(){
   const el = document.getElementById('ticketDisputeList'); if(!el) return;
-  el.innerHTML = adm_ticketDisputes.map(d=>`<div class="card"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b style="font-size:13.5px">${d.ref}</b>${statusBadge(d.status,LANG==='bn'?'পর্যালোচনায়':'In review')}</div><div class="muted" style="font-size:12.5px;margin-top:4px">${d.issue}</div></div>`).join('');
+  el.innerHTML = adm_ticketDisputes.map((d,i)=>`<div class="card">
+    <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b style="font-size:13.5px">${d.ref}</b>${statusBadge(d.status,d.status==='review'?(LANG==='bn'?'পর্যালোচনায়':'In review'):(LANG==='bn'?'সমাধান হয়েছে':'Resolved'))}</div>
+    <div class="muted" style="font-size:12.5px;margin-top:4px">${d.issue}</div>
+    ${d.status==='review' ? `<div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+      <button class="btn btn-sm btn-ok" data-action="adm-dispute-passenger" data-idx="${i}">${LANG==='bn'?'যাত্রীর পক্ষে (রিফান্ড)':"Resolve for passenger (refund)"}</button>
+      <button class="btn btn-sm btn-outline" data-action="adm-dispute-operator" data-idx="${i}">${LANG==='bn'?'অপারেটরের পক্ষে':'Resolve for operator'}</button>
+    </div>` : ''}
+  </div>`).join('');
 }
 function adm_wireTicketing(){
   document.getElementById('operatorVerifRows').addEventListener('click', e=>{
@@ -5990,6 +6261,12 @@ function adm_wireTicketing(){
     const t = adm_ticketTrips[parseInt(btn.dataset.idx,10)];
     t.status = t.status==='paused' ? 'live' : 'paused';
     adm_renderTicketTrips();
+  });
+  document.getElementById('ticketDisputeList').addEventListener('click', e=>{
+    const btn = e.target.closest('[data-action]'); if(!btn) return;
+    const d = adm_ticketDisputes[parseInt(btn.dataset.idx,10)];
+    if(btn.dataset.action==='adm-dispute-passenger'){ d.status='resolved'; adm_renderTicketDisputes(); toastMsg(LANG==='bn'?'যাত্রীকে রিফান্ড দেওয়া হয়েছে':'Refunded to passenger','check'); }
+    else if(btn.dataset.action==='adm-dispute-operator'){ d.status='resolved'; adm_renderTicketDisputes(); toastMsg(LANG==='bn'?'অপারেটরের পক্ষে সমাধান করা হয়েছে':"Resolved in operator's favour",'shield'); }
   });
 }
 
@@ -6616,7 +6893,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   mb_renderList(); mb_wire();
   rm_wire();
   tk_renderSearch(); tk_wireSearch(); tk_wireSeatGrid(); tk_renderMyTickets();
-  op_renderBuses(); op_wireBuses(); op_renderTrips(); op_wireTrips(); op_renderPolicies(); op_renderDash(); op_wireOnboard();
+  op_renderBuses(); op_wireBuses(); op_renderTrips(); op_wireTrips(); op_renderPolicies(); op_wirePolicies(); op_renderDash(); op_wireOnboard();
   adm_renderOperatorVerifs(); adm_renderTicketTrips(); adm_renderTicketDisputes(); adm_wireTicketing();
   wirePage();
   scale_wirePwa();
