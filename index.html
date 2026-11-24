@@ -385,9 +385,17 @@ html, body {
   100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
 }
 
+.lang-toggle button {
+  color: #64748b;
+  transition: background .15s, color .15s;
+}
+.lang-toggle button:hover:not(.active) {
+  color: #0f172a;
+}
 .lang-toggle button.active {
   background: #065f46;
   color: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(6,95,70,.35);
 }
 #pubPoliceFormBtn:hover {
   background: rgba(255,255,255,0.12) !important;
@@ -2368,22 +2376,22 @@ html, body {
         <div class="pub-footer-col">
           <h4 data-t="pub_f_dhaka_stays">শহর ও বিভাগীয় হাব</h4>
           <ul class="pub-footer-links">
-            <li><a href="#dhaka" class="pub-footer-area" data-area="Dhaka">ঢাকা (মিরপুর, ধানমন্ডি, গুলশান, উত্তরা)</a></li>
-            <li><a href="#ctg" class="pub-footer-area" data-area="Chattogram">চট্টগ্রাম (জিইসি, খুলশী, আগ্রাবাদ)</a></li>
-            <li><a href="#sylhet" class="pub-footer-area" data-area="Sylhet">সিলেট (উপশহর, জিন্দাবাজার)</a></li>
-            <li><a href="#rajshahi" class="pub-footer-area" data-area="Rajshahi">রাজশাহী (মতিহার, কাজলা)</a></li>
-            <li><a href="#cox" class="pub-footer-area" data-area="Cox's Bazar">কক্সবাজার (কলাতলী বিচফ্রন্ট)</a></li>
+            <li><a href="#dhaka" class="pub-footer-area" data-area="Dhaka" data-t="ffoot_dhaka">ঢাকা (মিরপুর, ধানমন্ডি, গুলশান, উত্তরা)</a></li>
+            <li><a href="#ctg" class="pub-footer-area" data-area="Chattogram" data-t="ffoot_ctg">চট্টগ্রাম (জিইসি, খুলশী, আগ্রাবাদ)</a></li>
+            <li><a href="#sylhet" class="pub-footer-area" data-area="Sylhet" data-t="ffoot_sylhet">সিলেট (উপশহর, জিন্দাবাজার)</a></li>
+            <li><a href="#rajshahi" class="pub-footer-area" data-area="Rajshahi" data-t="ffoot_rajshahi">রাজশাহী (মতিহার, কাজলা)</a></li>
+            <li><a href="#cox" class="pub-footer-area" data-area="Cox's Bazar" data-t="ffoot_cox">কক্সবাজার (কলাতলী বিচফ্রন্ট)</a></li>
           </ul>
         </div>
 
         <div class="pub-footer-col">
           <h4 data-t="pub_f_stay_types">থাকার ধরন</h4>
           <ul class="pub-footer-links">
-            <li><a href="#bachelor" class="pub-footer-type" data-type="bachelor">ব্যাচেলর ২ বেড ও ৩ বেড ফ্ল্যাট</a></li>
-            <li><a href="#family" class="pub-footer-type" data-type="family">ফ্যামিলি অ্যাপার্টমেন্ট ও বাড়ি</a></li>
-            <li><a href="#mess" class="pub-footer-type" data-type="student">খাবারসহ ছাত্র ও এক্সিকিউটিভ মেস</a></li>
-            <li><a href="#short" class="pub-footer-type" data-type="short">ফার্নিশড স্টুডিও ও শর্ট স্টে</a></li>
-            <li><a href="#female" class="pub-footer-type" data-type="female">ফিমেল অনলি হোস্টেল ও ফ্ল্যাট</a></li>
+            <li><a href="#bachelor" class="pub-footer-type" data-type="bachelor" data-t="ffoot_bachelor">ব্যাচেলর ২ বেড ও ৩ বেড ফ্ল্যাট</a></li>
+            <li><a href="#family" class="pub-footer-type" data-type="family" data-t="ffoot_family">ফ্যামিলি অ্যাপার্টমেন্ট ও বাড়ি</a></li>
+            <li><a href="#mess" class="pub-footer-type" data-type="student" data-t="ffoot_mess">খাবারসহ ছাত্র ও এক্সিকিউটিভ মেস</a></li>
+            <li><a href="#short" class="pub-footer-type" data-type="short" data-t="ffoot_short">ফার্নিশড স্টুডিও ও শর্ট স্টে</a></li>
+            <li><a href="#female" class="pub-footer-type" data-type="female" data-t="ffoot_female">ফিমেল অনলি হোস্টেল ও ফ্ল্যাট</a></li>
           </ul>
         </div>
 
@@ -2392,9 +2400,9 @@ html, body {
           <ul class="pub-footer-links">
             <li><a href="#owner" id="pubHostCtaBtn" data-t="pub_nav_partner">বাড়িওয়ালা ও হোস্ট পোর্টাল</a></li>
             <li><a href="#food" id="pubFoodFooterLink" data-t="pub_f_cloud_kitchen">সিবিএস ক্লাউড কিচেন ফুড</a></li>
-            <li><a href="#rest" id="pubRestPartnerLink">রেস্টুরেন্ট কিচেন ড্যাশবোর্ড</a></li>
+            <li><a href="#rest" id="pubRestPartnerLink" data-t="ffoot_restdash">রেস্টুরেন্ট কিচেন ড্যাশবোর্ড</a></li>
             <li><a href="#rider" id="pubRiderPartnerLink" data-t="pub_f_delivery_rider">ডেলিভারি রাইডার অ্যাপ</a></li>
-            <li><a href="#pwa" id="pubPwaInstallBtn">অফলাইন PWA অ্যাপ ইন্সটল</a></li>
+            <li><a href="#pwa" id="pubPwaInstallBtn" data-t="ffoot_pwa">অফলাইন PWA অ্যাপ ইন্সটল</a></li>
           </ul>
         </div>
       </div>
@@ -4134,7 +4142,12 @@ Object.assign(window.I18N.bn, {
   testi2_2_quote: '"চট্টগ্রাম জিইসি সার্কেলের কাছে মেস সিট নিয়ে আগে ফেসবুক গ্রুপে প্রতারণার শিকার হয়েছিলাম। CBS Stays-এ বিকাশ এসক্রো দিয়ে নিশ্চিন্তে বুকিং পেয়েছি।"',
   testi2_2_name: 'তানভীর আহমেদ', testi2_2_role: 'চবি শিক্ষার্থী · জিইসি, চট্টগ্রাম',
   testi2_3_quote: '"বাড়িওয়ালা হিসেবে সবচেয়ে বড় সুবিধা—পুলিশ ফরম-৭ এক ক্লিকে রেডি হয় এবং প্রতি মাসের ভাড়া সরাসরি ব্যাংক একাউন্টে নিশ্চিতভাবে জমা হয়।"',
-  testi2_3_name: 'মো: কামাল হোসেন', testi2_3_role: 'প্রপার্টি ওনার · ধানমন্ডি, ঢাকা'
+  testi2_3_name: 'মো: কামাল হোসেন', testi2_3_role: 'প্রপার্টি ওনার · ধানমন্ডি, ঢাকা',
+  ffoot_dhaka: 'ঢাকা (মিরপুর, ধানমন্ডি, গুলশান, উত্তরা)', ffoot_ctg: 'চট্টগ্রাম (জিইসি, খুলশী, আগ্রাবাদ)',
+  ffoot_sylhet: 'সিলেট (উপশহর, জিন্দাবাজার)', ffoot_rajshahi: 'রাজশাহী (মতিহার, কাজলা)', ffoot_cox: 'কক্সবাজার (কলাতলী বিচফ্রন্ট)',
+  ffoot_bachelor: 'ব্যাচেলর ২ বেড ও ৩ বেড ফ্ল্যাট', ffoot_family: 'ফ্যামিলি অ্যাপার্টমেন্ট ও বাড়ি', ffoot_mess: 'খাবারসহ ছাত্র ও এক্সিকিউটিভ মেস',
+  ffoot_short: 'ফার্নিশড স্টুডিও ও শর্ট স্টে', ffoot_female: 'ফিমেল অনলি হোস্টেল ও ফ্ল্যাট',
+  ffoot_restdash: 'রেস্টুরেন্ট কিচেন ড্যাশবোর্ড', ffoot_pwa: 'অফলাইন PWA অ্যাপ ইন্সটল'
 });
 Object.assign(window.I18N.en, {
   nav_reporting: 'Platform Reporting',
@@ -4230,7 +4243,12 @@ Object.assign(window.I18N.en, {
   testi2_2_quote: '"I was scammed before trying to find a mess seat near GEC Circle in Chattogram through Facebook groups. With CBS Stays, I booked safely with a bKash escrow."',
   testi2_2_name: 'Tanvir Ahmed', testi2_2_role: 'CU student · GEC, Chattogram',
   testi2_3_quote: '"As an owner, the biggest benefit is Police Form-7 ready in one click, and my monthly rent lands reliably straight in my bank account."',
-  testi2_3_name: 'Md. Kamal Hossain', testi2_3_role: 'Property owner · Dhanmondi, Dhaka'
+  testi2_3_name: 'Md. Kamal Hossain', testi2_3_role: 'Property owner · Dhanmondi, Dhaka',
+  ffoot_dhaka: 'Dhaka (Mirpur, Dhanmondi, Gulshan, Uttara)', ffoot_ctg: 'Chattogram (GEC, Khulshi, Agrabad)',
+  ffoot_sylhet: 'Sylhet (Upashahar, Zindabazar)', ffoot_rajshahi: 'Rajshahi (Motihar, Kazla)', ffoot_cox: "Cox's Bazar (Kolatoli Beachfront)",
+  ffoot_bachelor: 'Bachelor 2-Bed & 3-Bed Flats', ffoot_family: 'Family Apartments & Houses', ffoot_mess: 'Student & Executive Mess with Meals',
+  ffoot_short: 'Furnished Studios & Short Stays', ffoot_female: 'Female-Only Hostels & Flats',
+  ffoot_restdash: 'Restaurant Kitchen Dashboard', ffoot_pwa: 'Install Offline PWA App'
 });
 Object.assign(window.I18N.bn, {
   pub_nav_why: 'কেন CBS?',
@@ -4316,7 +4334,7 @@ Object.assign(window.I18N.bn, {
   rest_open: "চালু",
   h_active_orders: "রান্না চলছে (ইন-প্রিপারেশন)",
   h_active_sub: "রান্না সম্পন্ন হলে রাইডারকে জানান",
-  pub_hero_tag: 'ঢাকার ১ নম্বর ভেরিফাইড ফ্ল্যাট ও মেস প্ল্যাটফর্ম · ৳০ দালাল ফি',
+  pub_hero_tag: 'বাংলাদেশের ১ নম্বর ভেরিফাইড ফ্ল্যাট ও মেস প্ল্যাটফর্ম · ৳০ দালাল ফি',
   pub_s_loc_lbl: 'এলাকা বা মহল্লা',
   pub_s_type_lbl: 'প্রপার্টির ধরন',
   pub_s_any: 'সব ধরনের প্রপার্টি',
@@ -4417,7 +4435,7 @@ Object.assign(window.I18N.en, {
   rest_open: "Open",
   h_active_orders: "In Kitchen Preparation",
   h_active_sub: "Mark ready to summon delivery rider",
-  pub_hero_tag: "Dhaka's #1 Verified Rental Platform · ৳0 Broker Commission",
+  pub_hero_tag: "Bangladesh's #1 Verified Rental Platform · ৳0 Broker Commission",
   pub_s_loc_lbl: 'Location anywhere in Bangladesh',
   pub_s_type_lbl: 'Property Type',
   pub_s_any: 'All Property Types',
@@ -5510,7 +5528,7 @@ function renderPubFeatured(filterCat, areaFilter, budgetFilter, tenantFilter){
       <div class="pub-listing-card-modern" data-pub-listing="${l.id}">
         <div class="pub-card-media">
           <img src="${photos[0]}" alt="${l.title}" class="pub-card-img" id="pubImg-${l.id}" />
-          ${l.superhost ? `<div class="pub-card-badge-top"><i data-icon="star" data-icon-cls="icon-sm"></i>Superhost</div>` : (l.tags.includes('Instant booking') ? `<div class="pub-card-badge-top"><i data-icon="rocket" data-icon-cls="icon-sm"></i>Instant Book</div>` : `<div class="pub-card-badge-top"><i data-icon="shield" data-icon-cls="icon-sm"></i>Verified</div>`)}
+          ${l.superhost ? `<div class="pub-card-badge-top"><i data-icon="star" data-icon-cls="icon-sm"></i>${LANG==='bn'?'সুপারহোস্ট':'Superhost'}</div>` : (l.tags.includes('Instant booking') ? `<div class="pub-card-badge-top"><i data-icon="rocket" data-icon-cls="icon-sm"></i>${LANG==='bn'?'ইনস্ট্যান্ট বুক':'Instant Book'}</div>` : `<div class="pub-card-badge-top"><i data-icon="shield" data-icon-cls="icon-sm"></i>${LANG==='bn'?'ভেরিফাইড':'Verified'}</div>`)}
           <button class="pub-card-wishlist ${l.saved?'active':''}" data-wishlist="${l.id}" title="Save to Wishlist" onclick="event.stopPropagation(); toggleWishlist('${l.id}')">
             <i data-icon="star" data-icon-cls="icon-sm"></i>
           </button>
@@ -5527,11 +5545,11 @@ function renderPubFeatured(filterCat, areaFilter, budgetFilter, tenantFilter){
 
           <div class="pub-card-title">${l.title}</div>
           <div class="pub-card-specs">${l.specs}</div>
-          <div class="pub-card-metro"><i data-icon="rocket" data-icon-cls="icon-sm"></i>${l.metro || 'Near Transit Corridor'}</div>
+          <div class="pub-card-metro"><i data-icon="rocket" data-icon-cls="icon-sm"></i>${l.metro || (LANG==='bn'?'ট্রানজিট করিডোর সংলগ্ন':'Near Transit Corridor')}</div>
 
           <div class="pub-card-footer">
             <div class="pub-card-price">৳ ${l.price}<small> /${l.unit==='night'?(LANG==='bn'?'রাত':'night'):(LANG==='bn'?'মাস':'month')}</small></div>
-            <span class="badge badge-brand" style="font-size:10px;padding:3px 7px">৳০ দালাল ফি</span>
+            <span class="badge badge-brand" style="font-size:10px;padding:3px 7px">${LANG==='bn'?'৳০ দালাল ফি':'৳0 broker fee'}</span>
           </div>
         </div>
       </div>`;
@@ -6596,6 +6614,7 @@ function wirePage(){
     rider_renderPayouts(); rider_renderTraining();
     if (typeof switchNeighborhood === 'function') switchNeighborhood(activeNeighborKey);
     if (typeof calcRent === 'function') calcRent();
+    if (typeof renderPubFeatured === 'function') renderPubFeatured();
   };
 }
 
