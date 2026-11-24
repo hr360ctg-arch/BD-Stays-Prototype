@@ -5841,17 +5841,17 @@ function tk_rowLayout(bus, deckPrefix, rowNum){
   if(bus.businessRows && isPremiumDeck && rowNum <= bus.businessRows){
     const bl = bus.businessLeft != null ? bus.businessLeft : bus.left;
     const br = bus.businessRight != null ? bus.businessRight : bus.right;
-    return { cols: tk_colsForCounts(bl, br), leftCount: bl, aisle: true };
+    return { cols: tk_colsForCounts(bl, br), leftCount: bl, aisle: true, tag: 'business' };
   }
   if(bus.backBench && rowNum === rows){
-    return { cols: fullCols, leftCount: fullCols.length, aisle: false };
+    return { cols: fullCols, leftCount: fullCols.length, aisle: false, tag: 'bench' };
   }
   if(rowNum === 1 && isDoorDeck && bus.frontRowSeats && bus.frontRowSeats < fullCols.length){
     const side = bus.doorSide || 'left';
     const cols = side === 'left' ? fullCols.slice(fullCols.length - bus.frontRowSeats) : fullCols.slice(0, bus.frontRowSeats);
-    return { cols, leftCount: cols.length, aisle: false };
+    return { cols, leftCount: cols.length, aisle: false, tag: 'door' };
   }
-  return { cols: fullCols, leftCount: bus.left, aisle: true };
+  return { cols: fullCols, leftCount: bus.left, aisle: true, tag: null };
 }
 function tk_seatsRemaining(trip){
   let total = 0;
@@ -5955,6 +5955,12 @@ function tk_seatFare(t, seatId){
   return inBusinessRows ? Math.round(base * 1.15) : base;
 }
 
+function tk_rowTagLabel(tag){
+  if(tag==='business') return LANG==='bn'?'বিজনেস':'Business';
+  if(tag==='bench') return LANG==='bn'?'বেঞ্চ সিট':'Bench seat';
+  if(tag==='door') return LANG==='bn'?'দরজার পাশে':'By the door';
+  return '';
+}
 function tk_renderSeatGrid(){
   const t = tk_tripsData.find(x=>x.id===tk_currentTripId); if(!t) return;
   const el = document.getElementById('seatGrid'); if(!el) return;
@@ -5964,7 +5970,7 @@ function tk_renderSeatGrid(){
     const rows = tk_rowsForDeck(t, deckPrefix);
     for(let r=1; r<=rows; r++){
       const layout = tk_rowLayout(t, deckPrefix, r);
-      rowsHtml += '<div class="seat-row">';
+      rowsHtml += `<div class="seat-row${layout.tag?' seat-row-'+layout.tag:''}">`;
       layout.cols.forEach((c,i)=>{
         const seatId = deckPrefix + r + c;
         let state = 'avail';
@@ -5974,6 +5980,7 @@ function tk_renderSeatGrid(){
         rowsHtml += `<button type="button" class="seat-btn seat-${state}" data-seat="${seatId}" ${state==='sold'||state==='held'?'disabled':''}>${seatId}</button>`;
         if(layout.aisle && i === layout.leftCount-1) rowsHtml += '<span class="aisle-gap"></span>';
       });
+      if(layout.tag) rowsHtml += `<span class="row-tag">${tk_rowTagLabel(layout.tag)}</span>`;
       rowsHtml += '</div>';
     }
     const heading = deckPrefix === 'U' ? (LANG==='bn'?'উপরের ডেক':'Upper deck') : deckPrefix === 'L' ? (LANG==='bn'?'নিচের ডেক':'Lower deck') : '';
@@ -6218,11 +6225,12 @@ function op_renderBusPreview(){
     const rows = tk_rowsForDeck(bus, deckPrefix);
     for(let r=1; r<=rows; r++){
       const layout = tk_rowLayout(bus, deckPrefix, r);
-      rowsHtml += '<div class="seat-row">';
+      rowsHtml += `<div class="seat-row${layout.tag?' seat-row-'+layout.tag:''}">`;
       layout.cols.forEach((c,i)=>{
         rowsHtml += `<button type="button" class="seat-btn seat-avail" disabled>${deckPrefix}${r}${c}</button>`;
         if(layout.aisle && i === layout.leftCount-1) rowsHtml += '<span class="aisle-gap"></span>';
       });
+      if(layout.tag) rowsHtml += `<span class="row-tag">${tk_rowTagLabel(layout.tag)}</span>`;
       rowsHtml += '</div>';
     }
     const heading = deckPrefix === 'U' ? (LANG==='bn'?'উপরের ডেক':'Upper deck') : deckPrefix === 'L' ? (LANG==='bn'?'নিচের ডেক':'Lower deck') : '';
