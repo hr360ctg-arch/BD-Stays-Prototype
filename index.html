@@ -2800,7 +2800,7 @@ html, body {
                 <span><i class="seat-dot seat-held"></i> <span data-t="seat_held">Held</span></span>
                 <span><i class="seat-dot seat-sold"></i> <span data-t="seat_sold">Booked</span></span>
               </div>
-              <div id="seatGrid" class="seat-grid"></div>
+              <div id="seatGrid"></div>
             </div>
           </div>
           <div>
@@ -2975,17 +2975,19 @@ html, body {
           <div class="form-grid">
             <div class="field"><label data-t="bus_f_reg">Registration number</label><input type="text" id="busRegInput" placeholder="e.g. Dhaka Metro-GA-11-2233"></div>
             <div class="field"><label data-t="bus_f_label">Bus name/label</label><input type="text" id="busLabelInput" placeholder="e.g. Volvo 36-seater"></div>
-            <div class="field"><label data-t="bus_f_rows">Total rows</label><input type="number" id="busRowsInput" value="9"></div>
-            <div class="field"><label data-t="bus_f_layout">Layout</label>
-              <select id="busLayoutInput">
-                <option value="2-2" data-t="bus_layout_22">2 – 2 (AC coach)</option>
-                <option value="2-3" data-t="bus_layout_23">2 – 3 (Non-AC coach)</option>
+            <div class="field"><label data-t="bus_f_rows">Rows per deck</label><input type="number" id="busRowsInput" value="9"></div>
+            <div class="field"><label data-t="bus_f_left">Seats — left of aisle</label><input type="number" id="busLeftInput" value="2" min="1" max="4"></div>
+            <div class="field"><label data-t="bus_f_right">Seats — right of aisle</label><input type="number" id="busRightInput" value="2" min="1" max="4"></div>
+            <div class="field"><label data-t="bus_f_deck">Deck type</label>
+              <select id="busDeckInput">
+                <option value="single" data-t="bus_deck_single">Single deck</option>
+                <option value="double" data-t="bus_deck_double">Double decker (upper + lower)</option>
               </select>
             </div>
           </div>
           <div style="margin-top:16px">
             <div class="muted" style="font-size:12px;margin-bottom:8px" data-t="bus_preview">Live preview — confirm this matches the real bus before saving</div>
-            <div id="busPreviewGrid" class="seat-grid" style="transform:scale(0.85);transform-origin:top left"></div>
+            <div id="busPreviewGrid"></div>
           </div>
           <button class="btn btn-primary" id="busSaveBtn" style="margin-top:14px" data-t="bus_save">Save bus</button>
         </div>
@@ -4218,7 +4220,7 @@ Object.assign(window.I18N.bn, {
   oo_f_routes: 'প্রধান রুট', oo_submit: 'অনুমোদনের জন্য জমা দিন',
   h_busmanage: 'বাস ও সিট ম্যাপ', h_busmanage_sub: 'পুনঃব্যবহারযোগ্য সিট টেমপ্লেট — একবার তৈরি করুন, অনেক ট্রিপে ব্যবহার করুন',
   bus_add: 'নতুন বাস যোগ করুন', bus_f_reg: 'নিবন্ধন নম্বর', bus_f_label: 'বাসের নাম/লেবেল', bus_f_rows: 'মোট সারি',
-  bus_f_layout: 'লেআউট', bus_layout_22: '২ – ২ (এসি কোচ)', bus_layout_23: '২ – ৩ (নন-এসি কোচ)', bus_save: 'বাস সংরক্ষণ করুন',
+  bus_save: 'বাস সংরক্ষণ করুন',
   h_triplist: 'ট্রিপ ও রুট', h_triplist_sub: 'নির্ধারিত ট্রিপ তৈরি ও পরিচালনা করুন',
   trip_add: 'নতুন ট্রিপ তৈরি করুন', trip_f_bus: 'বাস', trip_f_origin: 'যাত্রা শুরু', trip_f_dest: 'গন্তব্য',
   trip_f_datetime: 'ছাড়ার তারিখ ও সময়', trip_f_fareac: 'ভাড়া — এসি (৳)', trip_f_farenonac: 'ভাড়া — নন-এসি (৳)', trip_save: 'ট্রিপ প্রকাশ করুন',
@@ -4243,7 +4245,9 @@ Object.assign(window.I18N.bn, {
   ct_back: 'টিকেট রাখুন', ct_confirm: 'বাতিলকরণ নিশ্চিত করুন',
   pol_add: 'নতুন নিয়ম যোগ করুন', pol_f_hours: 'ছাড়ার কত ঘণ্টা আগে', pol_f_refund: 'ফেরতের শতাংশ', pol_add_btn: 'নিয়ম যোগ করুন',
   trip_f_boarding: 'বোর্ডিং পয়েন্ট', trip_f_dropping: 'ড্রপিং পয়েন্ট',
-  bus_preview: 'লাইভ প্রিভিউ — সংরক্ষণের আগে নিশ্চিত করুন এটি আসল বাসের সাথে মিলছে'
+  bus_preview: 'লাইভ প্রিভিউ — সংরক্ষণের আগে নিশ্চিত করুন এটি আসল বাসের সাথে মিলছে',
+  bus_f_left: 'সিট — আইলের বামে', bus_f_right: 'সিট — আইলের ডানে',
+  bus_f_deck: 'ডেক টাইপ', bus_deck_single: 'সিঙ্গেল ডেক', bus_deck_double: 'ডাবল ডেকার (উপরে + নিচে)'
 });
 Object.assign(window.I18N.en, {
   nav_reporting: 'Platform Reporting',
@@ -4366,7 +4370,7 @@ Object.assign(window.I18N.en, {
   oo_f_routes: 'Primary routes served', oo_submit: 'Submit for approval',
   h_busmanage: 'Buses & seat maps', h_busmanage_sub: 'Reusable seat templates — build once, use across many trips',
   bus_add: 'Add a new bus', bus_f_reg: 'Registration number', bus_f_label: 'Bus name/label', bus_f_rows: 'Total rows',
-  bus_f_layout: 'Layout', bus_layout_22: '2 – 2 (AC coach)', bus_layout_23: '2 – 3 (Non-AC coach)', bus_save: 'Save bus',
+  bus_save: 'Save bus',
   h_triplist: 'Trips & routes', h_triplist_sub: 'Create and manage scheduled trips',
   trip_add: 'Create a new trip', trip_f_bus: 'Bus', trip_f_origin: 'Origin', trip_f_dest: 'Destination',
   trip_f_datetime: 'Departure date & time', trip_f_fareac: 'Fare — AC (৳)', trip_f_farenonac: 'Fare — Non-AC (৳)', trip_save: 'Publish trip',
@@ -4391,7 +4395,9 @@ Object.assign(window.I18N.en, {
   ct_back: 'Keep ticket', ct_confirm: 'Confirm cancellation',
   pol_add: 'Add a new rule', pol_f_hours: 'Hours before departure', pol_f_refund: 'Refund percentage', pol_add_btn: 'Add rule',
   trip_f_boarding: 'Boarding point', trip_f_dropping: 'Dropping point',
-  bus_preview: 'Live preview — confirm this matches the real bus before saving'
+  bus_preview: 'Live preview — confirm this matches the real bus before saving',
+  bus_f_left: 'Seats — left of aisle', bus_f_right: 'Seats — right of aisle',
+  bus_f_deck: 'Deck type', bus_deck_single: 'Single deck', bus_deck_double: 'Double decker (upper + lower)'
 });
 Object.assign(window.I18N.bn, {
   pub_nav_why: 'কেন CBS?',
@@ -5755,10 +5761,10 @@ function rm_wire(){
 /* ================= TRANSPORT TICKETING (Phase 5) ================= */
 const tk_cityLabel = { dhaka:'Dhaka', chattogram:'Chattogram', sylhet:'Sylhet', coxsbazar:"Cox's Bazar" };
 const tk_tripsData = [
-  { id:'TRP-1', operator:'Green Line Paribahan', origin:'dhaka', dest:'chattogram', originLabel:'Dhaka (Gabtoli)', destLabel:'Chattogram (GEC Circle)', date:'2026-12-05', departTime:'10:00 PM', arriveTime:'4:30 AM', timeBand:'night', busLabel:'Volvo 9800 (AC)', layout:'2-2', rows:9, fareAc:1200, fareNonAc:null, soldSeats:['1A','1B','2C','3A','4B','5A','5C','6D','7A','8C','9B'], heldSeats:['2A'] },
-  { id:'TRP-2', operator:'Shyamoli Paribahan', origin:'dhaka', dest:'sylhet', originLabel:'Dhaka (Sayedabad)', destLabel:'Sylhet (Kadamtoli)', date:'2026-12-05', departTime:'11:30 PM', arriveTime:'6:00 AM', timeBand:'night', busLabel:'Scania (Non-AC)', layout:'2-3', rows:9, fareAc:null, fareNonAc:650, soldSeats:['1A','1E','3C','4A','6B','7E'], heldSeats:[] },
-  { id:'TRP-3', operator:'Ena Transport', origin:'dhaka', dest:'coxsbazar', originLabel:'Dhaka (Kallyanpur)', destLabel:"Cox's Bazar (Kolatoli)", date:'2026-12-05', departTime:'9:00 AM', arriveTime:'7:00 PM', timeBand:'morning', busLabel:'Scania Irizar (AC)', layout:'2-2', rows:9, fareAc:1600, fareNonAc:null, soldSeats:['1A','1B','1C','1D','2A','2B','2C','3A','3B','4C','4D','5A','5B','5C','6A','6B','6C','6D','7A','7B','7C','8A','8B','8C','9A','9B','9C','9D'], heldSeats:['3C'] },
-  { id:'TRP-4', operator:'Hanif Enterprise', origin:'dhaka', dest:'sylhet', originLabel:'Dhaka (Mohakhali)', destLabel:'Sylhet (Amberkhana)', date:'2026-12-05', departTime:'2:30 PM', arriveTime:'9:00 PM', timeBand:'afternoon', busLabel:'Hino AC', layout:'2-2', rows:9, fareAc:1050, fareNonAc:null, soldSeats:['1A','2B','3C'], heldSeats:[] },
+  { id:'TRP-1', operator:'Green Line Paribahan', origin:'dhaka', dest:'chattogram', originLabel:'Dhaka (Gabtoli)', destLabel:'Chattogram (GEC Circle)', date:'2026-12-05', departTime:'10:00 PM', arriveTime:'4:30 AM', timeBand:'night', busLabel:'Volvo 9800 (AC)', left:2, right:2, rows:9, deck:'single', fareAc:1200, fareNonAc:null, soldSeats:['1A','1B','2C','3A','4B','5A','5C','6D','7A','8C','9B'], heldSeats:['2A'] },
+  { id:'TRP-2', operator:'Shyamoli Paribahan', origin:'dhaka', dest:'sylhet', originLabel:'Dhaka (Sayedabad)', destLabel:'Sylhet (Kadamtoli)', date:'2026-12-05', departTime:'11:30 PM', arriveTime:'6:00 AM', timeBand:'night', busLabel:'Scania (Non-AC)', left:2, right:3, rows:9, deck:'single', fareAc:null, fareNonAc:650, soldSeats:['1A','1E','3C','4A','6B','7E'], heldSeats:[] },
+  { id:'TRP-3', operator:'Ena Transport', origin:'dhaka', dest:'coxsbazar', originLabel:'Dhaka (Kallyanpur)', destLabel:"Cox's Bazar (Kolatoli)", date:'2026-12-05', departTime:'9:00 AM', arriveTime:'7:00 PM', timeBand:'morning', busLabel:'Soudia Double Decker (AC)', left:2, right:2, rows:9, deck:'double', fareAc:1600, fareNonAc:null, soldSeats:['L1A','L1B','L1C','L1D','L2A','L2B','L2C','L2D','L3A','L3B','L3C','L3D','L4A','L4B','U1A','U1B','U2A','U2B','U3C','U3D','U4A','U4B','U5C'], heldSeats:['U4C'] },
+  { id:'TRP-4', operator:'Hanif Enterprise', origin:'dhaka', dest:'sylhet', originLabel:'Dhaka (Mohakhali)', destLabel:'Sylhet (Amberkhana)', date:'2026-12-05', departTime:'2:30 PM', arriveTime:'9:00 PM', timeBand:'afternoon', busLabel:'Hino AC', left:2, right:2, rows:9, deck:'single', fareAc:1050, fareNonAc:null, soldSeats:['1A','2B','3C'], heldSeats:[] },
 ];
 let tk_currentTripId = null;
 let tk_selectedSeats = [];
@@ -5766,8 +5772,21 @@ let tk_holdTimerId = null;
 let tk_holdSeconds = 0;
 const TK_HOLD_SECONDS_TOTAL = 480;
 
+/* Generalized seat-layout generator — supports arbitrary left/right seat
+   counts per row and optional double-decker (two identical decks, seat ids
+   prefixed U/L). Used by both the live trip seat map and the bus-builder preview. */
+function tk_decksFor(bus){
+  return bus.deck === 'double' ? ['U','L'] : [''];
+}
+function tk_seatCols(bus){
+  const cols = [];
+  for(let i=0;i<bus.left;i++) cols.push(String.fromCharCode(65+i));
+  for(let i=0;i<bus.right;i++) cols.push(String.fromCharCode(65+bus.left+i));
+  return cols;
+}
 function tk_seatsRemaining(trip){
-  const total = trip.layout==='2-2' ? trip.rows*4 : trip.rows*5;
+  const perDeck = trip.rows * (trip.left + trip.right);
+  const total = perDeck * tk_decksFor(trip).length;
   return total - trip.soldSeats.length - trip.heldSeats.length;
 }
 
@@ -5855,8 +5874,8 @@ function tk_openSeatMap(tripId){
   showView('seatmap');
 }
 
-function tk_seatFare(t, seatNum){
-  const row = parseInt(seatNum, 10);
+function tk_seatFare(t, seatId){
+  const row = parseInt(seatId.replace(/^[UL]/,''), 10);
   const base = t.fareAc || t.fareNonAc;
   return row <= 2 ? Math.round(base * 1.15) : base;
 }
@@ -5864,23 +5883,27 @@ function tk_seatFare(t, seatNum){
 function tk_renderSeatGrid(){
   const t = tk_tripsData.find(x=>x.id===tk_currentTripId); if(!t) return;
   const el = document.getElementById('seatGrid'); if(!el) return;
-  const perSide = t.layout==='2-2' ? 2 : 3;
-  const cols = t.layout==='2-2' ? ['A','B','C','D'] : ['A','B','C','D','E'];
-  let html = '';
-  for(let r=1; r<=t.rows; r++){
-    html += '<div class="seat-row">';
-    cols.forEach((c,i)=>{
-      const seatId = r+c;
-      let state = 'avail';
-      if(t.soldSeats.includes(seatId)) state='sold';
-      else if(t.heldSeats.includes(seatId)) state='held';
-      else if(tk_selectedSeats.includes(seatId)) state='selected';
-      html += `<button type="button" class="seat-btn seat-${state}" data-seat="${seatId}" ${state==='sold'||state==='held'?'disabled':''}>${seatId}</button>`;
-      if(i === perSide-1) html += '<span class="aisle-gap"></span>';
-    });
-    html += '</div>';
-  }
-  el.innerHTML = html;
+  const cols = tk_seatCols(t);
+  const decks = tk_decksFor(t);
+  el.innerHTML = decks.map(deckPrefix=>{
+    let rowsHtml = '';
+    for(let r=1; r<=t.rows; r++){
+      rowsHtml += '<div class="seat-row">';
+      cols.forEach((c,i)=>{
+        const seatId = deckPrefix + r + c;
+        let state = 'avail';
+        if(t.soldSeats.includes(seatId)) state='sold';
+        else if(t.heldSeats.includes(seatId)) state='held';
+        else if(tk_selectedSeats.includes(seatId)) state='selected';
+        rowsHtml += `<button type="button" class="seat-btn seat-${state}" data-seat="${seatId}" ${state==='sold'||state==='held'?'disabled':''}>${seatId}</button>`;
+        if(i === t.left-1) rowsHtml += '<span class="aisle-gap"></span>';
+      });
+      rowsHtml += '</div>';
+    }
+    const heading = deckPrefix === 'U' ? (LANG==='bn'?'উপরের ডেক':'Upper deck') : deckPrefix === 'L' ? (LANG==='bn'?'নিচের ডেক':'Lower deck') : '';
+    return `<div class="deck-section">${heading?`<div class="deck-heading"><i data-icon="bus" data-icon-cls="icon-sm"></i>${heading}</div>`:''}<div class="seat-grid">${rowsHtml}</div></div>`;
+  }).join('');
+  hydrateIcons(el);
 }
 
 function tk_renderSeatSummary(){
@@ -6076,13 +6099,19 @@ function tk_wireSearch(){
 
 /* ---- Transport Operator: buses, trips, policies, dashboard ---- */
 const op_buses = [
-  { id:'BUS-1', reg:'Dhaka Metro-GA-11-2233', label:'Volvo 9800 (AC)', rows:9, layout:'2-2' },
-  { id:'BUS-2', reg:'Dhaka Metro-GA-22-4455', label:'Scania (Non-AC)', rows:9, layout:'2-3' },
+  { id:'BUS-1', reg:'Dhaka Metro-GA-11-2233', label:'Volvo 9800 (AC)', rows:9, left:2, right:2, deck:'single' },
+  { id:'BUS-2', reg:'Dhaka Metro-GA-22-4455', label:'Scania (Non-AC)', rows:9, left:2, right:3, deck:'single' },
+  { id:'BUS-3', reg:'Dhaka Metro-GA-33-6677', label:'Soudia Double Decker (AC)', rows:9, left:2, right:2, deck:'double' },
 ];
+function op_busLayoutLabel(b){
+  const sides = `${b.left}–${b.right}`;
+  const deckLbl = b.deck==='double' ? (LANG==='bn'?' · ডাবল ডেকার':' · Double decker') : '';
+  return sides + deckLbl;
+}
 function op_renderBuses(){
   const el = document.getElementById('busList'); if(!el) return;
   el.innerHTML = op_buses.map(b=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center">
-    <div><div style="font-weight:700;font-size:13.5px">${b.label}</div><div class="muted mono" style="font-size:12px">${b.reg} · ${b.layout} · ${b.rows} ${LANG==='bn'?'সারি':'rows'}</div></div>
+    <div><div style="font-weight:700;font-size:13.5px">${b.label}</div><div class="muted mono" style="font-size:12px">${b.reg} · ${op_busLayoutLabel(b)} · ${b.rows} ${LANG==='bn'?'সারি/ডেক':'rows/deck'}</div></div>
     <span class="badge badge-ok">${LANG==='bn'?'সক্রিয়':'Active'}</span>
   </div>`).join('');
   const sel = document.getElementById('tripBusSelect');
@@ -6090,32 +6119,41 @@ function op_renderBuses(){
 }
 function op_renderBusPreview(){
   const el = document.getElementById('busPreviewGrid'); if(!el) return;
-  const rows = parseInt(document.getElementById('busRowsInput')?.value,10) || 9;
-  const layout = document.getElementById('busLayoutInput')?.value || '2-2';
-  const cols = layout==='2-2' ? ['A','B','C','D'] : ['A','B','C','D','E'];
-  const perSide = layout==='2-2' ? 2 : 3;
-  let html = '';
-  for(let r=1; r<=rows; r++){
-    html += '<div class="seat-row">';
-    cols.forEach((c,i)=>{
-      html += `<button type="button" class="seat-btn seat-avail" disabled>${r+c}</button>`;
-      if(i === perSide-1) html += '<span class="aisle-gap"></span>';
-    });
-    html += '</div>';
-  }
-  el.innerHTML = html;
+  const bus = {
+    rows: parseInt(document.getElementById('busRowsInput')?.value,10) || 9,
+    left: parseInt(document.getElementById('busLeftInput')?.value,10) || 2,
+    right: parseInt(document.getElementById('busRightInput')?.value,10) || 2,
+    deck: document.getElementById('busDeckInput')?.value || 'single'
+  };
+  const cols = tk_seatCols(bus);
+  const decks = tk_decksFor(bus);
+  el.innerHTML = decks.map(deckPrefix=>{
+    let rowsHtml = '';
+    for(let r=1; r<=bus.rows; r++){
+      rowsHtml += '<div class="seat-row">';
+      cols.forEach((c,i)=>{
+        rowsHtml += `<button type="button" class="seat-btn seat-avail" disabled>${deckPrefix}${r}${c}</button>`;
+        if(i === bus.left-1) rowsHtml += '<span class="aisle-gap"></span>';
+      });
+      rowsHtml += '</div>';
+    }
+    const heading = deckPrefix === 'U' ? (LANG==='bn'?'উপরের ডেক':'Upper deck') : deckPrefix === 'L' ? (LANG==='bn'?'নিচের ডেক':'Lower deck') : '';
+    return `<div class="deck-section">${heading?`<div class="deck-heading">${heading}</div>`:''}<div class="seat-grid" style="transform:scale(0.85);transform-origin:top left">${rowsHtml}</div></div>`;
+  }).join('');
 }
 function op_wireBuses(){
   document.getElementById('busSaveBtn').addEventListener('click', ()=>{
     const reg = document.getElementById('busRegInput').value.trim() || 'New-Bus-0001';
     const label = document.getElementById('busLabelInput').value.trim() || (LANG==='bn'?'নতুন বাস':'New bus');
     const rows = parseInt(document.getElementById('busRowsInput').value,10) || 9;
-    const layout = document.getElementById('busLayoutInput').value;
-    op_buses.push({ id:'BUS-'+(op_buses.length+1), reg, label, rows, layout });
+    const left = parseInt(document.getElementById('busLeftInput').value,10) || 2;
+    const right = parseInt(document.getElementById('busRightInput').value,10) || 2;
+    const deck = document.getElementById('busDeckInput').value;
+    op_buses.push({ id:'BUS-'+(op_buses.length+1), reg, label, rows, left, right, deck });
     op_renderBuses();
     toastMsg(LANG==='bn'?'বাস সংরক্ষিত হয়েছে':'Bus saved','bus');
   });
-  ['busRowsInput','busLayoutInput'].forEach(id=>{
+  ['busRowsInput','busLeftInput','busRightInput','busDeckInput'].forEach(id=>{
     document.getElementById(id).addEventListener('input', op_renderBusPreview);
     document.getElementById(id).addEventListener('change', op_renderBusPreview);
   });
