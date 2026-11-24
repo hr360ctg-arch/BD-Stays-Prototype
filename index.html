@@ -2420,7 +2420,7 @@ html, body {
           <i data-icon="users"></i>
           <div style="text-align:left;margin-left:8px">
             <div style="font-weight:700" data-t="pl_tenant_t">ভাড়াটিয়া / গেস্ট পোর্টাল</div>
-            <div style="font-size:11px;opacity:0.85" data-t="pl_tenant_p">ফ্ল্যাট খোঁজা, বুকিং ও খাবার অর্ডার</div>
+            <div style="font-size:11px;opacity:0.85" data-t="pl_tenant_p">ফ্ল্যাট খোঁজা, বুকিং ও বাস টিকেট</div>
           </div>
         </button>
 
@@ -2429,6 +2429,14 @@ html, body {
           <div style="text-align:left;margin-left:8px">
             <div style="font-weight:700" data-t="pl_owner_t">বাড়িওয়ালা / হোস্ট পোর্টাল</div>
             <div style="font-size:11px;color:#64748b" data-t="pl_owner_p">লিস্টিং ও পেআউট ম্যানেজমেন্ট</div>
+          </div>
+        </button>
+
+        <button class="btn btn-outline" style="justify-content:flex-start;padding:12px 16px" data-enter-role="operator">
+          <i data-icon="bus"></i>
+          <div style="text-align:left;margin-left:8px">
+            <div style="font-weight:700" data-t="pl_op_t">ট্রান্সপোর্ট অপারেটর পোর্টাল</div>
+            <div style="font-size:11px;color:#64748b" data-t="pl_op_p">বাস ট্রিপ, সিট ম্যাপ ও বুকিং ম্যানেজমেন্ট</div>
           </div>
         </button>
 
@@ -2460,6 +2468,10 @@ html, body {
     <button class="sb-link" data-view="booking" data-roles="tenant"><i data-icon="wallet"></i><span data-t="nav_booking">Booking &amp; Payment</span></button>
     <button class="sb-link" data-view="mybookings" data-roles="tenant"><i data-icon="calendar"></i><span data-t="nav_mybookings">My Bookings</span></button>
 
+    <div class="sb-group" data-t="nav_ticketing" data-roles-group="tenant">Bus Tickets</div>
+    <button class="sb-link" data-view="ticketsearch" data-roles="tenant"><i data-icon="bus"></i><span data-t="nav_ticketsearch">Search Trips</span></button>
+    <button class="sb-link" data-view="myticket" data-roles="tenant"><i data-icon="ticket"></i><span data-t="nav_myticket">My Tickets</span></button>
+
     <div class="sb-group" data-t="nav_trust_loyalty" data-roles-group="tenant">Trust &amp; loyalty</div>
     <button class="sb-link" data-view="pap" data-roles="tenant"><i data-icon="key"></i><span data-t="nav_pap">Pay at Property</span></button>
     <button class="sb-link" data-view="reviews" data-roles="tenant"><i data-icon="star"></i><span data-t="nav_reviews">Verified Reviews</span></button>
@@ -2473,10 +2485,19 @@ html, body {
     <button class="sb-link" data-view="calendar" data-roles="owner"><i data-icon="calendar"></i><span data-t="nav_calendar">Availability &amp; iCal</span></button>
     <button class="sb-link" data-view="disputes" data-roles="owner,admin"><i data-icon="shield"></i><span data-t="nav_disputes">Disputes</span></button>
 
+    <div class="sb-group" data-t="nav_operator" data-roles-group="operator">Transport Operator</div>
+    <button class="sb-link" data-view="operatordash" data-roles="operator"><i data-icon="layout"></i><span data-t="nav_operatordash">Operator Dashboard</span></button>
+    <button class="sb-link" data-view="operatoronboard" data-roles="operator"><i data-icon="file"></i><span data-t="nav_operatoronboard">Operator Onboarding</span></button>
+    <button class="sb-link" data-view="busmanage" data-roles="operator"><i data-icon="bus"></i><span data-t="nav_busmanage">Buses &amp; Seat Maps</span></button>
+    <button class="sb-link" data-view="triplist" data-roles="operator"><i data-icon="calendar"></i><span data-t="nav_triplist">Trips &amp; Routes</span></button>
+    <button class="sb-link" data-view="policies" data-roles="operator"><i data-icon="shield"></i><span data-t="nav_policies">Cancellation Policies</span></button>
+
     <div class="sb-group" data-t="nav_admin_console" data-roles-group="admin">Admin console</div>
     <button class="sb-link" data-view="admindash" data-roles="admin"><i data-icon="grid"></i><span data-t="nav_admindash">Dashboard</span></button>
     <button class="sb-link" data-view="reporting" data-roles="admin"><i data-icon="layout"></i><span data-t="nav_reporting">Platform Reporting</span></button>
     <button class="sb-link" data-view="listings" data-roles="admin"><i data-icon="building"></i><span data-t="nav_listings">Listings Management</span></button>
+    <button class="sb-link" data-view="adminoperators" data-roles="admin"><i data-icon="bus"></i><span data-t="nav_adminoperators">Operator Verification</span></button>
+    <button class="sb-link" data-view="adminticketing" data-roles="admin"><i data-icon="ticket"></i><span data-t="nav_adminticketing">Ticketing Oversight</span></button>
     <button class="sb-link" data-view="users" data-roles="admin"><i data-icon="users"></i><span data-t="nav_users">Admin Users &amp; Roles</span></button>
     <button class="sb-link" data-view="verification" data-roles="admin"><i data-icon="check"></i><span data-t="nav_verification">Verification Queue</span></button>
     <button class="sb-link" data-view="audit" data-roles="admin"><i data-icon="log"></i><span data-t="nav_audit">Audit Log</span></button>
@@ -2518,6 +2539,7 @@ html, body {
         <select id="roleSwitch" style="font-size:11.5px;font-weight:700;padding:5px 8px;border-radius:999px;border:1px solid var(--border);background:var(--surface-2);color:var(--fg)">
           <option value="tenant" data-t="role_opt_tenant">👤 Tenant / Guest</option>
           <option value="owner" data-t="role_opt_owner">🏠 Owner</option>
+          <option value="operator" data-t="role_opt_operator">🚌 Transport Operator</option>
           <option value="admin" data-t="role_opt_admin">🛡 Admin</option>
         </select>
       </div>
@@ -2719,6 +2741,96 @@ html, body {
         <div style="display:flex;flex-direction:column;gap:14px" id="mbList"></div>
       </section>
 
+      <!-- ===== BUS TICKET SEARCH ===== -->
+      <section class="view-section" id="view-ticketsearch">
+        <div class="section-title"><h2 data-t="h_ticketsearch">Search bus trips</h2><span class="count" data-t="h_ticketsearch_sub">Full payment at checkout — no partial/token option for tickets</span></div>
+        <div class="card" style="margin-bottom:20px">
+          <div class="form-grid">
+            <div class="field"><label data-t="tk_f_origin">From</label>
+              <select id="tkOrigin">
+                <option value="dhaka">Dhaka</option>
+                <option value="chattogram">Chattogram</option>
+                <option value="sylhet">Sylhet</option>
+                <option value="coxsbazar">Cox's Bazar</option>
+              </select>
+            </div>
+            <div class="field"><label data-t="tk_f_dest">To</label>
+              <select id="tkDest">
+                <option value="chattogram">Chattogram</option>
+                <option value="dhaka">Dhaka</option>
+                <option value="sylhet">Sylhet</option>
+                <option value="coxsbazar">Cox's Bazar</option>
+              </select>
+            </div>
+            <div class="field"><label data-t="tk_f_date">Travel date</label><input type="date" id="tkDate" value="2026-12-05"></div>
+          </div>
+          <button class="btn btn-primary" id="tkSearchBtn" style="margin-top:14px" data-t="tk_search_btn">Search trips</button>
+        </div>
+        <div class="section-title"><h2 data-t="tk_results">Available trips</h2></div>
+        <div style="display:flex;flex-direction:column;gap:14px" id="tkResults"></div>
+      </section>
+
+      <!-- ===== SEAT MAP & SELECTION ===== -->
+      <section class="view-section" id="view-seatmap">
+        <div class="section-title"><h2 data-t="h_seatmap">Select your seats</h2><span class="count" id="tkTripSummary"></span></div>
+        <div class="two-col">
+          <div>
+            <div class="card">
+              <div class="seatmap-legend" style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:12px">
+                <span><i class="seat-dot seat-avail"></i> <span data-t="seat_available">Available</span></span>
+                <span><i class="seat-dot seat-selected"></i> <span data-t="seat_selected">Selected</span></span>
+                <span><i class="seat-dot seat-held"></i> <span data-t="seat_held">Held</span></span>
+                <span><i class="seat-dot seat-sold"></i> <span data-t="seat_sold">Booked</span></span>
+              </div>
+              <div id="seatGrid" class="seat-grid"></div>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div style="font-weight:700;font-size:14px;margin-bottom:10px" data-t="seat_summary_title">Your selection</div>
+              <div id="seatSelectionSummary" class="muted" style="font-size:13px" data-t="seat_summary_empty">No seats selected yet</div>
+              <div class="price-row total" style="margin-top:14px"><span data-t="seat_total">Total</span><span class="tabular" id="seatTotalPrice">৳ 0</span></div>
+              <button class="btn btn-primary btn-block" id="seatContinueBtn" style="margin-top:14px" disabled data-t="seat_continue">Continue to checkout</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== TICKET CHECKOUT ===== -->
+      <section class="view-section" id="view-ticketcheckout">
+        <div class="section-title"><h2 data-t="h_ticketcheckout">Passenger details &amp; payment</h2></div>
+        <div class="two-col">
+          <div>
+            <div class="card" style="margin-bottom:16px">
+              <div style="font-weight:700;font-size:14px;margin-bottom:10px" data-t="tc_passengers">Passenger details</div>
+              <div id="passengerForms"></div>
+            </div>
+            <div class="card">
+              <div style="font-weight:700;font-size:14px;margin-bottom:4px" data-t="tc_pay_title">Payment method</div>
+              <div class="muted" style="font-size:12px;margin-bottom:14px" data-t="tc_pay_sub">Charged in full now — no partial payment for ticket bookings</div>
+              <div style="display:flex;flex-direction:column;gap:9px" id="tcPayMethods">
+                <label class="pay-method on" data-pm="bkash"><div class="pm-mark pm-bkash" title="bKash"><i data-icon="wallet" data-icon-cls="icon-sm"></i></div><div style="font-weight:700;font-size:13px">bKash</div></label>
+                <label class="pay-method" data-pm="nagad"><div class="pm-mark pm-nagad" title="Nagad"><i data-icon="wallet" data-icon-cls="icon-sm"></i></div><div style="font-weight:700;font-size:13px">Nagad</div></label>
+                <label class="pay-method" data-pm="card"><div class="pm-mark pm-card" title="Card"><i data-icon="wallet" data-icon-cls="icon-sm"></i></div><div style="font-weight:700;font-size:13px" data-t="tc_pay_card">Visa / Mastercard / DBBL Nexus</div></label>
+              </div>
+              <button class="btn btn-primary btn-block" id="tcPayBtn" style="margin-top:16px" data-t="tc_pay_btn">Pay &amp; get ticket</button>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div style="font-weight:700;font-size:14px;margin-bottom:10px" data-t="tc_breakdown">Price breakdown</div>
+              <div id="tcBreakdown"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== MY TICKETS ===== -->
+      <section class="view-section" id="view-myticket">
+        <div class="section-title"><h2 data-t="h_myticket">My tickets</h2><span class="count" data-t="h_myticket_sub">Upcoming and past bus bookings</span></div>
+        <div style="display:flex;flex-direction:column;gap:16px" id="myTicketList"></div>
+      </section>
+
 
       <!-- ===== OWNER DASHBOARD (FR-H10, H11, H12, H13) ===== -->
       <section class="view-section" id="view-ownerdash">
@@ -2813,6 +2925,92 @@ html, body {
       <section class="view-section" id="view-disputes">
         <div class="section-title"><h2 data-t="h_disp">Dispute handling · FR-B13</h2><span class="count" data-t="h_disp_sub">Tenant may report an issue within 24h of check-in; payout held pending resolution</span></div>
         <div style="display:flex;flex-direction:column;gap:14px" id="disputeList"></div>
+      </section>
+
+      <!-- ===== OPERATOR ONBOARDING ===== -->
+      <section class="view-section" id="view-operatoronboard">
+        <div class="section-title"><h2 data-t="h_operatoronboard">Transport operator onboarding</h2><span class="count" data-t="h_operatoronboard_sub">Admin approval required before publishing any trip</span></div>
+        <div class="card" style="max-width:720px">
+          <div class="form-grid">
+            <div class="field"><label data-t="oo_f_company">Operator / company name</label><input type="text" placeholder="e.g. Green Line Paribahan"></div>
+            <div class="field"><label data-t="oo_f_owner">Owner's full name</label><input type="text" placeholder="e.g. Abdul Karim"></div>
+            <div class="field"><label data-t="oo_f_nid">Owner NID number</label><input type="text" placeholder="10-17 digit NID"></div>
+            <div class="field"><label data-t="oo_f_trade">Trade licence number</label><input type="text" placeholder="e.g. TRAD/DNCC/445566"></div>
+            <div class="field"><label data-t="oo_f_payout">Payout account</label><input type="text" placeholder="bKash merchant or bank account"></div>
+            <div class="field"><label data-t="oo_f_fleet">Fleet size (approx.)</label><input type="number" value="5"></div>
+          </div>
+          <div class="field" style="margin-top:14px"><label data-t="oo_f_routes">Primary routes served</label><input type="text" placeholder="e.g. Dhaka – Chattogram, Dhaka – Sylhet"></div>
+          <button class="btn btn-primary" id="operatorOnboardSubmitBtn" style="margin-top:16px" data-t="oo_submit">Submit for approval</button>
+        </div>
+      </section>
+
+      <!-- ===== BUS & SEAT MAP TEMPLATES ===== -->
+      <section class="view-section" id="view-busmanage">
+        <div class="section-title"><h2 data-t="h_busmanage">Buses &amp; seat maps</h2><span class="count" data-t="h_busmanage_sub">Reusable seat templates — build once, use across many trips</span></div>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:20px" id="busList"></div>
+        <div class="section-title"><h2 data-t="bus_add">Add a new bus</h2></div>
+        <div class="card" style="max-width:680px">
+          <div class="form-grid">
+            <div class="field"><label data-t="bus_f_reg">Registration number</label><input type="text" id="busRegInput" placeholder="e.g. Dhaka Metro-GA-11-2233"></div>
+            <div class="field"><label data-t="bus_f_label">Bus name/label</label><input type="text" id="busLabelInput" placeholder="e.g. Volvo 36-seater"></div>
+            <div class="field"><label data-t="bus_f_rows">Total rows</label><input type="number" id="busRowsInput" value="9"></div>
+            <div class="field"><label data-t="bus_f_layout">Layout</label>
+              <select id="busLayoutInput">
+                <option value="2-2" data-t="bus_layout_22">2 – 2 (AC coach)</option>
+                <option value="2-3" data-t="bus_layout_23">2 – 3 (Non-AC coach)</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="busSaveBtn" style="margin-top:14px" data-t="bus_save">Save bus</button>
+        </div>
+      </section>
+
+      <!-- ===== TRIPS & ROUTES ===== -->
+      <section class="view-section" id="view-triplist">
+        <div class="section-title"><h2 data-t="h_triplist">Trips &amp; routes</h2><span class="count" data-t="h_triplist_sub">Create and manage scheduled trips</span></div>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:20px" id="operatorTripList"></div>
+        <div class="section-title"><h2 data-t="trip_add">Create a new trip</h2></div>
+        <div class="card" style="max-width:680px">
+          <div class="form-grid">
+            <div class="field"><label data-t="trip_f_bus">Bus</label>
+              <select id="tripBusSelect"></select>
+            </div>
+            <div class="field"><label data-t="trip_f_origin">Origin</label><input type="text" id="tripOriginInput" placeholder="e.g. Dhaka (Gabtoli)"></div>
+            <div class="field"><label data-t="trip_f_dest">Destination</label><input type="text" id="tripDestInput" placeholder="e.g. Chattogram (GEC)"></div>
+            <div class="field"><label data-t="trip_f_datetime">Departure date &amp; time</label><input type="datetime-local" id="tripDepartInput" value="2026-12-05T22:00"></div>
+            <div class="field"><label data-t="trip_f_fareac">Fare — AC (৳)</label><input type="number" id="tripFareAcInput" value="1200"></div>
+            <div class="field"><label data-t="trip_f_farenonac">Fare — Non-AC (৳)</label><input type="number" id="tripFareNonAcInput" value="650"></div>
+          </div>
+          <button class="btn btn-primary" id="tripSaveBtn" style="margin-top:14px" data-t="trip_save">Publish trip</button>
+        </div>
+      </section>
+
+      <!-- ===== CANCELLATION POLICIES ===== -->
+      <section class="view-section" id="view-policies">
+        <div class="section-title"><h2 data-t="h_policies">Cancellation policies</h2><span class="count" data-t="h_policies_sub">Applied automatically at ticket cancellation time based on hours before departure</span></div>
+        <div class="card" style="max-width:680px">
+          <table>
+            <thead><tr><th data-t="pol_hours">Hours before departure</th><th data-t="pol_refund">Refund</th></tr></thead>
+            <tbody id="policyRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===== OPERATOR DASHBOARD ===== -->
+      <section class="view-section" id="view-operatordash">
+        <div class="grid cards-4" style="margin-bottom:18px">
+          <div class="card"><div class="stat-label"><i data-icon="bus" data-icon-cls="icon-sm"></i><span data-t="opd_upcoming">Upcoming trips</span></div><div class="stat-value tabular">6</div></div>
+          <div class="card"><div class="stat-label"><i data-icon="ticket" data-icon-cls="icon-sm"></i><span data-t="opd_seats">Seats sold this week</span></div><div class="stat-value tabular">214</div></div>
+          <div class="card"><div class="stat-label"><i data-icon="wallet" data-icon-cls="icon-sm"></i><span data-t="opd_revenue">This week's revenue</span></div><div class="stat-value tabular">৳ 1,78,400</div></div>
+          <div class="card"><div class="stat-label"><i data-icon="check" data-icon-cls="icon-sm"></i><span data-t="opd_occupancy">Average occupancy</span></div><div class="stat-value tabular">78%</div></div>
+        </div>
+        <div class="section-title"><h2 data-t="opd_bookings">Recent bookings</h2></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th data-t="col_passenger">Passenger</th><th data-t="trip_f_origin">Route</th><th data-t="col_seat">Seat(s)</th><th data-t="col_amount">Amount</th><th data-t="col_status">Status</th></tr></thead>
+            <tbody id="operatorBookingRows"></tbody>
+          </table>
+        </div>
       </section>
 
       <!-- ===== PAYMENT RECONCILIATION (FR-B14) ===== -->
@@ -3162,6 +3360,30 @@ html, body {
             <tbody id="listingsRows"></tbody>
           </table>
         </div>
+      </section>
+
+      <!-- ===== ADMIN: OPERATOR VERIFICATION ===== -->
+      <section class="view-section" id="view-adminoperators">
+        <div class="section-title"><h2 data-t="h_adminoperators">Operator verification queue</h2><span class="count" data-t="h_adminoperators_sub">Review trade licence, NID, and route details before approval</span></div>
+        <div class="card">
+          <table>
+            <thead><tr><th data-t="col_operator">Operator</th><th data-t="ao_owner">Owner</th><th data-t="col_submitted">Submitted</th><th data-t="col_status">Status</th><th></th></tr></thead>
+            <tbody id="operatorVerifRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===== ADMIN: TICKETING OVERSIGHT ===== -->
+      <section class="view-section" id="view-adminticketing">
+        <div class="section-title"><h2 data-t="h_adminticketing">Trip &amp; route oversight</h2><span class="count" data-t="h_adminticketing_sub">Pause a trip or delist an operator; resolve ticket disputes</span></div>
+        <div class="card" style="margin-bottom:20px">
+          <table>
+            <thead><tr><th data-t="col_operator">Operator</th><th data-t="trip_f_origin">Route</th><th data-t="col_date">Date</th><th data-t="ato_seats">Seats sold</th><th data-t="col_status">Status</th><th></th></tr></thead>
+            <tbody id="adminTripRows"></tbody>
+          </table>
+        </div>
+        <div class="section-title"><h2 data-t="ato_disputes">Ticket disputes</h2></div>
+        <div style="display:flex;flex-direction:column;gap:14px" id="ticketDisputeList"></div>
       </section>
 
 
@@ -3916,7 +4138,43 @@ Object.assign(window.I18N.bn, {
   ffoot_sylhet: 'সিলেট (উপশহর, জিন্দাবাজার)', ffoot_rajshahi: 'রাজশাহী (মতিহার, কাজলা)', ffoot_cox: 'কক্সবাজার (কলাতলী বিচফ্রন্ট)',
   ffoot_bachelor: 'ব্যাচেলর ২ বেড ও ৩ বেড ফ্ল্যাট', ffoot_family: 'ফ্যামিলি অ্যাপার্টমেন্ট ও বাড়ি', ffoot_mess: 'খাবারসহ ছাত্র ও এক্সিকিউটিভ মেস',
   ffoot_short: 'ফার্নিশড স্টুডিও ও শর্ট স্টে', ffoot_female: 'ফিমেল অনলি হোস্টেল ও ফ্ল্যাট',
-  ffoot_restdash: 'রেস্টুরেন্ট কিচেন ড্যাশবোর্ড', ffoot_pwa: 'অফলাইন PWA অ্যাপ ইন্সটল'
+  ffoot_restdash: 'রেস্টুরেন্ট কিচেন ড্যাশবোর্ড', ffoot_pwa: 'অফলাইন PWA অ্যাপ ইন্সটল',
+  nav_ticketing: 'বাস টিকেট', nav_ticketsearch: 'ট্রিপ খুঁজুন', nav_myticket: 'আমার টিকেট',
+  pl_op_t: 'ট্রান্সপোর্ট অপারেটর পোর্টাল', pl_op_p: 'বাস ট্রিপ, সিট ম্যাপ ও বুকিং ম্যানেজমেন্ট',
+  role_opt_operator: '🚌 ট্রান্সপোর্ট অপারেটর', role_operator: 'ট্রান্সপোর্ট অপারেটর',
+  h_ticketsearch: 'বাস ট্রিপ খুঁজুন', h_ticketsearch_sub: 'চেকআউটে সম্পূর্ণ পেমেন্ট — টিকেটের জন্য কোনো টোকেন অপশন নেই',
+  tk_f_origin: 'কোথা থেকে', tk_f_dest: 'কোথায়', tk_f_date: 'ভ্রমণের তারিখ', tk_search_btn: 'ট্রিপ খুঁজুন',
+  tk_results: 'উপলব্ধ ট্রিপ',
+  h_seatmap: 'আপনার সিট নির্বাচন করুন',
+  seat_available: 'খালি', seat_selected: 'নির্বাচিত', seat_held: 'হোল্ড করা', seat_sold: 'বুকড',
+  seat_summary_title: 'আপনার নির্বাচন', seat_summary_empty: 'এখনো কোনো সিট নির্বাচন করা হয়নি',
+  seat_total: 'মোট', seat_continue: 'চেকআউটে যান',
+  h_ticketcheckout: 'যাত্রীর তথ্য ও পেমেন্ট', tc_passengers: 'যাত্রীর তথ্য',
+  tc_pay_title: 'পেমেন্ট পদ্ধতি', tc_pay_sub: 'এখনই সম্পূর্ণ চার্জ করা হবে — টিকেট বুকিং-এর জন্য আংশিক পেমেন্ট নেই',
+  tc_pay_card: 'ভিসা / মাস্টারকার্ড / DBBL Nexus', tc_pay_btn: 'পেমেন্ট করুন ও টিকেট নিন',
+  tc_breakdown: 'মূল্য বিবরণ',
+  h_myticket: 'আমার টিকেট', h_myticket_sub: 'আসন্ন ও অতীত বাস বুকিং',
+  h_operatoronboard: 'ট্রান্সপোর্ট অপারেটর অনবোর্ডিং', h_operatoronboard_sub: 'যেকোনো ট্রিপ প্রকাশের আগে অ্যাডমিন অনুমোদন প্রয়োজন',
+  oo_f_company: 'অপারেটর / কোম্পানির নাম', oo_f_owner: 'মালিকের পূর্ণ নাম', oo_f_nid: 'মালিকের এনআইডি নম্বর',
+  oo_f_trade: 'ট্রেড লাইসেন্স নম্বর', oo_f_payout: 'পেআউট অ্যাকাউন্ট', oo_f_fleet: 'ফ্লিট সাইজ (আনুমানিক)',
+  oo_f_routes: 'প্রধান রুট', oo_submit: 'অনুমোদনের জন্য জমা দিন',
+  h_busmanage: 'বাস ও সিট ম্যাপ', h_busmanage_sub: 'পুনঃব্যবহারযোগ্য সিট টেমপ্লেট — একবার তৈরি করুন, অনেক ট্রিপে ব্যবহার করুন',
+  bus_add: 'নতুন বাস যোগ করুন', bus_f_reg: 'নিবন্ধন নম্বর', bus_f_label: 'বাসের নাম/লেবেল', bus_f_rows: 'মোট সারি',
+  bus_f_layout: 'লেআউট', bus_layout_22: '২ – ২ (এসি কোচ)', bus_layout_23: '২ – ৩ (নন-এসি কোচ)', bus_save: 'বাস সংরক্ষণ করুন',
+  h_triplist: 'ট্রিপ ও রুট', h_triplist_sub: 'নির্ধারিত ট্রিপ তৈরি ও পরিচালনা করুন',
+  trip_add: 'নতুন ট্রিপ তৈরি করুন', trip_f_bus: 'বাস', trip_f_origin: 'যাত্রা শুরু', trip_f_dest: 'গন্তব্য',
+  trip_f_datetime: 'ছাড়ার তারিখ ও সময়', trip_f_fareac: 'ভাড়া — এসি (৳)', trip_f_farenonac: 'ভাড়া — নন-এসি (৳)', trip_save: 'ট্রিপ প্রকাশ করুন',
+  h_policies: 'বাতিলকরণ নীতি', h_policies_sub: 'ছাড়ার সময়ের আগে ঘণ্টার ভিত্তিতে স্বয়ংক্রিয়ভাবে প্রয়োগ হয়',
+  pol_hours: 'ছাড়ার কত ঘণ্টা আগে', pol_refund: 'ফেরত',
+  opd_upcoming: 'আসন্ন ট্রিপ', opd_seats: 'এই সপ্তাহে বিক্রিত সিট', opd_revenue: 'এই সপ্তাহের আয়', opd_occupancy: 'গড় সিট পূর্ণতা',
+  opd_bookings: 'সাম্প্রতিক বুকিং', col_passenger: 'যাত্রী', col_seat: 'সিট', col_amount: 'পরিমাণ',
+  nav_operator: 'ট্রান্সপোর্ট অপারেটর', nav_operatordash: 'অপারেটর ড্যাশবোর্ড', nav_operatoronboard: 'অপারেটর অনবোর্ডিং',
+  nav_busmanage: 'বাস ও সিট ম্যাপ', nav_triplist: 'ট্রিপ ও রুট', nav_policies: 'বাতিলকরণ নীতি',
+  nav_adminoperators: 'অপারেটর ভেরিফিকেশন', nav_adminticketing: 'টিকেটিং তদারকি',
+  h_adminoperators: 'অপারেটর ভেরিফিকেশন কিউ', h_adminoperators_sub: 'অনুমোদনের আগে ট্রেড লাইসেন্স, এনআইডি ও রুট বিবরণ পর্যালোচনা করুন',
+  col_operator: 'অপারেটর', ao_owner: 'মালিক',
+  h_adminticketing: 'ট্রিপ ও রুট তদারকি', h_adminticketing_sub: 'ট্রিপ বিরতি দিন বা অপারেটর ডিলিস্ট করুন; টিকেট বিরোধ সমাধান করুন',
+  ato_seats: 'বিক্রিত সিট', ato_disputes: 'টিকেট বিরোধ'
 });
 Object.assign(window.I18N.en, {
   nav_reporting: 'Platform Reporting',
@@ -4017,7 +4275,43 @@ Object.assign(window.I18N.en, {
   ffoot_sylhet: 'Sylhet (Upashahar, Zindabazar)', ffoot_rajshahi: 'Rajshahi (Motihar, Kazla)', ffoot_cox: "Cox's Bazar (Kolatoli Beachfront)",
   ffoot_bachelor: 'Bachelor 2-Bed & 3-Bed Flats', ffoot_family: 'Family Apartments & Houses', ffoot_mess: 'Student & Executive Mess with Meals',
   ffoot_short: 'Furnished Studios & Short Stays', ffoot_female: 'Female-Only Hostels & Flats',
-  ffoot_restdash: 'Restaurant Kitchen Dashboard', ffoot_pwa: 'Install Offline PWA App'
+  ffoot_restdash: 'Restaurant Kitchen Dashboard', ffoot_pwa: 'Install Offline PWA App',
+  nav_ticketing: 'Bus Tickets', nav_ticketsearch: 'Search Trips', nav_myticket: 'My Tickets',
+  pl_op_t: 'Transport Operator Portal', pl_op_p: 'Bus trips, seat maps & booking management',
+  role_opt_operator: '🚌 Transport Operator', role_operator: 'Transport Operator',
+  h_ticketsearch: 'Search bus trips', h_ticketsearch_sub: 'Full payment at checkout — no partial/token option for tickets',
+  tk_f_origin: 'From', tk_f_dest: 'To', tk_f_date: 'Travel date', tk_search_btn: 'Search trips',
+  tk_results: 'Available trips',
+  h_seatmap: 'Select your seats',
+  seat_available: 'Available', seat_selected: 'Selected', seat_held: 'Held', seat_sold: 'Booked',
+  seat_summary_title: 'Your selection', seat_summary_empty: 'No seats selected yet',
+  seat_total: 'Total', seat_continue: 'Continue to checkout',
+  h_ticketcheckout: 'Passenger details & payment', tc_passengers: 'Passenger details',
+  tc_pay_title: 'Payment method', tc_pay_sub: 'Charged in full now — no partial payment for ticket bookings',
+  tc_pay_card: 'Visa / Mastercard / DBBL Nexus', tc_pay_btn: 'Pay & get ticket',
+  tc_breakdown: 'Price breakdown',
+  h_myticket: 'My tickets', h_myticket_sub: 'Upcoming and past bus bookings',
+  h_operatoronboard: 'Transport operator onboarding', h_operatoronboard_sub: 'Admin approval required before publishing any trip',
+  oo_f_company: 'Operator / company name', oo_f_owner: "Owner's full name", oo_f_nid: 'Owner NID number',
+  oo_f_trade: 'Trade licence number', oo_f_payout: 'Payout account', oo_f_fleet: 'Fleet size (approx.)',
+  oo_f_routes: 'Primary routes served', oo_submit: 'Submit for approval',
+  h_busmanage: 'Buses & seat maps', h_busmanage_sub: 'Reusable seat templates — build once, use across many trips',
+  bus_add: 'Add a new bus', bus_f_reg: 'Registration number', bus_f_label: 'Bus name/label', bus_f_rows: 'Total rows',
+  bus_f_layout: 'Layout', bus_layout_22: '2 – 2 (AC coach)', bus_layout_23: '2 – 3 (Non-AC coach)', bus_save: 'Save bus',
+  h_triplist: 'Trips & routes', h_triplist_sub: 'Create and manage scheduled trips',
+  trip_add: 'Create a new trip', trip_f_bus: 'Bus', trip_f_origin: 'Origin', trip_f_dest: 'Destination',
+  trip_f_datetime: 'Departure date & time', trip_f_fareac: 'Fare — AC (৳)', trip_f_farenonac: 'Fare — Non-AC (৳)', trip_save: 'Publish trip',
+  h_policies: 'Cancellation policies', h_policies_sub: 'Applied automatically at ticket cancellation time based on hours before departure',
+  pol_hours: 'Hours before departure', pol_refund: 'Refund',
+  opd_upcoming: 'Upcoming trips', opd_seats: 'Seats sold this week', opd_revenue: "This week's revenue", opd_occupancy: 'Average occupancy',
+  opd_bookings: 'Recent bookings', col_passenger: 'Passenger', col_seat: 'Seat(s)', col_amount: 'Amount',
+  nav_operator: 'Transport Operator', nav_operatordash: 'Operator Dashboard', nav_operatoronboard: 'Operator Onboarding',
+  nav_busmanage: 'Buses & Seat Maps', nav_triplist: 'Trips & Routes', nav_policies: 'Cancellation Policies',
+  nav_adminoperators: 'Operator Verification', nav_adminticketing: 'Ticketing Oversight',
+  h_adminoperators: 'Operator verification queue', h_adminoperators_sub: 'Review trade licence, NID, and route details before approval',
+  col_operator: 'Operator', ao_owner: 'Owner',
+  h_adminticketing: 'Trip & route oversight', h_adminticketing_sub: 'Pause a trip or delist an operator; resolve ticket disputes',
+  ato_seats: 'Seats sold', ato_disputes: 'Ticket disputes'
 });
 Object.assign(window.I18N.bn, {
   pub_nav_why: 'কেন CBS?',
@@ -5015,8 +5309,7 @@ function switchOdTab(tab){
 const ROLE2_PEOPLE = {
   tenant:{name:'Farzana Yasmin',init:'FY',roleKey:'role_tenant',defaultView:'search'},
   owner:{name:'Md. Kamal Hossain',init:'KH',roleKey:'role_owner',defaultView:'ownerdash'},
-  restaurant:{name:'Biriyani Bari',init:'BB',roleKey:'role_restaurant',defaultView:'restaurant'},
-  rider:{name:'Rahim Mia',init:'RM',roleKey:'role_rider',defaultView:'rider'},
+  operator:{name:'Green Line Paribahan',init:'GL',roleKey:'role_operator',defaultView:'operatordash'},
   admin:{name:'CBS Ops',init:'CO',roleKey:'role_admin',defaultView:'admindash'},
 };
 let currentRole2='tenant';
@@ -5376,6 +5669,327 @@ function rm_wire(){
     document.getElementById('rmProfileStatus').removeAttribute('data-t');
     document.getElementById('rmProfileStatus').textContent = LANG==='bn' ? 'প্রোফাইল সংরক্ষিত — মিল দেখানো হচ্ছে' : 'Profile saved — showing matches';
     toastMsg(LANG==='bn'?'রুমমেট প্রোফাইল সংরক্ষিত হয়েছে':'Roommate profile saved','check');
+  });
+}
+
+/* ================= TRANSPORT TICKETING (Phase 5) ================= */
+const tk_cityLabel = { dhaka:'Dhaka', chattogram:'Chattogram', sylhet:'Sylhet', coxsbazar:"Cox's Bazar" };
+const tk_tripsData = [
+  { id:'TRP-1', operator:'Green Line Paribahan', origin:'dhaka', dest:'chattogram', originLabel:'Dhaka (Gabtoli)', destLabel:'Chattogram (GEC Circle)', date:'2026-12-05', departTime:'10:00 PM', arriveTime:'4:30 AM', busLabel:'Volvo 9800 (AC)', layout:'2-2', rows:9, fareAc:1200, fareNonAc:null, soldSeats:['1A','1B','2C','3A','4B','5A','5C','6D','7A','8C','9B'], heldSeats:['2A'] },
+  { id:'TRP-2', operator:'Shyamoli Paribahan', origin:'dhaka', dest:'sylhet', originLabel:'Dhaka (Sayedabad)', destLabel:'Sylhet (Kadamtoli)', date:'2026-12-05', departTime:'11:30 PM', arriveTime:'6:00 AM', busLabel:'Scania (Non-AC)', layout:'2-3', rows:9, fareAc:null, fareNonAc:650, soldSeats:['1A','1E','3C','4A','6B','7E'], heldSeats:[] },
+  { id:'TRP-3', operator:'Ena Transport', origin:'dhaka', dest:'coxsbazar', originLabel:'Dhaka (Kallyanpur)', destLabel:"Cox's Bazar (Kolatoli)", date:'2026-12-05', departTime:'9:00 PM', arriveTime:'7:00 AM', busLabel:'Scania Irizar (AC)', layout:'2-2', rows:9, fareAc:1600, fareNonAc:null, soldSeats:['1A','1B','1C','1D','2A','2B','2C','3A','3B','4C','4D','5A','5B','5C','6A','6B','6C','6D','7A','7B','7C','8A','8B','8C','9A','9B','9C','9D'], heldSeats:['3C'] },
+];
+let tk_currentTripId = null;
+let tk_selectedSeats = [];
+
+function tk_seatsRemaining(trip){
+  const total = trip.layout==='2-2' ? trip.rows*4 : trip.rows*5;
+  return total - trip.soldSeats.length - trip.heldSeats.length;
+}
+
+function tk_renderSearch(){
+  const el = document.getElementById('tkResults'); if(!el) return;
+  const origin = document.getElementById('tkOrigin')?.value;
+  const dest = document.getElementById('tkDest')?.value;
+  let list = tk_tripsData.slice();
+  if(origin) list = list.filter(t=>t.origin===origin);
+  if(dest) list = list.filter(t=>t.dest===dest);
+  if(!list.length){
+    el.innerHTML = `<div class="card muted" style="text-align:center;padding:30px">${LANG==='bn'?'এই রুটে কোনো ট্রিপ পাওয়া যায়নি':'No trips found for this route'}</div>`;
+    return;
+  }
+  el.innerHTML = list.map(t=>{
+    const left = tk_seatsRemaining(t);
+    const fare = t.fareAc ? `৳ ${t.fareAc}` : `৳ ${t.fareNonAc}`;
+    const cls = t.fareAc ? (LANG==='bn'?'এসি':'AC') : (LANG==='bn'?'নন-এসি':'Non-AC');
+    return `<div class="card" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;cursor:pointer" data-trip="${t.id}">
+      <div>
+        <div style="font-weight:700;font-size:14px">${t.operator}</div>
+        <div class="muted" style="font-size:12.5px;margin-top:3px">${t.busLabel} · ${cls}</div>
+        <div style="font-size:13px;margin-top:6px">${t.departTime} ${icon('arrowRight','icon-sm')} ${t.arriveTime} · ${t.originLabel} ${icon('arrowRight','icon-sm')} ${t.destLabel}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="tabular" style="font-weight:700;font-size:15px">${fare}</div>
+        <div class="${left<5?'':'muted'}" style="font-size:12px;${left<5?'color:var(--warn);font-weight:700':''}">${left} ${LANG==='bn'?'সিট বাকি':'seats left'}</div>
+        <button class="btn btn-primary btn-sm" style="margin-top:8px" data-action="tk-view-seats" data-trip="${t.id}">${LANG==='bn'?'সিট দেখুন':'View seats'}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function tk_openSeatMap(tripId){
+  tk_currentTripId = tripId;
+  tk_selectedSeats = [];
+  const t = tk_tripsData.find(x=>x.id===tripId); if(!t) return;
+  document.getElementById('tkTripSummary').textContent = `${t.operator} · ${t.originLabel} → ${t.destLabel} · ${t.date} ${t.departTime}`;
+  tk_renderSeatGrid();
+  tk_renderSeatSummary();
+  showView('seatmap');
+}
+
+function tk_seatFare(t, seatNum){
+  const row = parseInt(seatNum, 10);
+  const base = t.fareAc || t.fareNonAc;
+  return row <= 2 ? Math.round(base * 1.15) : base;
+}
+
+function tk_renderSeatGrid(){
+  const t = tk_tripsData.find(x=>x.id===tk_currentTripId); if(!t) return;
+  const el = document.getElementById('seatGrid'); if(!el) return;
+  const perSide = t.layout==='2-2' ? 2 : 3;
+  const cols = t.layout==='2-2' ? ['A','B','C','D'] : ['A','B','C','D','E'];
+  let html = '';
+  for(let r=1; r<=t.rows; r++){
+    html += '<div class="seat-row">';
+    cols.forEach((c,i)=>{
+      const seatId = r+c;
+      let state = 'avail';
+      if(t.soldSeats.includes(seatId)) state='sold';
+      else if(t.heldSeats.includes(seatId)) state='held';
+      else if(tk_selectedSeats.includes(seatId)) state='selected';
+      html += `<button type="button" class="seat-btn seat-${state}" data-seat="${seatId}" ${state==='sold'||state==='held'?'disabled':''}>${seatId}</button>`;
+      if(i === perSide-1) html += '<span class="aisle-gap"></span>';
+    });
+    html += '</div>';
+  }
+  el.innerHTML = html;
+}
+
+function tk_renderSeatSummary(){
+  const t = tk_tripsData.find(x=>x.id===tk_currentTripId); if(!t) return;
+  const summaryEl = document.getElementById('seatSelectionSummary');
+  const totalEl = document.getElementById('seatTotalPrice');
+  const btn = document.getElementById('seatContinueBtn');
+  if(!tk_selectedSeats.length){
+    summaryEl.removeAttribute('data-t');
+    summaryEl.textContent = LANG==='bn' ? 'এখনো কোনো সিট নির্বাচন করা হয়নি' : 'No seats selected yet';
+    totalEl.textContent = '৳ 0';
+    btn.disabled = true;
+    return;
+  }
+  const total = tk_selectedSeats.reduce((s,seat)=>s+tk_seatFare(t,seat),0);
+  summaryEl.removeAttribute('data-t');
+  summaryEl.innerHTML = tk_selectedSeats.map(s=>`<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>${LANG==='bn'?'সিট':'Seat'} ${s}</span><span class="tabular">৳ ${tk_seatFare(t,s)}</span></div>`).join('');
+  totalEl.textContent = '৳ ' + total.toLocaleString();
+  btn.disabled = false;
+}
+
+function tk_wireSeatGrid(){
+  document.getElementById('seatGrid').addEventListener('click', e=>{
+    const btn = e.target.closest('.seat-btn:not([disabled])'); if(!btn) return;
+    const seat = btn.dataset.seat;
+    const idx = tk_selectedSeats.indexOf(seat);
+    if(idx>-1) tk_selectedSeats.splice(idx,1); else tk_selectedSeats.push(seat);
+    tk_renderSeatGrid();
+    tk_renderSeatSummary();
+  });
+  document.getElementById('seatContinueBtn').addEventListener('click', ()=>{
+    if(!tk_selectedSeats.length) return;
+    tk_renderCheckout();
+    showView('ticketcheckout');
+  });
+}
+
+function tk_renderCheckout(){
+  const t = tk_tripsData.find(x=>x.id===tk_currentTripId); if(!t) return;
+  const formsEl = document.getElementById('passengerForms');
+  formsEl.innerHTML = tk_selectedSeats.map((s,i)=>`
+    <div class="form-grid" style="margin-bottom:${i<tk_selectedSeats.length-1?'14px':'0'};padding-bottom:${i<tk_selectedSeats.length-1?'14px':'0'};border-bottom:${i<tk_selectedSeats.length-1?'1px solid var(--border)':'none'}">
+      <div class="field"><label>${LANG==='bn'?'যাত্রীর নাম':'Passenger name'} (${LANG==='bn'?'সিট':'Seat'} ${s})</label><input type="text" placeholder="${LANG==='bn'?'পূর্ণ নাম':'Full name'}" ${i===0?'value="Farzana Yasmin"':''}></div>
+      <div class="field"><label>${LANG==='bn'?'ফোন নম্বর':'Phone number'}</label><input type="text" placeholder="01XXXXXXXXX" ${i===0?'value="01712-345678"':''}></div>
+    </div>`).join('');
+
+  const breakdownEl = document.getElementById('tcBreakdown');
+  let subtotal = 0;
+  let rows = tk_selectedSeats.map(s=>{
+    const fare = tk_seatFare(t,s);
+    subtotal += fare;
+    return `<div class="price-row"><span>${LANG==='bn'?'সিট':'Seat'} ${s}</span><span class="tabular">৳ ${fare}</span></div>`;
+  }).join('');
+  const platformFee = 40;
+  const vat = Math.round(platformFee*0.15);
+  const total = subtotal + platformFee + vat;
+  breakdownEl.innerHTML = rows +
+    `<div class="price-row"><span>${LANG==='bn'?'প্ল্যাটফর্ম ফি':'Platform fee'}</span><span class="tabular">৳ ${platformFee}</span></div>
+     <div class="price-row"><span>${LANG==='bn'?'ভ্যাট (১৫%)':'VAT (15%)'}</span><span class="tabular">৳ ${vat}</span></div>
+     <div class="price-row total"><span>${LANG==='bn'?'মোট পরিশোধযোগ্য':'Total due now'}</span><span class="tabular">৳ ${total.toLocaleString()}</span></div>`;
+}
+
+const tk_myTickets = [];
+let tk_ticketSeq = 8841;
+
+function tk_pay(){
+  const t = tk_tripsData.find(x=>x.id===tk_currentTripId); if(!t) return;
+  t.soldSeats.push(...tk_selectedSeats);
+  const ref = 'CBST-' + (tk_ticketSeq++);
+  tk_myTickets.unshift({
+    ref, operator:t.operator, originLabel:t.originLabel, destLabel:t.destLabel,
+    date:t.date, departTime:t.departTime, seats:tk_selectedSeats.slice(), status:'upcoming'
+  });
+  tk_selectedSeats = [];
+  tk_renderMyTickets();
+  showView('myticket');
+  toastMsg(LANG==='bn'?'টিকেট নিশ্চিত হয়েছে':'Ticket confirmed','ticket');
+}
+
+function tk_renderMyTickets(){
+  const el = document.getElementById('myTicketList'); if(!el) return;
+  if(!tk_myTickets.length){
+    el.innerHTML = `<div class="card muted" style="text-align:center;padding:30px">${LANG==='bn'?'এখনো কোনো টিকেট কেনা হয়নি':'No tickets booked yet'}</div>`;
+    return;
+  }
+  el.innerHTML = tk_myTickets.map(tk=>`
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
+        <div>
+          <div style="font-weight:700;font-size:14px">${tk.operator}</div>
+          <div style="font-size:13px;margin-top:4px">${tk.originLabel} ${icon('arrowRight','icon-sm')} ${tk.destLabel}</div>
+          <div class="muted" style="font-size:12px;margin-top:4px">${tk.date} · ${tk.departTime} · ${LANG==='bn'?'সিট':'Seats'}: ${tk.seats.join(', ')}</div>
+        </div>
+        <div style="text-align:right">
+          <span class="badge badge-ok">${LANG==='bn'?'নিশ্চিত':'Confirmed'}</span>
+          <div class="mono" style="font-size:11px;margin-top:6px;color:var(--fg-faint)">${tk.ref}</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;margin-top:14px;padding-top:14px;border-top:1px dashed var(--border)">
+        <div style="width:84px;height:84px;background:repeating-linear-gradient(45deg,#000,#000 3px,#fff 3px,#fff 6px);border-radius:6px" title="QR"></div>
+      </div>
+    </div>`).join('');
+}
+
+function tk_wireSearch(){
+  document.getElementById('tkSearchBtn').addEventListener('click', tk_renderSearch);
+  document.getElementById('tkResults').addEventListener('click', e=>{
+    const btn = e.target.closest('[data-action="tk-view-seats"]');
+    const card = e.target.closest('[data-trip]');
+    const tripId = (btn && btn.dataset.trip) || (card && card.dataset.trip);
+    if(tripId) tk_openSeatMap(tripId);
+  });
+  document.getElementById('tcPayBtn').addEventListener('click', tk_pay);
+  document.querySelectorAll('#tcPayMethods .pay-method').forEach(p=>{
+    p.addEventListener('click', ()=>{
+      document.querySelectorAll('#tcPayMethods .pay-method').forEach(x=>x.classList.remove('on'));
+      p.classList.add('on');
+    });
+  });
+}
+
+/* ---- Transport Operator: buses, trips, policies, dashboard ---- */
+const op_buses = [
+  { id:'BUS-1', reg:'Dhaka Metro-GA-11-2233', label:'Volvo 9800 (AC)', rows:9, layout:'2-2' },
+  { id:'BUS-2', reg:'Dhaka Metro-GA-22-4455', label:'Scania (Non-AC)', rows:9, layout:'2-3' },
+];
+function op_renderBuses(){
+  const el = document.getElementById('busList'); if(!el) return;
+  el.innerHTML = op_buses.map(b=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center">
+    <div><div style="font-weight:700;font-size:13.5px">${b.label}</div><div class="muted mono" style="font-size:12px">${b.reg} · ${b.layout} · ${b.rows} ${LANG==='bn'?'সারি':'rows'}</div></div>
+    <span class="badge badge-ok">${LANG==='bn'?'সক্রিয়':'Active'}</span>
+  </div>`).join('');
+  const sel = document.getElementById('tripBusSelect');
+  if(sel) sel.innerHTML = op_buses.map(b=>`<option value="${b.id}">${b.label} (${b.reg})</option>`).join('');
+}
+function op_wireBuses(){
+  document.getElementById('busSaveBtn').addEventListener('click', ()=>{
+    const reg = document.getElementById('busRegInput').value.trim() || 'New-Bus-0001';
+    const label = document.getElementById('busLabelInput').value.trim() || (LANG==='bn'?'নতুন বাস':'New bus');
+    const rows = parseInt(document.getElementById('busRowsInput').value,10) || 9;
+    const layout = document.getElementById('busLayoutInput').value;
+    op_buses.push({ id:'BUS-'+(op_buses.length+1), reg, label, rows, layout });
+    op_renderBuses();
+    toastMsg(LANG==='bn'?'বাস সংরক্ষিত হয়েছে':'Bus saved','bus');
+  });
+}
+
+const op_trips = [
+  { id:'OPT-1', bus:'Volvo 9800 (AC)', origin:'Dhaka (Gabtoli)', dest:'Chattogram (GEC Circle)', depart:'2026-12-05 22:00', soldSeats:11, totalSeats:36, status:'scheduled' },
+  { id:'OPT-2', bus:'Scania (Non-AC)', origin:'Dhaka (Sayedabad)', dest:'Sylhet (Kadamtoli)', depart:'2026-12-06 23:30', soldSeats:6, totalSeats:45, status:'scheduled' },
+];
+function op_renderTrips(){
+  const el = document.getElementById('operatorTripList'); if(!el) return;
+  const lbl = { scheduled:LANG==='bn'?'নির্ধারিত':'Scheduled', departed:LANG==='bn'?'ছেড়ে গেছে':'Departed', cancelled:LANG==='bn'?'বাতিল':'Cancelled' };
+  el.innerHTML = op_trips.map(t=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+    <div><div style="font-weight:700;font-size:13.5px">${t.origin} ${icon('arrowRight','icon-sm')} ${t.dest}</div><div class="muted" style="font-size:12px;margin-top:3px">${t.bus} · ${t.depart}</div></div>
+    <div style="text-align:right"><div class="tabular" style="font-size:13px">${t.soldSeats}/${t.totalSeats} ${LANG==='bn'?'বিক্রিত':'sold'}</div>${statusBadge(t.status,lbl[t.status])}</div>
+  </div>`).join('');
+}
+function op_wireTrips(){
+  document.getElementById('tripSaveBtn').addEventListener('click', ()=>{
+    const busSel = document.getElementById('tripBusSelect');
+    const busLabel = busSel.options[busSel.selectedIndex]?.text || '';
+    const origin = document.getElementById('tripOriginInput').value.trim() || 'Dhaka';
+    const dest = document.getElementById('tripDestInput').value.trim() || 'Destination';
+    const depart = document.getElementById('tripDepartInput').value || '2026-12-05 22:00';
+    op_trips.unshift({ id:'OPT-'+(op_trips.length+1), bus:busLabel, origin, dest, depart:depart.replace('T',' '), soldSeats:0, totalSeats:36, status:'scheduled' });
+    op_renderTrips();
+    toastMsg(LANG==='bn'?'ট্রিপ প্রকাশিত হয়েছে':'Trip published','bus');
+  });
+}
+
+const op_policies = [
+  { hours:6, refund:100 },
+  { hours:2, refund:50 },
+  { hours:0, refund:0 },
+];
+function op_renderPolicies(){
+  const el = document.getElementById('policyRows'); if(!el) return;
+  el.innerHTML = op_policies.map(p=>`<tr><td>${p.hours > 0 ? (LANG==='bn'?`${p.hours} ঘণ্টা আগ পর্যন্ত`:`Up to ${p.hours}h before`) : (LANG==='bn'?'তার পরে':'After that')}</td><td class="tabular">${p.refund}%</td></tr>`).join('');
+}
+
+const op_bookings = [
+  { passenger:'Rafiul Alam', route:'Dhaka → Chattogram', seats:'3A, 3B', amount:'৳ 2,400', status:'confirmed' },
+  { passenger:'Nasima Sultana', route:'Dhaka → Sylhet', seats:'5C', amount:'৳ 650', status:'confirmed' },
+];
+function op_renderDash(){
+  const el = document.getElementById('operatorBookingRows'); if(!el) return;
+  el.innerHTML = op_bookings.map(b=>`<tr><td>${b.passenger}</td><td>${b.route}</td><td>${b.seats}</td><td class="tabular">${b.amount}</td><td>${statusBadge(b.status,LANG==='bn'?'নিশ্চিত':'Confirmed')}</td></tr>`).join('');
+}
+function op_wireOnboard(){
+  const btn = document.getElementById('operatorOnboardSubmitBtn');
+  if(btn) btn.addEventListener('click', ()=>toastMsg(LANG==='bn'?'অনুমোদনের জন্য জমা দেওয়া হয়েছে':'Submitted for approval','check'));
+}
+
+/* ---- Admin: operator verification + ticketing oversight ---- */
+const adm_operatorVerifs = [
+  { operator:'Green Line Paribahan', owner:'Abdul Karim', submitted:'Nov 20, 2026', status:'pending' },
+  { operator:'Hanif Enterprise', owner:'Mizanur Rahman', submitted:'Nov 21, 2026', status:'pending' },
+  { operator:'Shyamoli Paribahan', owner:'Nasir Uddin', submitted:'Nov 18, 2026', status:'approved' },
+];
+function adm_renderOperatorVerifs(){
+  const el = document.getElementById('operatorVerifRows'); if(!el) return;
+  const lbl = { pending:LANG==='bn'?'বিচারাধীন':'Pending', approved:LANG==='bn'?'অনুমোদিত':'Approved', rejected:LANG==='bn'?'প্রত্যাখ্যাত':'Rejected' };
+  el.innerHTML = adm_operatorVerifs.map((o,i)=>`<tr><td style="font-weight:600">${o.operator}</td><td>${o.owner}</td><td>${o.submitted}</td><td>${statusBadge(o.status,lbl[o.status])}</td><td style="display:flex;gap:6px;flex-wrap:wrap">
+    ${o.status==='pending' ? `<button class="btn btn-sm" data-action="adm-op-approve" data-idx="${i}">${LANG==='bn'?'অনুমোদন':'Approve'}</button><button class="btn btn-sm btn-danger-outline" data-action="adm-op-reject" data-idx="${i}">${LANG==='bn'?'প্রত্যাখ্যান':'Reject'}</button>` : '—'}
+  </td></tr>`).join('');
+}
+
+const adm_ticketTrips = [
+  { operator:'Green Line Paribahan', route:'Dhaka → Chattogram', date:'2026-12-05', sold:11, status:'live' },
+  { operator:'Ena Transport', route:"Dhaka → Cox's Bazar", date:'2026-12-05', sold:28, status:'live' },
+];
+function adm_renderTicketTrips(){
+  const el = document.getElementById('adminTripRows'); if(!el) return;
+  const lbl = { live:LANG==='bn'?'লাইভ':'Live', paused:LANG==='bn'?'বিরতি':'Paused' };
+  el.innerHTML = adm_ticketTrips.map((t,i)=>`<tr><td>${t.operator}</td><td>${t.route}</td><td>${t.date}</td><td class="tabular">${t.sold}</td><td>${statusBadge(t.status,lbl[t.status])}</td><td><button class="btn btn-sm" data-action="adm-trip-pause" data-idx="${i}">${t.status==='paused'?(LANG==='bn'?'চালু করুন':'Resume'):(LANG==='bn'?'বিরতি দিন':'Pause')}</button></td></tr>`).join('');
+}
+const adm_ticketDisputes = [
+  { ref:'CBST-8831', issue:'Bus departed without passenger (no-show dispute)', status:'review' },
+];
+function adm_renderTicketDisputes(){
+  const el = document.getElementById('ticketDisputeList'); if(!el) return;
+  el.innerHTML = adm_ticketDisputes.map(d=>`<div class="card"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b style="font-size:13.5px">${d.ref}</b>${statusBadge(d.status,LANG==='bn'?'পর্যালোচনায়':'In review')}</div><div class="muted" style="font-size:12.5px;margin-top:4px">${d.issue}</div></div>`).join('');
+}
+function adm_wireTicketing(){
+  document.getElementById('operatorVerifRows').addEventListener('click', e=>{
+    const btn = e.target.closest('[data-action]'); if(!btn) return;
+    const o = adm_operatorVerifs[parseInt(btn.dataset.idx,10)];
+    if(btn.dataset.action==='adm-op-approve'){ o.status='approved'; adm_renderOperatorVerifs(); toastMsg(LANG==='bn'?'অপারেটর অনুমোদিত হয়েছে':'Operator approved','check'); }
+    else if(btn.dataset.action==='adm-op-reject'){ o.status='rejected'; adm_renderOperatorVerifs(); toastMsg(LANG==='bn'?'অপারেটর প্রত্যাখ্যাত হয়েছে':'Operator rejected','shield'); }
+  });
+  document.getElementById('adminTripRows').addEventListener('click', e=>{
+    const btn = e.target.closest('[data-action="adm-trip-pause"]'); if(!btn) return;
+    const t = adm_ticketTrips[parseInt(btn.dataset.idx,10)];
+    t.status = t.status==='paused' ? 'live' : 'paused';
+    adm_renderTicketTrips();
   });
 }
 
@@ -5982,6 +6596,10 @@ function wirePage(){
     diff_renderReviews(); diff_renderMatches(); diff_renderNotifMatrix(); diff_renderNotifFeed(); diff_renderNoshow();
     scale_renderAll();
     mb_renderList();
+    tk_renderSearch(); tk_renderMyTickets();
+    if(tk_currentTripId){ tk_renderSeatGrid(); tk_renderSeatSummary(); }
+    op_renderBuses(); op_renderTrips(); op_renderPolicies(); op_renderDash();
+    adm_renderOperatorVerifs(); adm_renderTicketTrips(); adm_renderTicketDisputes();
     if (typeof switchNeighborhood === 'function') switchNeighborhood(activeNeighborKey);
     if (typeof calcRent === 'function') calcRent();
     if (typeof renderPubFeatured === 'function') renderPubFeatured();
@@ -5997,6 +6615,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
   scale_renderAll();
   mb_renderList(); mb_wire();
   rm_wire();
+  tk_renderSearch(); tk_wireSearch(); tk_wireSeatGrid(); tk_renderMyTickets();
+  op_renderBuses(); op_wireBuses(); op_renderTrips(); op_wireTrips(); op_renderPolicies(); op_renderDash(); op_wireOnboard();
+  adm_renderOperatorVerifs(); adm_renderTicketTrips(); adm_renderTicketDisputes(); adm_wireTicketing();
   wirePage();
   scale_wirePwa();
   document.getElementById('roleSwitch').addEventListener('change',e=>applyRole2(e.target.value));
