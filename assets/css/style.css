@@ -381,3 +381,28 @@ tbody tr:hover{background:var(--surface-2)}
 .seat-row-business .row-tag{color:var(--brand);background:var(--brand-soft,var(--surface-2));border-color:var(--brand)}
 .seat-row-bench{background:var(--surface-2);border-radius:8px;padding:4px 6px;margin:-4px -6px}
 .seat-row-door .row-tag{color:var(--warn);border-color:var(--warn)}
+
+/* ---------- vehicle seat-map canvas (freeform drag-and-drop editor) ---------- */
+.veh-canvas{
+  position:relative;width:100%;min-height:420px;
+  background-color:var(--surface-2);
+  background-image:linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size:20px 20px;
+  border:1.5px dashed var(--border-strong);border-radius:12px;
+  overflow:hidden;touch-action:none;
+}
+.veh-seat{
+  position:absolute;width:40px;height:40px;margin-left:-20px;margin-top:-20px;
+  border-radius:8px;border:1.5px solid var(--border-strong);background:var(--surface);
+  display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:var(--fg);
+  cursor:grab;user-select:none;box-shadow:var(--shadow-sm,0 1px 2px rgba(0,0,0,.08));
+}
+.veh-seat:active{cursor:grabbing}
+.veh-seat.premium{background:var(--brand-soft,var(--surface-2));border-color:var(--brand);color:var(--brand)}
+.veh-seat.selected{outline:2px solid var(--brand);outline-offset:2px}
+.veh-deck-tab{display:flex;align-items:center;gap:4px}
+.veh-deck-tab .veh-deck-close{opacity:.6;cursor:pointer;font-weight:900}
+.veh-deck-tab .veh-deck-close:hover{opacity:1;color:var(--danger)}
+.veh-canvas-readonly{border-style:solid;cursor:default}
+.veh-canvas-readonly .veh-seat{cursor:pointer}
+.veh-canvas-readonly .veh-seat:disabled{cursor:not-allowed}

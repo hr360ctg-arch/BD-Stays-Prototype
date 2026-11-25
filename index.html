@@ -2800,6 +2800,7 @@ html, body {
                 <span><i class="seat-dot seat-held"></i> <span data-t="seat_held">Held</span></span>
                 <span><i class="seat-dot seat-sold"></i> <span data-t="seat_sold">Booked</span></span>
               </div>
+              <div class="filter-bar" id="seatDeckTabs" hidden style="margin-bottom:12px"></div>
               <div id="seatGrid"></div>
             </div>
           </div>
@@ -2968,45 +2969,47 @@ html, body {
 
       <!-- ===== BUS & SEAT MAP TEMPLATES ===== -->
       <section class="view-section" id="view-busmanage">
-        <div class="section-title"><h2 data-t="h_busmanage">Buses &amp; seat maps</h2><span class="count" data-t="h_busmanage_sub">Reusable seat templates — build once, use across many trips</span></div>
+        <div class="section-title"><h2 data-t="h_busmanage">Vehicles &amp; seat maps</h2><span class="count" data-t="h_busmanage_sub">Freeform seat-map designer — place every seat exactly where it is on the real vehicle</span></div>
         <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:20px" id="busList"></div>
-        <div class="section-title"><h2 data-t="bus_add">Add a new bus</h2></div>
-        <div class="card" style="max-width:680px">
+        <div class="section-title"><h2 data-t="bus_add">Add a new vehicle</h2></div>
+        <div class="card" style="max-width:920px">
           <div class="form-grid">
-            <div class="field"><label data-t="bus_f_reg">Registration number</label><input type="text" id="busRegInput" placeholder="e.g. Dhaka Metro-GA-11-2233"></div>
-            <div class="field"><label data-t="bus_f_label">Bus name/label</label><input type="text" id="busLabelInput" placeholder="e.g. Volvo 36-seater"></div>
-            <div class="field"><label data-t="bus_f_rows" id="busRowsLabel">Rows per deck</label><input type="number" id="busRowsInput" value="9"></div>
-            <div class="field"><label data-t="bus_f_left">Seats — left of aisle</label><input type="number" id="busLeftInput" value="2" min="1" max="4"></div>
-            <div class="field"><label data-t="bus_f_right">Seats — right of aisle</label><input type="number" id="busRightInput" value="2" min="1" max="4"></div>
-            <div class="field"><label data-t="bus_f_deck">Deck type</label>
-              <select id="busDeckInput">
-                <option value="single" data-t="bus_deck_single">Single deck</option>
-                <option value="double" data-t="bus_deck_double">Double decker (upper + lower)</option>
+            <div class="field"><label data-t="bus_f_reg">Registration / ID</label><input type="text" id="busRegInput" placeholder="e.g. Dhaka Metro-GA-11-2233"></div>
+            <div class="field"><label data-t="bus_f_label">Name / label</label><input type="text" id="busLabelInput" placeholder="e.g. Volvo 9800, Biman BG-147, MV Kajal Lata"></div>
+            <div class="field"><label data-t="veh_f_type">Vehicle type</label>
+              <select id="vehTypeInput">
+                <option value="bus" data-t="veh_type_bus">🚌 Bus</option>
+                <option value="plane" data-t="veh_type_plane">✈️ Plane</option>
+                <option value="ship" data-t="veh_type_ship">🚢 Ship / Launch</option>
+                <option value="other" data-t="veh_type_other">🚐 Other</option>
               </select>
             </div>
-            <div class="field" id="busLowerRowsField" hidden><label data-t="bus_f_lowerrows">Lower deck rows</label><input type="number" id="busLowerRowsInput" value="6"><div class="field-hint" data-t="bus_f_lowerrows_hint">Lower deck is often shorter (entrance, stairs, luggage/engine space)</div></div>
-            <div class="field"><label data-t="bus_f_frontrow">Front-row seats (optional)</label><input type="number" id="busFrontRowInput" placeholder="leave blank for a full row" min="0"><div class="field-hint" data-t="bus_f_frontrow_hint">For a door/stairwell cutout at the front — e.g. 1 seat instead of a full row</div></div>
-            <div class="field"><label data-t="bus_f_doorside">Door side</label>
-              <select id="busDoorSideInput">
-                <option value="left" data-t="bus_door_left">Left (kerb side)</option>
-                <option value="right" data-t="bus_door_right">Right</option>
-              </select>
-            </div>
-            <div class="field"><label data-t="bus_f_bizrows">Business/sofa rows at front (optional)</label><input type="number" id="busBusinessRowsInput" placeholder="0" min="0"></div>
-            <div class="field"><label data-t="bus_f_bizleft">Business — left of aisle</label><input type="number" id="busBusinessLeftInput" placeholder="e.g. 1" min="0" max="4"></div>
-            <div class="field"><label data-t="bus_f_bizright">Business — right of aisle</label><input type="number" id="busBusinessRightInput" placeholder="e.g. 2" min="0" max="4"></div>
-            <div class="field">
-              <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-                <input type="checkbox" id="busBackBenchInput">
-                <span data-t="bus_f_backbench">Last row is a continuous bench (no aisle gap)</span>
-              </label>
-            </div>
           </div>
-          <div style="margin-top:16px">
-            <div class="muted" style="font-size:12px;margin-bottom:8px" data-t="bus_preview">Live preview — confirm this matches the real bus before saving</div>
-            <div id="busPreviewGrid"></div>
+
+          <div class="section-title" style="margin-top:18px;margin-bottom:0"><h2 data-t="veh_decks">Decks / floors</h2><span class="spacer"></span><button class="btn btn-sm btn-outline" id="vehAddDeckBtn" data-t="veh_add_deck">+ Add deck/floor</button></div>
+          <div class="filter-bar" id="vehDeckTabs" style="margin-top:10px"></div>
+
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px">
+            <button class="btn btn-sm btn-primary" id="vehAddSeatBtn" data-t="veh_add_seat">+ Add seat</button>
+            <span class="muted" style="font-size:12px" data-t="veh_drag_hint">Drag any seat to place it exactly like the real vehicle. Click a seat to edit its label/class.</span>
           </div>
-          <button class="btn btn-primary" id="busSaveBtn" style="margin-top:14px" data-t="bus_save">Save bus</button>
+
+          <div id="vehCanvas" class="veh-canvas" style="margin-top:12px"></div>
+
+          <div id="vehSeatEditPanel" class="card" hidden style="margin-top:14px;background:var(--surface-2)">
+            <div class="form-grid">
+              <div class="field"><label data-t="veh_seat_label">Seat label</label><input type="text" id="vehSeatLabelInput" maxlength="6"></div>
+              <div class="field"><label data-t="veh_seat_class">Seat class</label>
+                <select id="vehSeatClassInput">
+                  <option value="standard" data-t="veh_class_standard">Standard</option>
+                  <option value="premium" data-t="veh_class_premium">Premium</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn btn-sm btn-danger-outline" id="vehSeatDeleteBtn" style="margin-top:10px" data-t="veh_seat_delete">Delete this seat</button>
+          </div>
+
+          <button class="btn btn-primary" id="busSaveBtn" style="margin-top:16px" data-t="bus_save">Save vehicle</button>
         </div>
       </section>
 
@@ -4235,18 +4238,18 @@ Object.assign(window.I18N.bn, {
   oo_f_company: 'অপারেটর / কোম্পানির নাম', oo_f_owner: 'মালিকের পূর্ণ নাম', oo_f_nid: 'মালিকের এনআইডি নম্বর',
   oo_f_trade: 'ট্রেড লাইসেন্স নম্বর', oo_f_payout: 'পেআউট অ্যাকাউন্ট', oo_f_fleet: 'ফ্লিট সাইজ (আনুমানিক)',
   oo_f_routes: 'প্রধান রুট', oo_submit: 'অনুমোদনের জন্য জমা দিন',
-  h_busmanage: 'বাস ও সিট ম্যাপ', h_busmanage_sub: 'পুনঃব্যবহারযোগ্য সিট টেমপ্লেট — একবার তৈরি করুন, অনেক ট্রিপে ব্যবহার করুন',
-  bus_add: 'নতুন বাস যোগ করুন', bus_f_reg: 'নিবন্ধন নম্বর', bus_f_label: 'বাসের নাম/লেবেল', bus_f_rows: 'মোট সারি',
-  bus_save: 'বাস সংরক্ষণ করুন',
+  h_busmanage: 'যানবাহন ও সিট ম্যাপ', h_busmanage_sub: 'ফ্রিফর্ম সিট-ম্যাপ ডিজাইনার — প্রতিটি সিট ঠিক যেখানে বাস্তব যানবাহনে আছে সেখানে বসান',
+  bus_add: 'নতুন যানবাহন যোগ করুন', bus_f_reg: 'নিবন্ধন / আইডি', bus_f_label: 'নাম / লেবেল',
+  bus_save: 'যানবাহন সংরক্ষণ করুন',
   h_triplist: 'ট্রিপ ও রুট', h_triplist_sub: 'নির্ধারিত ট্রিপ তৈরি ও পরিচালনা করুন',
-  trip_add: 'নতুন ট্রিপ তৈরি করুন', trip_f_bus: 'বাস', trip_f_origin: 'যাত্রা শুরু', trip_f_dest: 'গন্তব্য',
+  trip_add: 'নতুন ট্রিপ তৈরি করুন', trip_f_bus: 'যানবাহন', trip_f_origin: 'যাত্রা শুরু', trip_f_dest: 'গন্তব্য',
   trip_f_datetime: 'ছাড়ার তারিখ ও সময়', trip_f_fareac: 'ভাড়া — এসি (৳)', trip_f_farenonac: 'ভাড়া — নন-এসি (৳)', trip_save: 'ট্রিপ প্রকাশ করুন',
   h_policies: 'বাতিলকরণ নীতি', h_policies_sub: 'ছাড়ার সময়ের আগে ঘণ্টার ভিত্তিতে স্বয়ংক্রিয়ভাবে প্রয়োগ হয়',
   pol_hours: 'ছাড়ার কত ঘণ্টা আগে', pol_refund: 'ফেরত',
   opd_upcoming: 'আসন্ন ট্রিপ', opd_seats: 'এই সপ্তাহে বিক্রিত সিট', opd_revenue: 'এই সপ্তাহের আয়', opd_occupancy: 'গড় সিট পূর্ণতা',
   opd_bookings: 'সাম্প্রতিক বুকিং', col_passenger: 'যাত্রী', col_seat: 'সিট', col_amount: 'পরিমাণ',
   nav_operator: 'ট্রান্সপোর্ট অপারেটর', nav_operatordash: 'অপারেটর ড্যাশবোর্ড', nav_operatoronboard: 'অপারেটর অনবোর্ডিং',
-  nav_busmanage: 'বাস ও সিট ম্যাপ', nav_triplist: 'ট্রিপ ও রুট', nav_policies: 'বাতিলকরণ নীতি',
+  nav_busmanage: 'যানবাহন ও সিট ম্যাপ', nav_triplist: 'ট্রিপ ও রুট', nav_policies: 'বাতিলকরণ নীতি',
   nav_adminoperators: 'অপারেটর ভেরিফিকেশন', nav_adminticketing: 'টিকেটিং তদারকি',
   h_adminoperators: 'অপারেটর ভেরিফিকেশন কিউ', h_adminoperators_sub: 'অনুমোদনের আগে ট্রেড লাইসেন্স, এনআইডি ও রুট বিবরণ পর্যালোচনা করুন',
   col_operator: 'অপারেটর', ao_owner: 'মালিক',
@@ -4262,15 +4265,11 @@ Object.assign(window.I18N.bn, {
   ct_back: 'টিকেট রাখুন', ct_confirm: 'বাতিলকরণ নিশ্চিত করুন',
   pol_add: 'নতুন নিয়ম যোগ করুন', pol_f_hours: 'ছাড়ার কত ঘণ্টা আগে', pol_f_refund: 'ফেরতের শতাংশ', pol_add_btn: 'নিয়ম যোগ করুন',
   trip_f_boarding: 'বোর্ডিং পয়েন্ট', trip_f_dropping: 'ড্রপিং পয়েন্ট',
-  bus_preview: 'লাইভ প্রিভিউ — সংরক্ষণের আগে নিশ্চিত করুন এটি আসল বাসের সাথে মিলছে',
-  bus_f_left: 'সিট — আইলের বামে', bus_f_right: 'সিট — আইলের ডানে',
-  bus_f_deck: 'ডেক টাইপ', bus_deck_single: 'সিঙ্গেল ডেক', bus_deck_double: 'ডাবল ডেকার (উপরে + নিচে)',
-  bus_f_rows_upper: 'উপরের ডেকের সারি সংখ্যা',
-  bus_f_lowerrows: 'নিচের ডেকের সারি সংখ্যা', bus_f_lowerrows_hint: 'নিচের ডেক প্রায়ই ছোট হয় (প্রবেশপথ, সিঁড়ি, লাগেজ/ইঞ্জিন জায়গার জন্য)',
-  bus_f_frontrow: 'সামনের সারির সিট (ঐচ্ছিক)', bus_f_frontrow_hint: 'সামনে দরজা/সিঁড়ির জন্য — যেমন পূর্ণ সারির বদলে মাত্র ১টি সিট',
-  bus_f_doorside: 'দরজার পাশ', bus_door_left: 'বামে (কার্ব সাইড)', bus_door_right: 'ডানে',
-  bus_f_bizrows: 'সামনে বিজনেস/সোফা সারি (ঐচ্ছিক)', bus_f_bizleft: 'বিজনেস — আইলের বামে', bus_f_bizright: 'বিজনেস — আইলের ডানে',
-  bus_f_backbench: 'শেষ সারি একটি একটানা বেঞ্চ (কোনো আইল গ্যাপ নেই)'
+  veh_f_type: 'যানবাহনের ধরন', veh_type_bus: '🚌 বাস', veh_type_plane: '✈️ প্লেন', veh_type_ship: '🚢 জাহাজ / লঞ্চ', veh_type_other: '🚐 অন্যান্য',
+  veh_decks: 'ডেক / ফ্লোর', veh_add_deck: '+ ডেক/ফ্লোর যোগ করুন', veh_add_seat: '+ সিট যোগ করুন',
+  veh_drag_hint: 'যেকোনো সিট টেনে ঠিক বাস্তব যানবাহনের মতো জায়গায় বসান। সিট ক্লিক করে লেবেল/ক্লাস এডিট করুন।',
+  veh_seat_label: 'সিট লেবেল', veh_seat_class: 'সিট ক্লাস', veh_class_standard: 'স্ট্যান্ডার্ড', veh_class_premium: 'প্রিমিয়াম',
+  veh_seat_delete: 'এই সিট মুছে ফেলুন', veh_deck_name: 'ডেক', veh_no_seats: 'এখনো কোনো সিট যোগ করা হয়নি — "+ সিট যোগ করুন" চাপুন'
 });
 Object.assign(window.I18N.en, {
   nav_reporting: 'Platform Reporting',
@@ -4391,18 +4390,18 @@ Object.assign(window.I18N.en, {
   oo_f_company: 'Operator / company name', oo_f_owner: "Owner's full name", oo_f_nid: 'Owner NID number',
   oo_f_trade: 'Trade licence number', oo_f_payout: 'Payout account', oo_f_fleet: 'Fleet size (approx.)',
   oo_f_routes: 'Primary routes served', oo_submit: 'Submit for approval',
-  h_busmanage: 'Buses & seat maps', h_busmanage_sub: 'Reusable seat templates — build once, use across many trips',
-  bus_add: 'Add a new bus', bus_f_reg: 'Registration number', bus_f_label: 'Bus name/label', bus_f_rows: 'Total rows',
-  bus_save: 'Save bus',
+  h_busmanage: 'Vehicles & seat maps', h_busmanage_sub: 'Freeform seat-map designer — place every seat exactly where it is on the real vehicle',
+  bus_add: 'Add a new vehicle', bus_f_reg: 'Registration / ID', bus_f_label: 'Name / label',
+  bus_save: 'Save vehicle',
   h_triplist: 'Trips & routes', h_triplist_sub: 'Create and manage scheduled trips',
-  trip_add: 'Create a new trip', trip_f_bus: 'Bus', trip_f_origin: 'Origin', trip_f_dest: 'Destination',
+  trip_add: 'Create a new trip', trip_f_bus: 'Vehicle', trip_f_origin: 'Origin', trip_f_dest: 'Destination',
   trip_f_datetime: 'Departure date & time', trip_f_fareac: 'Fare — AC (৳)', trip_f_farenonac: 'Fare — Non-AC (৳)', trip_save: 'Publish trip',
   h_policies: 'Cancellation policies', h_policies_sub: 'Applied automatically at ticket cancellation time based on hours before departure',
   pol_hours: 'Hours before departure', pol_refund: 'Refund',
   opd_upcoming: 'Upcoming trips', opd_seats: 'Seats sold this week', opd_revenue: "This week's revenue", opd_occupancy: 'Average occupancy',
   opd_bookings: 'Recent bookings', col_passenger: 'Passenger', col_seat: 'Seat(s)', col_amount: 'Amount',
   nav_operator: 'Transport Operator', nav_operatordash: 'Operator Dashboard', nav_operatoronboard: 'Operator Onboarding',
-  nav_busmanage: 'Buses & Seat Maps', nav_triplist: 'Trips & Routes', nav_policies: 'Cancellation Policies',
+  nav_busmanage: 'Vehicles & Seat Maps', nav_triplist: 'Trips & Routes', nav_policies: 'Cancellation Policies',
   nav_adminoperators: 'Operator Verification', nav_adminticketing: 'Ticketing Oversight',
   h_adminoperators: 'Operator verification queue', h_adminoperators_sub: 'Review trade licence, NID, and route details before approval',
   col_operator: 'Operator', ao_owner: 'Owner',
@@ -4418,15 +4417,11 @@ Object.assign(window.I18N.en, {
   ct_back: 'Keep ticket', ct_confirm: 'Confirm cancellation',
   pol_add: 'Add a new rule', pol_f_hours: 'Hours before departure', pol_f_refund: 'Refund percentage', pol_add_btn: 'Add rule',
   trip_f_boarding: 'Boarding point', trip_f_dropping: 'Dropping point',
-  bus_preview: 'Live preview — confirm this matches the real bus before saving',
-  bus_f_left: 'Seats — left of aisle', bus_f_right: 'Seats — right of aisle',
-  bus_f_deck: 'Deck type', bus_deck_single: 'Single deck', bus_deck_double: 'Double decker (upper + lower)',
-  bus_f_rows_upper: 'Upper deck rows',
-  bus_f_lowerrows: 'Lower deck rows', bus_f_lowerrows_hint: 'Lower deck is often shorter (entrance, stairs, luggage/engine space)',
-  bus_f_frontrow: 'Front-row seats (optional)', bus_f_frontrow_hint: 'For a door/stairwell cutout at the front — e.g. 1 seat instead of a full row',
-  bus_f_doorside: 'Door side', bus_door_left: 'Left (kerb side)', bus_door_right: 'Right',
-  bus_f_bizrows: 'Business/sofa rows at front (optional)', bus_f_bizleft: 'Business — left of aisle', bus_f_bizright: 'Business — right of aisle',
-  bus_f_backbench: 'Last row is a continuous bench (no aisle gap)'
+  veh_f_type: 'Vehicle type', veh_type_bus: '🚌 Bus', veh_type_plane: '✈️ Plane', veh_type_ship: '🚢 Ship / Launch', veh_type_other: '🚐 Other',
+  veh_decks: 'Decks / floors', veh_add_deck: '+ Add deck/floor', veh_add_seat: '+ Add seat',
+  veh_drag_hint: 'Drag any seat to place it exactly like the real vehicle. Click a seat to edit its label/class.',
+  veh_seat_label: 'Seat label', veh_seat_class: 'Seat class', veh_class_standard: 'Standard', veh_class_premium: 'Premium',
+  veh_seat_delete: 'Delete this seat', veh_deck_name: 'Deck', veh_no_seats: 'No seats added yet — click "+ Add seat"'
 });
 Object.assign(window.I18N.bn, {
   pub_nav_why: 'কেন CBS?',
@@ -5789,77 +5784,84 @@ function rm_wire(){
 
 /* ================= TRANSPORT TICKETING (Phase 5) ================= */
 const tk_cityLabel = { dhaka:'Dhaka', chattogram:'Chattogram', sylhet:'Sylhet', coxsbazar:"Cox's Bazar" };
-const tk_tripsData = [
-  { id:'TRP-1', operator:'Green Line Paribahan', origin:'dhaka', dest:'chattogram', originLabel:'Dhaka (Gabtoli)', destLabel:'Chattogram (GEC Circle)', date:'2026-12-05', departTime:'10:00 PM', arriveTime:'4:30 AM', timeBand:'night', busLabel:'Volvo 9800 (AC)', left:2, right:2, rows:9, deck:'single', fareAc:1200, fareNonAc:null, soldSeats:['1A','1B','2C','3A','4B','5A','5C','6D','7A','8C','9B'], heldSeats:['2A'] },
-  { id:'TRP-2', operator:'Shyamoli Paribahan', origin:'dhaka', dest:'sylhet', originLabel:'Dhaka (Sayedabad)', destLabel:'Sylhet (Kadamtoli)', date:'2026-12-05', departTime:'11:30 PM', arriveTime:'6:00 AM', timeBand:'night', busLabel:'Scania (Non-AC)', left:2, right:3, rows:9, deck:'single', fareAc:null, fareNonAc:650, soldSeats:['1A','1E','3C','4A','6B','7E'], heldSeats:[] },
-  { id:'TRP-3', operator:'Green Line Paribahan', origin:'dhaka', dest:'coxsbazar', originLabel:'Dhaka (Kallyanpur)', destLabel:"Cox's Bazar (Kolatoli)", date:'2026-12-05', departTime:'9:00 AM', arriveTime:'7:00 PM', timeBand:'morning', busLabel:'Scania Double Decker (AC)', left:2, right:2, rows:9, lowerRows:6, frontRowSeats:1, doorSide:'left', businessRows:2, businessLeft:1, businessRight:2, backBench:true, deck:'double', fareAc:1600, fareNonAc:null, soldSeats:['L1D','L2A','L2B','L2C','L2D','L3A','L3B','L4C','L4D','L5A','U1A','U1B','U2A','U2B','U3C','U3D','U4A','U4B','U5C'], heldSeats:['U4C','L6B'] },
-  { id:'TRP-4', operator:'Hanif Enterprise', origin:'dhaka', dest:'sylhet', originLabel:'Dhaka (Mohakhali)', destLabel:'Sylhet (Amberkhana)', date:'2026-12-05', departTime:'2:30 PM', arriveTime:'9:00 PM', timeBand:'afternoon', busLabel:'Hino AC', left:2, right:2, rows:9, deck:'single', fareAc:1050, fareNonAc:null, soldSeats:['1A','2B','3C'], heldSeats:[] },
-];
-let tk_currentTripId = null;
-let tk_selectedSeats = [];
-let tk_holdTimerId = null;
-let tk_holdSeconds = 0;
-const TK_HOLD_SECONDS_TOTAL = 480;
-
-/* Generalized seat-layout generator — supports arbitrary left/right seat
-   counts per row, optional double-decker with independent row counts per
-   deck (the lower deck is often shorter — entrance, stairs, luggage/engine
-   space), and an optional reduced front row (door/stairwell cutout).
-   Used by both the live trip seat map and the bus-builder preview. */
-function tk_decksFor(bus){
-  return bus.deck === 'double' ? ['U','L'] : [''];
-}
+/* Freeform seat-layout helper — generates believable x/y/cls seed data for
+   the demo vehicles/trips below (what a merchant would get from dragging
+   seats onto the canvas by hand). Everything downstream of this (the
+   editor, the live booking seat map) treats seats as plain freeform data —
+   no row/column grid concept survives past this seeding step. */
 function tk_colsForCounts(left, right){
   const cols = [];
   for(let i=0;i<left;i++) cols.push(String.fromCharCode(65+i));
   for(let i=0;i<right;i++) cols.push(String.fromCharCode(65+left+i));
   return cols;
 }
-function tk_seatCols(bus){
-  return tk_colsForCounts(bus.left, bus.right);
+function tk_demoSeatLayout(rows, left, right, opts){
+  opts = opts || {};
+  const fullCols = tk_colsForCounts(left, right);
+  const totalSlots = left + right + 1;
+  const colX = {};
+  let slot = 0;
+  fullCols.forEach((c,i)=>{
+    if(i === left) slot++;
+    slot++;
+    colX[c] = slot * (100/(totalSlots+1));
+  });
+  const seats = [];
+  for(let r=1; r<=rows; r++){
+    let cols = fullCols, cls = 'standard';
+    if(opts.businessRows && r <= opts.businessRows){
+      cols = tk_colsForCounts(opts.businessLeft!=null?opts.businessLeft:left, opts.businessRight!=null?opts.businessRight:right);
+      cls = 'premium';
+    } else if(r === 1 && opts.frontRowSeats && opts.frontRowSeats < fullCols.length){
+      const side = opts.doorSide || 'left';
+      cols = side === 'left' ? fullCols.slice(fullCols.length - opts.frontRowSeats) : fullCols.slice(0, opts.frontRowSeats);
+    }
+    const y = 8 + (r-1) * (84/Math.max(rows-1,1));
+    cols.forEach(c=>{ seats.push({ id:r+c, label:r+c, cls, x: colX[c]!=null?colX[c]:50, y }); });
+  }
+  return seats;
 }
-function tk_rowsForDeck(bus, deckPrefix){
-  if(bus.deck === 'double' && deckPrefix === 'L') return bus.lowerRows || bus.rows;
-  return bus.rows;
-}
-/* Per-row seat layout, handling every real-world irregularity in one place:
-   - Business/sofa rows at the front of the premium deck (upper deck on a
-     double-decker, the only deck on a single-decker) can use a different,
-     usually wider, left/right split than the rest of the bus.
-   - The back row can be a continuous bench (no aisle break).
-   - The front row of whichever deck has the entrance door can be reduced
-     to fewer seats, cut from whichever side ('left' or 'right') the door
-     is actually on — never hardcoded to one side.
-   Returns { cols, leftCount, aisle } — leftCount/aisle tell the renderer
-   where (or whether) to draw the aisle gap for this specific row. */
-function tk_rowLayout(bus, deckPrefix, rowNum){
-  const rows = tk_rowsForDeck(bus, deckPrefix);
-  const isDoorDeck = bus.deck === 'double' ? deckPrefix === 'L' : true;
-  const isPremiumDeck = bus.deck === 'double' ? deckPrefix === 'U' : true;
-  const fullCols = tk_seatCols(bus);
+function op_gridSeats(rows, left, right){ return tk_demoSeatLayout(rows, left, right); }
 
-  if(bus.businessRows && isPremiumDeck && rowNum <= bus.businessRows){
-    const bl = bus.businessLeft != null ? bus.businessLeft : bus.left;
-    const br = bus.businessRight != null ? bus.businessRight : bus.right;
-    return { cols: tk_colsForCounts(bl, br), leftCount: bl, aisle: true, tag: 'business' };
-  }
-  if(bus.backBench && rowNum === rows){
-    return { cols: fullCols, leftCount: fullCols.length, aisle: false, tag: 'bench' };
-  }
-  if(rowNum === 1 && isDoorDeck && bus.frontRowSeats && bus.frontRowSeats < fullCols.length){
-    const side = bus.doorSide || 'left';
-    const cols = side === 'left' ? fullCols.slice(fullCols.length - bus.frontRowSeats) : fullCols.slice(0, bus.frontRowSeats);
-    return { cols, leftCount: cols.length, aisle: false, tag: 'door' };
-  }
-  return { cols: fullCols, leftCount: bus.left, aisle: true, tag: null };
+const tk_tripsData = [
+  { id:'TRP-1', operator:'Green Line Paribahan', origin:'dhaka', dest:'chattogram', originLabel:'Dhaka (Gabtoli)', destLabel:'Chattogram (GEC Circle)', date:'2026-12-05', departTime:'10:00 PM', arriveTime:'4:30 AM', timeBand:'night', vehicleLabel:'Volvo 9800 (AC)', vehicleType:'bus', fareAc:1200, fareNonAc:null,
+    decks:[ { name:'Main Deck', seats: tk_demoSeatLayout(9,2,2) } ],
+    soldSeats:['1A','1B','2C','3A','4B','5A','5C','6D','7A','8C','9B'], heldSeats:['2A'] },
+  { id:'TRP-2', operator:'Shyamoli Paribahan', origin:'dhaka', dest:'sylhet', originLabel:'Dhaka (Sayedabad)', destLabel:'Sylhet (Kadamtoli)', date:'2026-12-05', departTime:'11:30 PM', arriveTime:'6:00 AM', timeBand:'night', vehicleLabel:'Scania (Non-AC)', vehicleType:'bus', fareAc:null, fareNonAc:650,
+    decks:[ { name:'Main Deck', seats: tk_demoSeatLayout(9,2,3) } ],
+    soldSeats:['1A','1E','3C','4A','6B','7E'], heldSeats:[] },
+  { id:'TRP-3', operator:'Green Line Paribahan', origin:'dhaka', dest:'coxsbazar', originLabel:'Dhaka (Kallyanpur)', destLabel:"Cox's Bazar (Kolatoli)", date:'2026-12-05', departTime:'9:00 AM', arriveTime:'7:00 PM', timeBand:'morning', vehicleLabel:'Scania Double Decker (AC)', vehicleType:'bus', fareAc:1600, fareNonAc:null,
+    decks:[
+      { name:'Upper Deck', seats: tk_demoSeatLayout(9,2,2,{businessRows:2, businessLeft:1, businessRight:2}) },
+      { name:'Lower Deck', seats: tk_demoSeatLayout(6,2,2,{frontRowSeats:1, doorSide:'left'}) }
+    ],
+    soldSeats:['L1D','L2A','L2B','L2C','L2D','L3A','L3B','L4C','L4D','L5A','U1A','U1B','U2A','U2B','U3C','U3D','U4A','U4B','U5C'], heldSeats:['U4C','L6B'] },
+  { id:'TRP-4', operator:'Hanif Enterprise', origin:'dhaka', dest:'sylhet', originLabel:'Dhaka (Mohakhali)', destLabel:'Sylhet (Amberkhana)', date:'2026-12-05', departTime:'2:30 PM', arriveTime:'9:00 PM', timeBand:'afternoon', vehicleLabel:'Hino AC', vehicleType:'bus', fareAc:1050, fareNonAc:null,
+    decks:[ { name:'Main Deck', seats: tk_demoSeatLayout(9,2,2) } ],
+    soldSeats:['1A','2B','3C'], heldSeats:[] },
+];
+/* TRP-3's seat ids keep their U/L prefix purely as readable labels inherited
+   from the seed data above — the rendering/booking pipeline below never
+   parses or depends on that prefix meaning anything. */
+tk_tripsData[2].decks[1].seats.forEach(s=>{ s.id = 'L'+s.id; s.label = s.id; });
+tk_tripsData[2].decks[0].seats.forEach(s=>{ s.id = 'U'+s.id; s.label = s.id; });
+
+let tk_currentTripId = null;
+let tk_currentDeckIdx = 0;
+let tk_selectedSeats = [];
+let tk_holdTimerId = null;
+let tk_holdSeconds = 0;
+const TK_HOLD_SECONDS_TOTAL = 480;
+
+function tk_allSeats(trip){
+  return trip.decks.flatMap(d=>d.seats);
+}
+function tk_findSeat(trip, seatId){
+  for(const d of trip.decks){ const s=d.seats.find(x=>x.id===seatId); if(s) return s; }
+  return null;
 }
 function tk_seatsRemaining(trip){
-  let total = 0;
-  tk_decksFor(trip).forEach(deckPrefix=>{
-    const rows = tk_rowsForDeck(trip, deckPrefix);
-    for(let r=1; r<=rows; r++) total += tk_rowLayout(trip, deckPrefix, r).cols.length;
-  });
-  return total - trip.soldSeats.length - trip.heldSeats.length;
+  return tk_allSeats(trip).length - trip.soldSeats.length - trip.heldSeats.length;
 }
 
 let tk_activeTimeFilter = 'any';
@@ -5892,7 +5894,7 @@ function tk_renderSearch(){
     return `<div class="card" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;cursor:pointer" data-trip="${t.id}">
       <div>
         <div style="font-weight:700;font-size:14px">${t.operator}</div>
-        <div class="muted" style="font-size:12.5px;margin-top:3px">${t.busLabel} · ${cls}</div>
+        <div class="muted" style="font-size:12.5px;margin-top:3px"><i data-icon="${VEH_TYPE_ICON[t.vehicleType]||'bus'}" data-icon-cls="icon-sm"></i> ${t.vehicleLabel} · ${cls}</div>
         <div style="font-size:13px;margin-top:6px">${t.departTime} ${icon('arrowRight','icon-sm')} ${t.arriveTime} · ${t.originLabel} ${icon('arrowRight','icon-sm')} ${t.destLabel}</div>
       </div>
       <div style="text-align:right">
@@ -5902,6 +5904,7 @@ function tk_renderSearch(){
       </div>
     </div>`;
   }).join('');
+  hydrateIcons(el);
 }
 
 function tk_startHoldTimer(){
@@ -5937,9 +5940,11 @@ function tk_stopHoldTimer(){
 
 function tk_openSeatMap(tripId){
   tk_currentTripId = tripId;
+  tk_currentDeckIdx = 0;
   tk_selectedSeats = [];
   const t = tk_tripsData.find(x=>x.id===tripId); if(!t) return;
   document.getElementById('tkTripSummary').textContent = `${t.operator} · ${t.originLabel} → ${t.destLabel} · ${t.date} ${t.departTime}`;
+  tk_renderSeatDeckTabs();
   tk_renderSeatGrid();
   tk_renderSeatSummary();
   tk_stopHoldTimer();
@@ -5947,46 +5952,31 @@ function tk_openSeatMap(tripId){
 }
 
 function tk_seatFare(t, seatId){
-  const deckPrefix = /^[UL]/.test(seatId) ? seatId[0] : '';
-  const row = parseInt(seatId.replace(/^[UL]/,''), 10);
+  const seat = tk_findSeat(t, seatId);
   const base = t.fareAc || t.fareNonAc;
-  const isPremiumDeck = t.deck === 'double' ? deckPrefix === 'U' : true;
-  const inBusinessRows = t.businessRows ? row <= t.businessRows && isPremiumDeck : row <= 2;
-  return inBusinessRows ? Math.round(base * 1.15) : base;
+  return (seat && seat.cls === 'premium') ? Math.round(base * 1.15) : base;
 }
 
-function tk_rowTagLabel(tag){
-  if(tag==='business') return LANG==='bn'?'বিজনেস':'Business';
-  if(tag==='bench') return LANG==='bn'?'বেঞ্চ সিট':'Bench seat';
-  if(tag==='door') return LANG==='bn'?'দরজার পাশে':'By the door';
-  return '';
+function tk_renderSeatDeckTabs(){
+  const t = tk_tripsData.find(x=>x.id===tk_currentTripId); if(!t) return;
+  const wrap = document.getElementById('seatDeckTabs'); if(!wrap) return;
+  if(t.decks.length < 2){ wrap.innerHTML = ''; wrap.hidden = true; return; }
+  wrap.hidden = false;
+  wrap.innerHTML = t.decks.map((d,i)=>`<span class="chip ${i===tk_currentDeckIdx?'on':''}" data-seat-deck="${i}">${d.name}</span>`).join('');
 }
+
 function tk_renderSeatGrid(){
   const t = tk_tripsData.find(x=>x.id===tk_currentTripId); if(!t) return;
   const el = document.getElementById('seatGrid'); if(!el) return;
-  const decks = tk_decksFor(t);
-  el.innerHTML = decks.map(deckPrefix=>{
-    let rowsHtml = '';
-    const rows = tk_rowsForDeck(t, deckPrefix);
-    for(let r=1; r<=rows; r++){
-      const layout = tk_rowLayout(t, deckPrefix, r);
-      rowsHtml += `<div class="seat-row${layout.tag?' seat-row-'+layout.tag:''}">`;
-      layout.cols.forEach((c,i)=>{
-        const seatId = deckPrefix + r + c;
-        let state = 'avail';
-        if(t.soldSeats.includes(seatId)) state='sold';
-        else if(t.heldSeats.includes(seatId)) state='held';
-        else if(tk_selectedSeats.includes(seatId)) state='selected';
-        rowsHtml += `<button type="button" class="seat-btn seat-${state}" data-seat="${seatId}" ${state==='sold'||state==='held'?'disabled':''}>${seatId}</button>`;
-        if(layout.aisle && i === layout.leftCount-1) rowsHtml += '<span class="aisle-gap"></span>';
-      });
-      if(layout.tag) rowsHtml += `<span class="row-tag">${tk_rowTagLabel(layout.tag)}</span>`;
-      rowsHtml += '</div>';
-    }
-    const heading = deckPrefix === 'U' ? (LANG==='bn'?'উপরের ডেক':'Upper deck') : deckPrefix === 'L' ? (LANG==='bn'?'নিচের ডেক':'Lower deck') : '';
-    return `<div class="deck-section">${heading?`<div class="deck-heading"><i data-icon="bus" data-icon-cls="icon-sm"></i>${heading}</div>`:''}<div class="seat-grid">${rowsHtml}</div></div>`;
-  }).join('');
-  hydrateIcons(el);
+  const deck = t.decks[tk_currentDeckIdx];
+  el.innerHTML = `<div class="veh-canvas veh-canvas-readonly">${deck.seats.map(s=>{
+    let state = 'avail';
+    if(t.soldSeats.includes(s.id)) state='sold';
+    else if(t.heldSeats.includes(s.id)) state='held';
+    else if(tk_selectedSeats.includes(s.id)) state='selected';
+    const premiumCls = s.cls==='premium' ? ' premium' : '';
+    return `<button type="button" class="veh-seat seat-btn seat-${state}${premiumCls}" data-seat="${s.id}" style="left:${s.x}%;top:${s.y}%" ${state==='sold'||state==='held'?'disabled':''}>${s.label}</button>`;
+  }).join('')}</div>`;
 }
 
 function tk_renderSeatSummary(){
@@ -6009,6 +5999,12 @@ function tk_renderSeatSummary(){
 }
 
 function tk_wireSeatGrid(){
+  document.getElementById('seatDeckTabs').addEventListener('click', e=>{
+    const tab = e.target.closest('[data-seat-deck]'); if(!tab) return;
+    tk_currentDeckIdx = parseInt(tab.dataset.seatDeck,10);
+    tk_renderSeatDeckTabs();
+    tk_renderSeatGrid();
+  });
   document.getElementById('seatGrid').addEventListener('click', e=>{
     const btn = e.target.closest('.seat-btn:not([disabled])'); if(!btn) return;
     const seat = btn.dataset.seat;
@@ -6181,91 +6177,171 @@ function tk_wireSearch(){
 }
 
 /* ---- Transport Operator: buses, trips, policies, dashboard ---- */
-const op_buses = [
-  { id:'BUS-1', reg:'Dhaka Metro-GA-11-2233', label:'Volvo 9800 (AC)', rows:9, left:2, right:2, deck:'single' },
-  { id:'BUS-2', reg:'Dhaka Metro-GA-22-4455', label:'Scania (Non-AC)', rows:9, left:2, right:3, deck:'single' },
-  { id:'BUS-3', reg:'Dhaka Metro-GA-33-6677', label:'Scania Double Decker (AC)', rows:9, left:2, right:2, deck:'double', lowerRows:6, frontRowSeats:1 },
+/* ---- Freeform vehicle + seat-map editor (bus/plane/ship/other) ---- */
+const VEH_TYPE_ICON = { bus:'bus', plane:'plane', ship:'ship', other:'bus' };
+const op_vehicles = [
+  { id:'VEH-1', reg:'Dhaka Metro-GA-11-2233', label:'Volvo 9800 (AC)', type:'bus', decks:[
+    { name:'Main Deck', seats: op_gridSeats(9,2,2) }
+  ]},
+  { id:'VEH-2', reg:'Dhaka Metro-GA-22-4455', label:'Scania (Non-AC)', type:'bus', decks:[
+    { name:'Main Deck', seats: op_gridSeats(9,2,3) }
+  ]},
+  { id:'VEH-3', reg:'Dhaka Metro-GA-33-6677', label:'Scania Double Decker (AC)', type:'bus', decks:[
+    { name:'Upper Deck', seats: op_gridSeats(9,2,2) },
+    { name:'Lower Deck', seats: op_gridSeats(6,2,2) }
+  ]},
 ];
-function op_busLayoutLabel(b){
-  const sides = `${b.left}–${b.right}`;
-  const deckLbl = b.deck==='double' ? (LANG==='bn'?` · ডাবল ডেকার (উপরে ${b.rows}, নিচে ${b.lowerRows||b.rows} সারি)`:` · Double decker (${b.rows} up / ${b.lowerRows||b.rows} down)`) : '';
-  const frontLbl = b.frontRowSeats ? (LANG==='bn'?` · সামনের সারিতে ${b.frontRowSeats} সিট`:` · front row: ${b.frontRowSeats} seat(s)`) : '';
-  return sides + deckLbl + frontLbl;
+function op_vehicleTypeLabel(type){
+  const map = { bus:(LANG==='bn'?'বাস':'Bus'), plane:(LANG==='bn'?'প্লেন':'Plane'), ship:(LANG==='bn'?'জাহাজ/লঞ্চ':'Ship/Launch'), other:(LANG==='bn'?'অন্যান্য':'Other') };
+  return map[type] || type;
+}
+function op_vehicleSeatCount(v){
+  return v.decks.reduce((s,d)=>s+d.seats.length,0);
 }
 function op_renderBuses(){
   const el = document.getElementById('busList'); if(!el) return;
-  el.innerHTML = op_buses.map(b=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center">
-    <div><div style="font-weight:700;font-size:13.5px">${b.label}</div><div class="muted mono" style="font-size:12px">${b.reg} · ${op_busLayoutLabel(b)}</div></div>
+  el.innerHTML = op_vehicles.map(v=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center">
+    <div><div style="font-weight:700;font-size:13.5px"><i data-icon="${VEH_TYPE_ICON[v.type]||'bus'}" data-icon-cls="icon-sm"></i> ${v.label}</div><div class="muted mono" style="font-size:12px">${v.reg} · ${op_vehicleTypeLabel(v.type)} · ${v.decks.length} ${LANG==='bn'?'ডেক':'deck(s)'} · ${op_vehicleSeatCount(v)} ${LANG==='bn'?'সিট':'seats'}</div></div>
     <span class="badge badge-ok">${LANG==='bn'?'সক্রিয়':'Active'}</span>
   </div>`).join('');
+  hydrateIcons(el);
   const sel = document.getElementById('tripBusSelect');
-  if(sel) sel.innerHTML = op_buses.map(b=>`<option value="${b.id}">${b.label} (${b.reg})</option>`).join('');
+  if(sel) sel.innerHTML = op_vehicles.map(v=>`<option value="${v.id}">${v.label} (${v.reg})</option>`).join('');
 }
-function op_readBusForm(){
-  return {
-    rows: parseInt(document.getElementById('busRowsInput')?.value,10) || 9,
-    left: parseInt(document.getElementById('busLeftInput')?.value,10) || 2,
-    right: parseInt(document.getElementById('busRightInput')?.value,10) || 2,
-    deck: document.getElementById('busDeckInput')?.value || 'single',
-    lowerRows: parseInt(document.getElementById('busLowerRowsInput')?.value,10) || null,
-    frontRowSeats: parseInt(document.getElementById('busFrontRowInput')?.value,10) || null,
-    doorSide: document.getElementById('busDoorSideInput')?.value || 'left',
-    businessRows: parseInt(document.getElementById('busBusinessRowsInput')?.value,10) || null,
-    businessLeft: parseInt(document.getElementById('busBusinessLeftInput')?.value,10) || null,
-    businessRight: parseInt(document.getElementById('busBusinessRightInput')?.value,10) || null,
-    backBench: document.getElementById('busBackBenchInput')?.checked || false
-  };
+
+/* Editor working state — a fresh in-memory vehicle draft, reset after save */
+let op_draftVehicle = null;
+let op_draftActiveDeck = 0;
+let op_draftSelectedSeat = null;
+let op_draftSeatSeq = 1;
+
+function op_newDraftVehicle(){
+  op_draftVehicle = { decks: [ { name:'Deck 1', seats: [] } ] };
+  op_draftActiveDeck = 0;
+  op_draftSelectedSeat = null;
+  op_draftSeatSeq = 1;
 }
-function op_renderBusPreview(){
-  const el = document.getElementById('busPreviewGrid'); if(!el) return;
-  const bus = op_readBusForm();
-  const decks = tk_decksFor(bus);
-  el.innerHTML = decks.map(deckPrefix=>{
-    let rowsHtml = '';
-    const rows = tk_rowsForDeck(bus, deckPrefix);
-    for(let r=1; r<=rows; r++){
-      const layout = tk_rowLayout(bus, deckPrefix, r);
-      rowsHtml += `<div class="seat-row${layout.tag?' seat-row-'+layout.tag:''}">`;
-      layout.cols.forEach((c,i)=>{
-        rowsHtml += `<button type="button" class="seat-btn seat-avail" disabled>${deckPrefix}${r}${c}</button>`;
-        if(layout.aisle && i === layout.leftCount-1) rowsHtml += '<span class="aisle-gap"></span>';
-      });
-      if(layout.tag) rowsHtml += `<span class="row-tag">${tk_rowTagLabel(layout.tag)}</span>`;
-      rowsHtml += '</div>';
-    }
-    const heading = deckPrefix === 'U' ? (LANG==='bn'?'উপরের ডেক':'Upper deck') : deckPrefix === 'L' ? (LANG==='bn'?'নিচের ডেক':'Lower deck') : '';
-    return `<div class="deck-section">${heading?`<div class="deck-heading">${heading}</div>`:''}<div class="seat-grid" style="transform:scale(0.85);transform-origin:top left">${rowsHtml}</div></div>`;
-  }).join('');
+
+function op_renderDeckTabs(){
+  const el = document.getElementById('vehDeckTabs'); if(!el) return;
+  el.innerHTML = op_draftVehicle.decks.map((d,i)=>`
+    <span class="chip veh-deck-tab ${i===op_draftActiveDeck?'on':''}" data-deck-idx="${i}">
+      <span>${d.name}</span>
+      ${op_draftVehicle.decks.length>1?`<span class="veh-deck-close" data-deck-remove="${i}">×</span>`:''}
+    </span>`).join('');
 }
-function op_toggleLowerRowsField(){
-  const deck = document.getElementById('busDeckInput').value;
-  const field = document.getElementById('busLowerRowsField');
-  const rowsLabel = document.getElementById('busRowsLabel');
-  if(field) field.hidden = deck !== 'double';
-  if(rowsLabel){
-    const key = deck === 'double' ? 'bus_f_rows_upper' : 'bus_f_rows';
-    rowsLabel.setAttribute('data-t', key);
-    rowsLabel.textContent = window.I18N[LANG][key];
+
+function op_renderCanvas(){
+  const el = document.getElementById('vehCanvas'); if(!el) return;
+  const deck = op_draftVehicle.decks[op_draftActiveDeck];
+  if(!deck.seats.length){
+    el.innerHTML = `<div class="muted" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;text-align:center;padding:20px" data-t="veh_no_seats">${window.I18N[LANG].veh_no_seats}</div>`;
+    return;
   }
+  el.innerHTML = deck.seats.map(s=>`<button type="button" class="veh-seat ${s.cls} ${s.id===op_draftSelectedSeat?'selected':''}" data-seat-id="${s.id}" style="left:${s.x}%;top:${s.y}%">${s.label}</button>`).join('');
 }
+
+function op_renderSeatEditPanel(){
+  const panel = document.getElementById('vehSeatEditPanel');
+  const deck = op_draftVehicle.decks[op_draftActiveDeck];
+  const seat = deck.seats.find(s=>s.id===op_draftSelectedSeat);
+  if(!seat){ panel.hidden = true; return; }
+  panel.hidden = false;
+  document.getElementById('vehSeatLabelInput').value = seat.label;
+  document.getElementById('vehSeatClassInput').value = seat.cls;
+}
+
+function op_wireVehicleCanvas(){
+  const canvas = document.getElementById('vehCanvas');
+  let dragSeat = null;
+
+  canvas.addEventListener('pointerdown', e=>{
+    const btn = e.target.closest('.veh-seat'); if(!btn) return;
+    const seatId = btn.dataset.seatId;
+    op_draftSelectedSeat = seatId;
+    op_renderCanvas(); op_renderSeatEditPanel();
+    dragSeat = { id: seatId, el: document.querySelector(`.veh-seat[data-seat-id="${CSS.escape(seatId)}"]`) };
+    if(canvas.setPointerCapture) try{ canvas.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  canvas.addEventListener('pointermove', e=>{
+    if(!dragSeat) return;
+    const rect = canvas.getBoundingClientRect();
+    let x = ((e.clientX - rect.left) / rect.width) * 100;
+    let y = ((e.clientY - rect.top) / rect.height) * 100;
+    x = Math.max(2, Math.min(98, x));
+    y = Math.max(3, Math.min(97, y));
+    const deck = op_draftVehicle.decks[op_draftActiveDeck];
+    const seat = deck.seats.find(s=>s.id===dragSeat.id);
+    if(seat){ seat.x = x; seat.y = y; if(dragSeat.el){ dragSeat.el.style.left = x+'%'; dragSeat.el.style.top = y+'%'; } }
+  });
+  ['pointerup','pointercancel'].forEach(evt=>canvas.addEventListener(evt, ()=>{ dragSeat = null; }));
+
+  document.getElementById('vehAddSeatBtn').addEventListener('click', ()=>{
+    const deck = op_draftVehicle.decks[op_draftActiveDeck];
+    const id = 'S'+(op_draftSeatSeq++);
+    deck.seats.push({ id, label: id, cls:'standard', x:50, y:50 });
+    op_draftSelectedSeat = id;
+    op_renderCanvas(); op_renderSeatEditPanel();
+  });
+  document.getElementById('vehAddDeckBtn').addEventListener('click', ()=>{
+    op_draftVehicle.decks.push({ name:(LANG==='bn'?'ডেক ':'Deck ')+(op_draftVehicle.decks.length+1), seats:[] });
+    op_draftActiveDeck = op_draftVehicle.decks.length-1;
+    op_draftSelectedSeat = null;
+    op_renderDeckTabs(); op_renderCanvas(); op_renderSeatEditPanel();
+  });
+  document.getElementById('vehDeckTabs').addEventListener('click', e=>{
+    const rm = e.target.closest('[data-deck-remove]');
+    if(rm){
+      const idx = parseInt(rm.dataset.deckRemove,10);
+      op_draftVehicle.decks.splice(idx,1);
+      if(op_draftActiveDeck >= op_draftVehicle.decks.length) op_draftActiveDeck = op_draftVehicle.decks.length-1;
+      op_draftSelectedSeat = null;
+      op_renderDeckTabs(); op_renderCanvas(); op_renderSeatEditPanel();
+      return;
+    }
+    const tab = e.target.closest('[data-deck-idx]'); if(!tab) return;
+    op_draftActiveDeck = parseInt(tab.dataset.deckIdx,10);
+    op_draftSelectedSeat = null;
+    op_renderDeckTabs(); op_renderCanvas(); op_renderSeatEditPanel();
+  });
+  document.getElementById('vehSeatLabelInput').addEventListener('input', e=>{
+    const deck = op_draftVehicle.decks[op_draftActiveDeck];
+    const seat = deck.seats.find(s=>s.id===op_draftSelectedSeat);
+    if(seat){ seat.label = e.target.value || seat.id; op_renderCanvas(); }
+  });
+  document.getElementById('vehSeatClassInput').addEventListener('change', e=>{
+    const deck = op_draftVehicle.decks[op_draftActiveDeck];
+    const seat = deck.seats.find(s=>s.id===op_draftSelectedSeat);
+    if(seat){ seat.cls = e.target.value; op_renderCanvas(); }
+  });
+  document.getElementById('vehSeatDeleteBtn').addEventListener('click', ()=>{
+    const deck = op_draftVehicle.decks[op_draftActiveDeck];
+    deck.seats = deck.seats.filter(s=>s.id!==op_draftSelectedSeat);
+    op_draftSelectedSeat = null;
+    op_renderCanvas(); op_renderSeatEditPanel();
+  });
+}
+
 function op_wireBuses(){
+  op_newDraftVehicle();
+  op_renderDeckTabs();
+  op_renderCanvas();
+  op_renderSeatEditPanel();
+  op_wireVehicleCanvas();
   document.getElementById('busSaveBtn').addEventListener('click', ()=>{
-    const reg = document.getElementById('busRegInput').value.trim() || 'New-Bus-0001';
-    const label = document.getElementById('busLabelInput').value.trim() || (LANG==='bn'?'নতুন বাস':'New bus');
-    const form = op_readBusForm();
-    if(form.deck !== 'double') form.lowerRows = null;
-    op_buses.push({ id:'BUS-'+(op_buses.length+1), reg, label, ...form });
+    const reg = document.getElementById('busRegInput').value.trim() || 'New-Vehicle-0001';
+    const label = document.getElementById('busLabelInput').value.trim() || (LANG==='bn'?'নতুন যানবাহন':'New vehicle');
+    const type = document.getElementById('vehTypeInput').value;
+    const totalSeats = op_draftVehicle.decks.reduce((s,d)=>s+d.seats.length,0);
+    if(!totalSeats){ toastMsg(LANG==='bn'?'অন্তত ১টি সিট যোগ করুন':'Add at least 1 seat first','shield'); return; }
+    op_vehicles.push({ id:'VEH-'+(op_vehicles.length+1), reg, label, type, decks: JSON.parse(JSON.stringify(op_draftVehicle.decks)) });
     op_renderBuses();
-    toastMsg(LANG==='bn'?'বাস সংরক্ষিত হয়েছে':'Bus saved','bus');
+    toastMsg(LANG==='bn'?'যানবাহন সংরক্ষিত হয়েছে':'Vehicle saved','bus');
+    document.getElementById('busRegInput').value = '';
+    document.getElementById('busLabelInput').value = '';
+    op_newDraftVehicle();
+    op_renderDeckTabs(); op_renderCanvas(); op_renderSeatEditPanel();
   });
-  document.getElementById('busDeckInput').addEventListener('change', op_toggleLowerRowsField);
-  ['busRowsInput','busLeftInput','busRightInput','busDeckInput','busLowerRowsInput','busFrontRowInput','busDoorSideInput','busBusinessRowsInput','busBusinessLeftInput','busBusinessRightInput','busBackBenchInput'].forEach(id=>{
-    const node = document.getElementById(id); if(!node) return;
-    node.addEventListener('input', op_renderBusPreview);
-    node.addEventListener('change', op_renderBusPreview);
-  });
-  op_toggleLowerRowsField();
-  op_renderBusPreview();
 }
 
 const op_trips = [
@@ -7020,8 +7096,9 @@ function wirePage(){
     scale_renderAll();
     mb_renderList();
     tk_renderSearch(); tk_renderMyTickets();
-    if(tk_currentTripId){ tk_renderSeatGrid(); tk_renderSeatSummary(); }
-    op_renderBuses(); op_renderTrips(); op_renderPolicies(); op_renderDash(); op_toggleLowerRowsField(); op_renderBusPreview();
+    if(tk_currentTripId){ tk_renderSeatDeckTabs(); tk_renderSeatGrid(); tk_renderSeatSummary(); }
+    op_renderBuses(); op_renderTrips(); op_renderPolicies(); op_renderDash();
+    if(op_draftVehicle){ op_renderDeckTabs(); op_renderCanvas(); op_renderSeatEditPanel(); }
     adm_renderOperatorVerifs(); adm_renderTicketTrips(); adm_renderTicketDisputes();
     if (typeof switchNeighborhood === 'function') switchNeighborhood(activeNeighborKey);
     if (typeof calcRent === 'function') calcRent();

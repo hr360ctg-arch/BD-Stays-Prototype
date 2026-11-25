@@ -48,6 +48,7 @@ const ICONS = {
   clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
   bus:'<path d="M8 6v6M16 6v6"/><path d="M2 12h20"/><rect x="3" y="4" width="18" height="13" rx="2"/><circle cx="7.5" cy="19.5" r="1.5"/><circle cx="16.5" cy="19.5" r="1.5"/>',
   ticket:'<path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4Z"/><path d="M13 5v2M13 17v2M13 10v4"/>',
+  ship:'<path d="M2 20.5c1.5 1.3 3.5 1.3 5 0 1.5 1.3 3.5 1.3 5 0 1.5 1.3 3.5 1.3 5 0 1.5 1.3 3.5 1.3 5 0"/><path d="M4 18 3 11h18l-1 7"/><path d="M12 11V4h4l3 4"/><path d="M6 4h3v3"/>',
 };
 function icon(name, cls){
   const path = ICONS[name] || '';
