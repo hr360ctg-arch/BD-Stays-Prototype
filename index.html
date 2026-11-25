@@ -2991,6 +2991,7 @@ html, body {
 
           <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px">
             <button class="btn btn-sm btn-primary" id="vehAddSeatBtn" data-t="veh_add_seat">+ Add seat</button>
+            <button class="btn btn-sm btn-outline" id="vehResetTemplateBtn" data-t="veh_reset_template">↺ Reset to standard layout</button>
             <span class="muted" style="font-size:12px" data-t="veh_drag_hint">Drag any seat to place it exactly like the real vehicle. Click a seat to edit its label/class.</span>
           </div>
 
@@ -4269,7 +4270,8 @@ Object.assign(window.I18N.bn, {
   veh_decks: 'ডেক / ফ্লোর', veh_add_deck: '+ ডেক/ফ্লোর যোগ করুন', veh_add_seat: '+ সিট যোগ করুন',
   veh_drag_hint: 'যেকোনো সিট টেনে ঠিক বাস্তব যানবাহনের মতো জায়গায় বসান। সিট ক্লিক করে লেবেল/ক্লাস এডিট করুন।',
   veh_seat_label: 'সিট লেবেল', veh_seat_class: 'সিট ক্লাস', veh_class_standard: 'স্ট্যান্ডার্ড', veh_class_premium: 'প্রিমিয়াম',
-  veh_seat_delete: 'এই সিট মুছে ফেলুন', veh_deck_name: 'ডেক', veh_no_seats: 'এখনো কোনো সিট যোগ করা হয়নি — "+ সিট যোগ করুন" চাপুন'
+  veh_seat_delete: 'এই সিট মুছে ফেলুন', veh_deck_name: 'ডেক', veh_no_seats: 'এখনো কোনো সিট যোগ করা হয়নি — "+ সিট যোগ করুন" চাপুন',
+  veh_reset_template: '↺ স্ট্যান্ডার্ড লেআউটে ফিরে যান'
 });
 Object.assign(window.I18N.en, {
   nav_reporting: 'Platform Reporting',
@@ -4421,7 +4423,8 @@ Object.assign(window.I18N.en, {
   veh_decks: 'Decks / floors', veh_add_deck: '+ Add deck/floor', veh_add_seat: '+ Add seat',
   veh_drag_hint: 'Drag any seat to place it exactly like the real vehicle. Click a seat to edit its label/class.',
   veh_seat_label: 'Seat label', veh_seat_class: 'Seat class', veh_class_standard: 'Standard', veh_class_premium: 'Premium',
-  veh_seat_delete: 'Delete this seat', veh_deck_name: 'Deck', veh_no_seats: 'No seats added yet — click "+ Add seat"'
+  veh_seat_delete: 'Delete this seat', veh_deck_name: 'Deck', veh_no_seats: 'No seats added yet — click "+ Add seat"',
+  veh_reset_template: '↺ Reset to standard layout'
 });
 Object.assign(window.I18N.bn, {
   pub_nav_why: 'কেন CBS?',
@@ -6215,11 +6218,25 @@ let op_draftActiveDeck = 0;
 let op_draftSelectedSeat = null;
 let op_draftSeatSeq = 1;
 
+/* Starting-point templates so a merchant isn't dragging 40 seats from a
+   blank canvas by hand — pick a type and get a realistic default layout,
+   then drag/add/delete freely to match the real vehicle. */
+function op_defaultLayoutForType(type){
+  if(type==='plane') return tk_demoSeatLayout(15,3,3);
+  if(type==='ship') return tk_demoSeatLayout(8,2,2);
+  if(type==='other') return tk_demoSeatLayout(6,2,2);
+  return tk_demoSeatLayout(10,2,2);
+}
+function op_applyDefaultTemplate(type){
+  const deck = op_draftVehicle.decks[op_draftActiveDeck];
+  deck.seats = JSON.parse(JSON.stringify(op_defaultLayoutForType(type)));
+}
 function op_newDraftVehicle(){
   op_draftVehicle = { decks: [ { name:'Deck 1', seats: [] } ] };
   op_draftActiveDeck = 0;
   op_draftSelectedSeat = null;
   op_draftSeatSeq = 1;
+  op_applyDefaultTemplate(document.getElementById('vehTypeInput')?.value || 'bus');
 }
 
 function op_renderDeckTabs(){
@@ -6287,6 +6304,7 @@ function op_wireVehicleCanvas(){
     op_draftVehicle.decks.push({ name:(LANG==='bn'?'ডেক ':'Deck ')+(op_draftVehicle.decks.length+1), seats:[] });
     op_draftActiveDeck = op_draftVehicle.decks.length-1;
     op_draftSelectedSeat = null;
+    op_applyDefaultTemplate(document.getElementById('vehTypeInput').value);
     op_renderDeckTabs(); op_renderCanvas(); op_renderSeatEditPanel();
   });
   document.getElementById('vehDeckTabs').addEventListener('click', e=>{
@@ -6328,6 +6346,27 @@ function op_wireBuses(){
   op_renderCanvas();
   op_renderSeatEditPanel();
   op_wireVehicleCanvas();
+  document.getElementById('vehTypeInput').addEventListener('change', e=>{
+    const totalSeats = op_draftVehicle.decks.reduce((s,d)=>s+d.seats.length,0);
+    const msg = LANG==='bn'
+      ? 'এই ভেহিকল টাইপের জন্য স্ট্যান্ডার্ড টেমপ্লেট বসাবেন? বর্তমান ডেকের সিট বদলে যাবে (পরে ইচ্ছামতো টেনে বদলাতে পারবেন)।'
+      : "Load a standard template for this vehicle type? The current deck's seats will be replaced (you can still drag/edit/delete freely after).";
+    if(totalSeats && !confirm(msg)) return;
+    op_applyDefaultTemplate(e.target.value);
+    op_draftSelectedSeat = null;
+    op_renderCanvas();
+    op_renderSeatEditPanel();
+  });
+  document.getElementById('vehResetTemplateBtn').addEventListener('click', ()=>{
+    const msg = LANG==='bn'
+      ? 'বর্তমান ডেকের সিট মুছে স্ট্যান্ডার্ড টেমপ্লেট দিয়ে বদলাবেন?'
+      : "Replace the current deck's seats with the standard template for this vehicle type?";
+    if(!confirm(msg)) return;
+    op_applyDefaultTemplate(document.getElementById('vehTypeInput').value);
+    op_draftSelectedSeat = null;
+    op_renderCanvas();
+    op_renderSeatEditPanel();
+  });
   document.getElementById('busSaveBtn').addEventListener('click', ()=>{
     const reg = document.getElementById('busRegInput').value.trim() || 'New-Vehicle-0001';
     const label = document.getElementById('busLabelInput').value.trim() || (LANG==='bn'?'নতুন যানবাহন':'New vehicle');
