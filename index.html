@@ -2957,8 +2957,8 @@ html, body {
         <div class="section-title"><h2 data-t="h_operatoronboard">Transport operator onboarding</h2><span class="count" data-t="h_operatoronboard_sub">Admin approval required before publishing any trip</span></div>
         <div class="card" style="max-width:720px">
           <div class="form-grid">
-            <div class="field"><label data-t="oo_f_company">Operator / company name</label><input type="text" placeholder="e.g. Green Line Paribahan"></div>
-            <div class="field"><label data-t="oo_f_owner">Owner's full name</label><input type="text" placeholder="e.g. Abdul Karim"></div>
+            <div class="field"><label data-t="oo_f_company">Operator / company name</label><input type="text" id="ooCompanyInput" placeholder="e.g. Green Line Paribahan"></div>
+            <div class="field"><label data-t="oo_f_owner">Owner's full name</label><input type="text" id="ooOwnerInput" placeholder="e.g. Abdul Karim"></div>
             <div class="field"><label data-t="oo_f_nid">Owner NID number</label><input type="text" placeholder="10-17 digit NID"></div>
             <div class="field"><label data-t="oo_f_trade">Trade licence number</label><input type="text" placeholder="e.g. TRAD/DNCC/445566"></div>
             <div class="field"><label data-t="oo_f_payout">Payout account</label><input type="text" placeholder="bKash merchant or bank account"></div>
@@ -5909,7 +5909,7 @@ function tk_renderSearch(){
   const origin = document.getElementById('tkOrigin')?.value;
   const dest = document.getElementById('tkDest')?.value;
   const sort = document.getElementById('tkSort')?.value || 'departure';
-  let list = tk_tripsData.slice();
+  let list = tk_tripsData.slice().filter(t=>t.status==='scheduled');
   if(origin) list = list.filter(t=>t.origin===origin);
   if(dest) list = list.filter(t=>t.dest===dest);
   if(tk_activeTimeFilter !== 'any') list = list.filter(t=>t.timeBand===tk_activeTimeFilter);
@@ -6440,7 +6440,7 @@ function op_myTrips(){
 }
 function op_renderTrips(){
   const el = document.getElementById('operatorTripList'); if(!el) return;
-  const lbl = { scheduled:LANG==='bn'?'নির্ধারিত':'Scheduled', departed:LANG==='bn'?'ছেড়ে গেছে':'Departed', cancelled:LANG==='bn'?'বাতিল':'Cancelled' };
+  const lbl = { scheduled:LANG==='bn'?'নির্ধারিত':'Scheduled', paused:LANG==='bn'?'বিরতি':'Paused', departed:LANG==='bn'?'ছেড়ে গেছে':'Departed', cancelled:LANG==='bn'?'বাতিল':'Cancelled' };
   const trips = op_myTrips();
   if(!trips.length){
     el.innerHTML = `<div class="card muted" style="text-align:center;padding:24px">${LANG==='bn'?'এখনো কোনো ট্রিপ নেই':'No trips yet'}</div>`;
@@ -6583,15 +6583,33 @@ function op_renderDash(){
 }
 function op_wireOnboard(){
   const btn = document.getElementById('operatorOnboardSubmitBtn');
-  if(btn) btn.addEventListener('click', ()=>toastMsg(LANG==='bn'?'অনুমোদনের জন্য জমা দেওয়া হয়েছে':'Submitted for approval','check'));
+  if(!btn) return;
+  btn.addEventListener('click', ()=>{
+    const company = document.getElementById('ooCompanyInput').value.trim();
+    const owner = document.getElementById('ooOwnerInput').value.trim();
+    if(!company || !owner){ toastMsg(LANG==='bn'?'অপারেটরের নাম ও মালিকের নাম আবশ্যক':'Operator name and owner name are required','shield'); return; }
+    const today = new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+    const existing = adm_operatorVerifs.find(o=>o.operator===company);
+    if(existing){ existing.owner = owner; existing.submitted = today; existing.status = 'pending'; }
+    else { adm_operatorVerifs.push({ operator:company, owner, submitted:today, status:'pending' }); }
+    if(typeof adm_renderOperatorVerifs==='function') adm_renderOperatorVerifs();
+    toastMsg(LANG==='bn'?'অনুমোদনের জন্য জমা দেওয়া হয়েছে — অ্যাডমিন পর্যালোচনা করবে':'Submitted for approval — admin will review it','check');
+  });
 }
 
 /* ---- Admin: operator verification + ticketing oversight ---- */
 const adm_operatorVerifs = [
-  { operator:'Green Line Paribahan', owner:'Abdul Karim', submitted:'Nov 20, 2026', status:'pending' },
-  { operator:'Hanif Enterprise', owner:'Mizanur Rahman', submitted:'Nov 21, 2026', status:'pending' },
+  { operator:'Green Line Paribahan', owner:'Abdul Karim', submitted:'Nov 20, 2026', status:'approved' },
   { operator:'Shyamoli Paribahan', owner:'Nasir Uddin', submitted:'Nov 18, 2026', status:'approved' },
+  { operator:'Hanif Enterprise', owner:'Mizanur Rahman', submitted:'Nov 21, 2026', status:'approved' },
+  { operator:'NovoAir', owner:'Kamrul Islam', submitted:'Nov 15, 2026', status:'approved' },
+  { operator:'Sundarban Navigation', owner:'Shahadat Hossain', submitted:'Nov 12, 2026', status:'approved' },
+  { operator:'Ena Transport', owner:'Delwar Hossain', submitted:'Nov 24, 2026', status:'pending' },
 ];
+function adm_operatorStatus(operatorName){
+  const o = adm_operatorVerifs.find(x=>x.operator===operatorName);
+  return o ? o.status : 'unknown';
+}
 function adm_renderOperatorVerifs(){
   const el = document.getElementById('operatorVerifRows'); if(!el) return;
   const lbl = { pending:LANG==='bn'?'বিচারাধীন':'Pending', approved:LANG==='bn'?'অনুমোদিত':'Approved', rejected:LANG==='bn'?'প্রত্যাখ্যাত':'Rejected' };
@@ -6600,14 +6618,12 @@ function adm_renderOperatorVerifs(){
   </td></tr>`).join('');
 }
 
-const adm_ticketTrips = [
-  { operator:'Green Line Paribahan', route:'Dhaka → Chattogram', date:'2026-12-05', sold:11, status:'live' },
-  { operator:'Ena Transport', route:"Dhaka → Cox's Bazar", date:'2026-12-05', sold:28, status:'live' },
-];
+/* Reads straight from tk_tripsData — every trip from every operator, the
+   same data tenant search uses — instead of a separate illustrative mock. */
 function adm_renderTicketTrips(){
   const el = document.getElementById('adminTripRows'); if(!el) return;
-  const lbl = { live:LANG==='bn'?'লাইভ':'Live', paused:LANG==='bn'?'বিরতি':'Paused' };
-  el.innerHTML = adm_ticketTrips.map((t,i)=>`<tr><td>${t.operator}</td><td>${t.route}</td><td>${t.date}</td><td class="tabular">${t.sold}</td><td>${statusBadge(t.status,lbl[t.status])}</td><td><button class="btn btn-sm" data-action="adm-trip-pause" data-idx="${i}">${t.status==='paused'?(LANG==='bn'?'চালু করুন':'Resume'):(LANG==='bn'?'বিরতি দিন':'Pause')}</button></td></tr>`).join('');
+  const lbl = { scheduled:LANG==='bn'?'লাইভ':'Live', paused:LANG==='bn'?'বিরতি':'Paused', cancelled:LANG==='bn'?'বাতিল':'Cancelled' };
+  el.innerHTML = tk_tripsData.map(t=>`<tr><td>${t.operator}</td><td>${t.originLabel.split(' (')[0]} → ${t.destLabel.split(' (')[0]}</td><td>${t.date}</td><td class="tabular">${t.soldSeats.length}</td><td>${statusBadge(t.status,lbl[t.status])}</td><td>${t.status!=='cancelled' ? `<button class="btn btn-sm" data-action="adm-trip-pause" data-trip="${t.id}">${t.status==='paused'?(LANG==='bn'?'চালু করুন':'Resume'):(LANG==='bn'?'বিরতি দিন':'Pause')}</button>` : '—'}</td></tr>`).join('');
 }
 const adm_ticketDisputes = [
   { ref:'CBST-8831', issue:'Bus departed without passenger (no-show dispute)', status:'review' },
@@ -6632,9 +6648,14 @@ function adm_wireTicketing(){
   });
   document.getElementById('adminTripRows').addEventListener('click', e=>{
     const btn = e.target.closest('[data-action="adm-trip-pause"]'); if(!btn) return;
-    const t = adm_ticketTrips[parseInt(btn.dataset.idx,10)];
-    t.status = t.status==='paused' ? 'live' : 'paused';
+    const t = tk_tripsData.find(x=>x.id===btn.dataset.trip); if(!t) return;
+    t.status = t.status==='paused' ? 'scheduled' : 'paused';
     adm_renderTicketTrips();
+    tk_renderSearch();
+    if(typeof op_renderTrips==='function') op_renderTrips();
+    toastMsg(t.status==='paused'
+      ? (LANG==='bn'?'ট্রিপ বিরতি দেওয়া হয়েছে — যাত্রীরা আর এটি খুঁজে পাবেন না':'Trip paused — tenants can no longer find it')
+      : (LANG==='bn'?'ট্রিপ আবার চালু করা হয়েছে':'Trip resumed'), 'bus');
   });
   document.getElementById('ticketDisputeList').addEventListener('click', e=>{
     const btn = e.target.closest('[data-action]'); if(!btn) return;
