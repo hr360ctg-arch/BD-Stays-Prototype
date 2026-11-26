@@ -1776,6 +1776,7 @@ html, body {
       <!-- Desktop Nav -->
       <nav class="pub-nav">
         <button class="pub-nav-link active" data-pub-nav="stays"><span data-t="pub_nav_stays">রুম ও ফ্ল্যাট</span></button>
+        <button class="pub-nav-link" data-pub-nav="tickets"><span data-t="pub_nav_tickets">বাস টিকেট</span></button>
         <button class="pub-nav-link" data-pub-nav="areas"><span data-t="pub_nav_areas">শহর ও এলাকা</span></button>
         <button class="pub-nav-link" data-pub-nav="standard"><span data-t="pub_nav_standard">সিবিএস স্ট্যান্ডার্ড</span></button>
         <button class="pub-nav-link" data-pub-nav="pass"><span data-t="pub_nav_pass">স্মার্ট পাস</span></button>
@@ -1817,6 +1818,7 @@ html, body {
 
       <div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">
         <button class="pub-nav-link" data-pub-nav="stays" style="text-align:left;width:100%"><i data-icon="home" data-icon-cls="icon-sm"></i> <span data-t="pub_nav_stays">রুম ও ফ্ল্যাট</span></button>
+        <button class="pub-nav-link" data-pub-nav="tickets" style="text-align:left;width:100%"><i data-icon="bus" data-icon-cls="icon-sm"></i> <span data-t="pub_nav_tickets">বাস টিকেট</span></button>
         <button class="pub-nav-link" data-pub-nav="areas" style="text-align:left;width:100%"><i data-icon="map" data-icon-cls="icon-sm"></i> <span data-t="pub_nav_areas">শহর ও এলাকা</span></button>
         <button class="pub-nav-link" data-pub-nav="standard" style="text-align:left;width:100%"><i data-icon="shield" data-icon-cls="icon-sm"></i> <span data-t="pub_nav_standard">সিবিএস স্ট্যান্ডার্ড</span></button>
         <button class="pub-nav-link" data-pub-nav="pass" style="text-align:left;width:100%"><i data-icon="check" data-icon-cls="icon-sm"></i> <span data-t="pub_nav_pass">স্মার্ট পাস</span></button>
@@ -1966,6 +1968,51 @@ html, body {
     <div class="pub-listing-grid" id="pubFeaturedGrid">
       <!-- Populated dynamically by renderPubFeatured() -->
     </div>
+  </section>
+
+  <!-- Bus / Launch / Plane Ticketing -->
+  <section class="pub-section" id="pubTicketsSection" style="background:#ffffff;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0">
+    <div class="pub-sec-header">
+      <div>
+        <h2 data-t="pub_tickets_title">বাংলাদেশজুড়ে বাস, লঞ্চ ও বিমানের টিকেট বুক করুন</h2>
+        <p data-t="pub_tickets_sub">লাইভ সিট ম্যাপ, তাৎক্ষণিক সিট হোল্ড ও নিশ্চিত বিকাশ/নগদ পেমেন্ট — এক জায়গায় সব অপারেটর</p>
+      </div>
+    </div>
+
+    <div class="pub-capsule-search" style="margin-bottom:20px">
+      <div class="pub-search-segment">
+        <label><i data-icon="bus" data-icon-cls="icon-sm"></i><span data-t="pub_tickets_from_lbl">যেখান থেকে</span></label>
+        <select id="pubTkOrigin">
+          <option value="dhaka">Dhaka</option>
+          <option value="chattogram">Chattogram</option>
+          <option value="sylhet">Sylhet</option>
+          <option value="coxsbazar">Cox's Bazar</option>
+          <option value="barishal">Barishal</option>
+        </select>
+      </div>
+      <div class="pub-search-segment">
+        <label><i data-icon="map" data-icon-cls="icon-sm"></i><span data-t="pub_tickets_to_lbl">যেখানে যাবেন</span></label>
+        <select id="pubTkDest">
+          <option value="chattogram">Chattogram</option>
+          <option value="dhaka">Dhaka</option>
+          <option value="sylhet">Sylhet</option>
+          <option value="coxsbazar">Cox's Bazar</option>
+          <option value="barishal">Barishal</option>
+        </select>
+      </div>
+      <div class="pub-search-segment">
+        <label><i data-icon="clock" data-icon-cls="icon-sm"></i><span data-t="pub_tickets_date_lbl">যাত্রার তারিখ</span></label>
+        <input type="date" id="pubTkDate" value="2026-12-05" />
+      </div>
+      <button class="pub-search-cta" id="pubTkSearchBtn">
+        <i data-icon="search" data-icon-cls="icon-sm"></i>
+        <span data-t="pub_tickets_search_btn">ট্রিপ খুঁজুন</span>
+      </button>
+    </div>
+
+    <div class="section-title" style="margin-bottom:10px"><h2 style="font-size:16px" data-t="pub_tickets_results_title">পাওয়া ট্রিপসমূহ</h2></div>
+    <div style="display:flex;flex-direction:column;gap:14px" id="pubTkResults"></div>
+    <div class="muted" style="font-size:12px;text-align:center;margin-top:14px"><i data-icon="shield" data-icon-cls="icon-sm"></i> <span data-t="pub_tickets_login_note">সিট নির্বাচন ও পেমেন্টের জন্য লগ ইন প্রয়োজন হবে</span></div>
   </section>
 
   <!-- Nationwide City Explorer -->
@@ -4545,7 +4592,18 @@ Object.assign(window.I18N.bn, {
   pub_stat_listings: 'ভেরিফাইড লিস্টিং',
   pub_stat_nid: 'NID ও দলিল যাচাইকৃত',
   pub_stat_fee: 'দালাল ফি, কখনোই না',
-  pub_stat_rev: 'গেস্ট রিভিউ (৪.৯★)'
+  pub_stat_rev: 'গেস্ট রিভিউ (৪.৯★)',
+  pub_nav_tickets: 'বাস টিকেট',
+  pub_tickets_title: 'বাংলাদেশজুড়ে বাস, লঞ্চ ও বিমানের টিকেট বুক করুন',
+  pub_tickets_sub: 'লাইভ সিট ম্যাপ, তাৎক্ষণিক সিট হোল্ড ও নিশ্চিত বিকাশ/নগদ পেমেন্ট — এক জায়গায় সব অপারেটর',
+  pub_tickets_from_lbl: 'যেখান থেকে',
+  pub_tickets_to_lbl: 'যেখানে যাবেন',
+  pub_tickets_date_lbl: 'যাত্রার তারিখ',
+  pub_tickets_search_btn: 'ট্রিপ খুঁজুন',
+  pub_tickets_results_title: 'পাওয়া ট্রিপসমূহ',
+  pub_tickets_empty: 'এই রুটে কোনো ট্রিপ পাওয়া যায়নি — অন্য তারিখ বা রুট চেষ্টা করুন',
+  pub_tickets_book_btn: 'সিট বুক করুন',
+  pub_tickets_login_note: 'সিট নির্বাচন ও পেমেন্টের জন্য লগ ইন প্রয়োজন হবে'
 });
 
 Object.assign(window.I18N.en, {
@@ -4646,7 +4704,18 @@ Object.assign(window.I18N.en, {
   pub_stat_listings: 'Verified listings',
   pub_stat_nid: 'NID & deed verified',
   pub_stat_fee: 'Broker fee, ever',
-  pub_stat_rev: 'reviews (4.9★)'
+  pub_stat_rev: 'reviews (4.9★)',
+  pub_nav_tickets: 'Bus Tickets',
+  pub_tickets_title: 'Book bus, launch & plane tickets anywhere in Bangladesh',
+  pub_tickets_sub: 'Live seat maps, instant seat hold and confirmed bKash/Nagad payment — every operator, one place',
+  pub_tickets_from_lbl: 'From',
+  pub_tickets_to_lbl: 'To',
+  pub_tickets_date_lbl: 'Travel date',
+  pub_tickets_search_btn: 'Search trips',
+  pub_tickets_results_title: 'Available trips',
+  pub_tickets_empty: 'No trips found for this route — try another date or route',
+  pub_tickets_book_btn: 'Select seats',
+  pub_tickets_login_note: "You'll need to log in to select seats and pay"
 });
 
 /* ---------------- mock data ---------------- */
@@ -5550,6 +5619,39 @@ function renderPubFeatured(filterCat, areaFilter, budgetFilter, tenantFilter){
   hydrateIcons(container);
 }
 
+function renderPubTickets(){
+  const el = document.getElementById('pubTkResults'); if(!el) return;
+  const origin = document.getElementById('pubTkOrigin')?.value;
+  const dest = document.getElementById('pubTkDest')?.value;
+  let list = tk_tripsData.slice().filter(t=>t.status==='scheduled');
+  if(origin) list = list.filter(t=>t.origin===origin);
+  if(dest) list = list.filter(t=>t.dest===dest);
+  list.sort((a,b)=>a.fareStandard-b.fareStandard);
+
+  if(!list.length){
+    el.innerHTML = `<div class="card muted" style="text-align:center;padding:30px">${LANG==='bn'?'এই রুটে কোনো ট্রিপ পাওয়া যায়নি — অন্য তারিখ বা রুট চেষ্টা করুন':'No trips found for this route — try another date or route'}</div>`;
+    return;
+  }
+  el.innerHTML = list.map(t=>{
+    const left = tk_seatsRemaining(t);
+    const hasPremium = tk_tripHasPremium(t);
+    const fare = hasPremium ? `৳ ${t.fareStandard} – ${t.farePremium || Math.round(t.fareStandard*1.15)}` : `৳ ${t.fareStandard}`;
+    const cls = hasPremium ? (LANG==='bn'?'স্ট্যান্ডার্ড + প্রিমিয়াম':'Standard + Premium') : (LANG==='bn'?'স্ট্যান্ডার্ড':'Standard');
+    return `<div class="card" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <div>
+        <div style="font-weight:700;font-size:14px">${t.operator}</div>
+        <div class="muted" style="font-size:12.5px;margin-top:3px"><i data-icon="${VEH_TYPE_ICON[t.vehicleType]||'bus'}" data-icon-cls="icon-sm"></i> ${t.vehicleLabel} · ${cls}</div>
+        <div style="font-size:13px;margin-top:6px">${t.departTime} ${icon('arrowRight','icon-sm')} ${t.arriveTime} · ${t.originLabel} ${icon('arrowRight','icon-sm')} ${t.destLabel}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="tabular" style="font-weight:700;font-size:15px">${fare}</div>
+        <div class="${left<5?'':'muted'}" style="font-size:12px;${left<5?'color:var(--warn);font-weight:700':''}">${left} ${LANG==='bn'?'সিট বাকি':'seats left'}</div>
+        <button class="btn btn-primary btn-sm" style="margin-top:8px" data-pub-tk-book="${t.id}">${LANG==='bn'?'সিট বুক করুন':'Select seats'}</button>
+      </div>
+    </div>`;
+  }).join('');
+  hydrateIcons(el);
+}
 
 /* ============ imported: admin console (ex-Foundation) ============ */
 function fnd_runRestoreTest(){
@@ -7450,6 +7552,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
       if (nv === 'stays') {
         const s = document.getElementById('pubFeaturedSection');
         if (s) s.scrollIntoView({ behavior: 'smooth' });
+      } else if (nv === 'tickets') {
+        const s = document.getElementById('pubTicketsSection');
+        if (s) s.scrollIntoView({ behavior: 'smooth' });
       } else if (nv === 'areas') {
         const s = document.getElementById('pubAreasSection');
         if (s) s.scrollIntoView({ behavior: 'smooth' });
@@ -7493,6 +7598,22 @@ document.addEventListener('DOMContentLoaded', ()=>{
     });
   }
 
+  // Public ticketing search button
+  const pubTkSearchBtn = document.getElementById('pubTkSearchBtn');
+  if (pubTkSearchBtn) {
+    pubTkSearchBtn.addEventListener('click', () => {
+      renderPubTickets();
+      toastMsg(LANG === 'bn' ? 'ট্রিপ খোঁজা হচ্ছে...' : 'Searching trips...', 'search');
+    });
+  }
+  document.getElementById('pubTkResults')?.addEventListener('click', e => {
+    const btn = e.target.closest('[data-pub-tk-book]'); if (!btn) return;
+    enterApp('tenant');
+    showView('seatmap');
+    tk_openSeatMap(btn.dataset.pubTkBook);
+  });
+  if (typeof renderPubTickets === 'function') renderPubTickets();
+
   // Trigger initial neighborhood setup & rent calculation
   if (typeof switchNeighborhood === 'function') switchNeighborhood('mirpur');
   if (typeof calcRent === 'function') calcRent();
@@ -7535,6 +7656,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
       const nv = b.dataset.pubNav;
       if (nv === 'stays') {
         const s = document.getElementById('pubFeaturedSection');
+        if (s) s.scrollIntoView({ behavior: 'smooth' });
+      } else if (nv === 'tickets') {
+        const s = document.getElementById('pubTicketsSection');
         if (s) s.scrollIntoView({ behavior: 'smooth' });
       } else if (nv === 'areas') {
         const s = document.getElementById('pubAreasSection');
